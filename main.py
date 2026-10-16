@@ -645,3 +645,116 @@ class App(ctk.CTk):
         if not os.path.exists(MTK_SCRIPT):
             self.log(self.tr("msg_no_mtk"))
             return
+        def t():
+            self.log("=" * 50)
+            self.log(self.tr("msg_running_cmd", "mtk " + " ".join(args)))
+            self.log(run([EMBED_PY, "mtk.py"] + args, timeout=timeout, cwd=MTK_DIR))
+        threading.Thread(target=t, daemon=True).start()
+
+    def mtk_read(self):
+        part = self.mtk_read_part.get().strip()
+        if part:
+            self.mtk_cmd(["r", part, f"{part}.img"])
+
+    def pick_mtk_file(self):
+        p = filedialog.askopenfilename(filetypes=[("Images", "*.img *.bin")])
+        if p:
+            self.mtk_write_file.delete(0, "end")
+            self.mtk_write_file.insert(0, p)
+
+    def mtk_write(self):
+        part = self.mtk_write_part.get().strip()
+        f = self.mtk_write_file.get().strip()
+        if not part or not os.path.exists(f):
+            messagebox.showerror(self.tr("err"), self.tr("err_check"))
+            return
+        if not messagebox.askyesno(self.tr("confirm"), self.tr("confirm_write", part, f)):
+            return
+        self.mtk_cmd(["w", part, f])
+
+    def mtk_unlock(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_unlock")):
+            return
+        self.mtk_cmd(["da", "seccfg", "unlock"])
+
+    def mtk_wipe(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_wipe")):
+            return
+        self.mtk_cmd(["e", "frp,userdata,metadata,md_udc"])
+
+    # ============ EDL ============
+    def edl_base(self):
+        args = [EMBED_PY, "edl.py"]
+        loader = self.edl_loader_entry.get().strip()
+        if loader and os.path.exists(loader):
+            args += ["--loader", loader]
+        return args
+
+    def edl_run(self, args, timeout=1200):
+        if not os.path.exists(EMBED_PY):
+            self.log(self.tr("msg_no_embed"))
+            return
+        if not os.path.exists(EDL_SCRIPT):
+            self.log(self.tr("msg_no_edl"))
+            return
+        def t():
+            self.log("=" * 50)
+            full = self.edl_base() + args
+            self.log(self.tr("msg_running_cmd", "edl " + " ".join(args)))
+            self.log(run(full, timeout=timeout, cwd=EDL_DIR))
+        threading.Thread(target=t, daemon=True).start()
+
+    def pick_edl_loader(self):
+        p = filedialog.askopenfilename(
+            filetypes=[("Loader", "*.mbn *.bin *.elf"), ("All", "*.*")])
+        if p:
+            self.edl_loader_entry.delete(0, "end")
+            self.edl_loader_entry.insert(0, p)
+
+    def pick_edl_file(self):
+        p = filedialog.askopenfilename(
+            filetypes=[("Images", "*.img *.bin"), ("All", "*.*")])
+        if p:
+            self.edl_write_file.delete(0, "end")
+            self.edl_write_file.insert(0, p)
+
+    def edl_check(self):
+        self.edl_run(["printgpt"], timeout=120)
+
+    def edl_printgpt(self):
+        self.edl_run(["printgpt"])
+
+    def edl_dump(self):
+        part = self.edl_read_part.get().strip()
+        if not part:
+            messagebox.showerror(self.tr("err"), self.tr("err_check"))
+            return
+        self.edl_run(["r", part, f"{part}.img"])
+
+    def edl_write(self):
+        part = self.edl_write_part.get().strip()
+        f = self.edl_write_file.get().strip()
+        if not part or not os.path.exists(f):
+            messagebox.showerror(self.tr("err"), self.tr("err_check"))
+            return
+        if not messagebox.askyesno(self.tr("confirm"),
+                                    self.tr("confirm_write", part, f)):
+            return
+        self.edl_run(["w", part, f])
+
+    def edl_rw(self):
+        if not messagebox.askyesno(self.tr("warn"), "Enable Read/Write mode?"):
+            return
+        self.edl_run(["--memory", "ufs", "printgpt"])
+
+    def edl_reset(self):
+        self.edl_run(["reset"])
+
+    def edl_wipe(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_wipe")):
+            return
+        self.edl_run(["e", "userdata"])
+
+
+if __name__ == "__main__":
+    App().mainloop()
