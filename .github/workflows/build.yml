@@ -18,30 +18,27 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           pip install -r requirements.txt
           pip install pyinstaller
 
       - name: Download mtkclient
-        run: |
-          curl -L -o mtk.zip https://github.com/bkerler/mtkclient/archive/refs/heads/main.zip
-          tar -xf mtk.zip
-          Move-Item mtkclient-main mtkclient
         shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/bkerler/mtkclient/archive/refs/heads/main.zip" -OutFile mtk.zip
+          Expand-Archive mtk.zip -DestinationPath .
+          Move-Item mtkclient-main mtkclient
 
       - name: Install mtkclient requirements
-        run: |
-          pip install -r mtkclient/requirements.txt
         shell: pwsh
-
-      - name: Build EXE with PyInstaller
         run: |
-          pyinstaller --noconfirm --onedir --windowed ^
-            --name "AndroidTool" ^
-            --add-data "mtkclient;mtkclient" ^
-            main.py
-        shell: cmd
+          if (Test-Path mtkclient/requirements.txt) {
+            pip install -r mtkclient/requirements.txt
+          }
+
+      - name: Build with Spec file
+        run: pyinstaller --noconfirm AndroidTool.spec
 
       - name: Install Inno Setup
         run: choco install innosetup -y
