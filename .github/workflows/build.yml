@@ -37,6 +37,27 @@ jobs:
           Expand-Archive edl.zip -DestinationPath .
           Move-Item edl-master edl
 
+      - name: Download Heimdall
+        shell: pwsh
+        run: |
+          $url = "https://github.com/Dees-Tech/heihei/releases/download/v2.1.0/Heimdall_Windows_2.1.0.zip"
+          try {
+            Invoke-WebRequest -Uri $url -OutFile heimdall.zip
+            New-Item -ItemType Directory -Path heimdall -Force | Out-Null
+            Expand-Archive heimdall.zip -DestinationPath heimdall -Force
+          } catch {
+            Write-Host "Heimdall download failed - will try alternative"
+            $alt = "https://bitbucket.org/benjamin_dobell/heimdall/downloads/Heimdall-v2.0.2-win.zip"
+            try {
+              Invoke-WebRequest -Uri $alt -OutFile heimdall.zip
+              New-Item -ItemType Directory -Path heimdall -Force | Out-Null
+              Expand-Archive heimdall.zip -DestinationPath heimdall -Force
+            } catch {
+              Write-Host "Alternative also failed"
+              New-Item -ItemType Directory -Path heimdall -Force | Out-Null
+            }
+          }
+
       - name: Download Python Embeddable
         shell: pwsh
         run: |
@@ -45,7 +66,7 @@ jobs:
           New-Item -ItemType Directory -Path python-embed -Force | Out-Null
           Expand-Archive python-embed.zip -DestinationPath python-embed -Force
 
-      - name: Enable site-packages in embedded Python
+      - name: Enable site-packages
         shell: pwsh
         run: |
           $pth = Get-ChildItem python-embed\python*._pth | Select-Object -First 1
@@ -56,7 +77,7 @@ jobs:
           Add-Content $pth.FullName "..\edl"
           Set-Content $pth.FullName $content
 
-      - name: Install pip into embedded Python
+      - name: Install pip
         shell: pwsh
         run: |
           Invoke-WebRequest -Uri "https://bootstrap.pypa.io/get-pip.py" -OutFile get-pip.py
@@ -76,15 +97,16 @@ jobs:
           }
           .\python-embed\python.exe -m pip install --no-warn-script-location pyserial pyusb docopt
 
-      - name: Build with Spec file
+      - name: Build with Spec
         run: pyinstaller --noconfirm AndroidTool.spec
 
-      - name: Copy python-embed, mtkclient, edl into dist
+      - name: Copy resources into dist
         shell: pwsh
         run: |
           Copy-Item -Recurse -Force python-embed dist\AndroidTool\python-embed
           Copy-Item -Recurse -Force mtkclient dist\AndroidTool\mtkclient
           Copy-Item -Recurse -Force edl dist\AndroidTool\edl
+          if (Test-Path heimdall) { Copy-Item -Recurse -Force heimdall dist\AndroidTool\heimdall }
           Remove-Item -Recurse -Force dist\AndroidTool\mtkclient\.git -ErrorAction SilentlyContinue
           Remove-Item -Recurse -Force dist\AndroidTool\edl\.git -ErrorAction SilentlyContinue
 
