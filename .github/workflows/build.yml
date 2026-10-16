@@ -30,6 +30,13 @@ jobs:
           Expand-Archive mtk.zip -DestinationPath .
           Move-Item mtkclient-main mtkclient
 
+      - name: Download edl
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/bkerler/edl/archive/refs/heads/master.zip" -OutFile edl.zip
+          Expand-Archive edl.zip -DestinationPath .
+          Move-Item edl-master edl
+
       - name: Download Python Embeddable
         shell: pwsh
         run: |
@@ -46,8 +53,8 @@ jobs:
           $content = $content -replace '#import site', 'import site'
           Add-Content $pth.FullName "Lib\site-packages"
           Add-Content $pth.FullName "..\mtkclient"
+          Add-Content $pth.FullName "..\edl"
           Set-Content $pth.FullName $content
-          Get-Content $pth.FullName
 
       - name: Install pip into embedded Python
         shell: pwsh
@@ -55,23 +62,31 @@ jobs:
           Invoke-WebRequest -Uri "https://bootstrap.pypa.io/get-pip.py" -OutFile get-pip.py
           .\python-embed\python.exe get-pip.py --no-warn-script-location
 
-      - name: Install mtkclient requirements into embedded Python
+      - name: Install mtkclient requirements
         shell: pwsh
         run: |
           .\python-embed\python.exe -m pip install --no-warn-script-location -r mtkclient\requirements.txt
           .\python-embed\python.exe -m pip install --no-warn-script-location pyusb pyserial pycryptodome capstone colorama
 
+      - name: Install edl requirements
+        shell: pwsh
+        run: |
+          if (Test-Path edl\requirements.txt) {
+            .\python-embed\python.exe -m pip install --no-warn-script-location -r edl\requirements.txt
+          }
+          .\python-embed\python.exe -m pip install --no-warn-script-location pyserial pyusb docopt
+
       - name: Build with Spec file
         run: pyinstaller --noconfirm AndroidTool.spec
 
-      - name: Copy python-embed and mtkclient into dist
+      - name: Copy python-embed, mtkclient, edl into dist
         shell: pwsh
         run: |
           Copy-Item -Recurse -Force python-embed dist\AndroidTool\python-embed
           Copy-Item -Recurse -Force mtkclient dist\AndroidTool\mtkclient
-          # حذف المجلدات الثقيلة غير الضرورية
+          Copy-Item -Recurse -Force edl dist\AndroidTool\edl
           Remove-Item -Recurse -Force dist\AndroidTool\mtkclient\.git -ErrorAction SilentlyContinue
-          Remove-Item -Recurse -Force dist\AndroidTool\mtkclient\__pycache__ -ErrorAction SilentlyContinue
+          Remove-Item -Recurse -Force dist\AndroidTool\edl\.git -ErrorAction SilentlyContinue
 
       - name: Install Inno Setup
         run: choco install innosetup -y
