@@ -35,7 +35,7 @@ HEIMDALL = os.path.join(HEIMDALL_DIR, "heimdall.exe")
 
 PLATFORM_TOOLS_URL = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
 
-APP_VERSION = "0.7.0"
+APP_VERSION = "0.8.0"
 GITHUB_REPO = "Gissa333/android-tool"
 GITHUB_API = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
@@ -46,7 +46,8 @@ LANG = {
         "tab_adb": "ADB / Fastboot",
         "tab_flash": "📦 فلاش الروم",
         "tab_samsung": "📱 Samsung",
-        "tab_unlock": "🔓 فك القفل",
+        "tab_root": "🔓 TWRP & Root",
+        "tab_unlock": "🔒 فك القفل",
         "tab_mtk": "MTK",
         "tab_edl": "Qualcomm EDL",
         "tab_about": "ℹ️ حول",
@@ -59,34 +60,28 @@ LANG = {
         "reboot_recovery": "♻️ وضع Recovery",
         "reboot_edl": "📡 وضع EDL",
         "exit_fastboot": "🔌 خروج من Fastboot",
-        # Samsung
-        "samsung_title": "📱 Samsung — وضع Download",
-        "samsung_warning": "⚠️ الأجهزة يجب أن تكون في Download Mode (Volume Down + Home + Power)",
-        "samsung_detect": "🔍 كشف الجهاز",
-        "samsung_pit": "📋 قراءة PIT",
-        "samsung_print_pit": "🖨️ طباعة جدول PIT",
-        "samsung_flash_ap": "📦 فلاش AP",
-        "samsung_flash_bl": "📦 فلاش BL",
-        "samsung_flash_cp": "📦 فلاش CP",
-        "samsung_flash_csc": "📦 فلاش CSC",
-        "samsung_flash_all": "🚀 فلاش الكل",
-        "samsung_select_ap": "اختر AP (.tar.md5)",
-        "samsung_select_bl": "اختر BL",
-        "samsung_select_cp": "اختر CP",
-        "samsung_select_csc": "اختر CSC",
-        "samsung_ap": "AP (Boot/Recovery/System):",
-        "samsung_bl": "BL (Bootloader):",
-        "samsung_cp": "CP (Modem):",
-        "samsung_csc": "CSC (Region):",
-        "samsung_no_file": "لم يتم اختيار ملف",
-        "samsung_reboot": "إعادة التشغيل بعد الفلاش",
-        "samsung_no_reboot": "بدون إعادة تشغيل",
-        "samsung_flashing": "⏳ جاري الفلاش: {}",
-        "samsung_done": "✅ اكتمل",
-        "samsung_failed": "❌ فشل",
-        "samsung_no_device": "❌ لم يتم العثور على جهاز Samsung",
+        # Root
+        "root_title": "🔓 TWRP & Root",
+        "root_warning": "⚠️ تأكد من فتح البوتلودر أولاً",
+        "check_bl_status": "🔍 فحص حالة البوتلودر",
+        "unlock_bl": "🔓 فتح البوتلودر",
+        "lock_bl": "🔒 قفل البوتلودر",
+        "flash_twrp": "📥 تثبيت TWRP (recovery.img)",
+        "flash_magisk": "🎯 تثبيت Magisk (patched boot)",
+        "select_recovery": "اختر ملف recovery.img",
+        "select_boot": "اختر ملف boot patched",
+        "bl_locked": "🔒 البوتلودر مقفل",
+        "bl_unlocked": "🔓 البوتلودر مفتوح",
+        "bl_unknown": "❓ غير معروف",
+        "unlock_confirm": "سيتم محو كل البيانات! متأكد؟",
+        "unlock_warn_screen": "انظر لشاشة الهاتف واضغط Volume Up للموافقة",
+        "flash_recovery_success": "✅ تم تثبيت recovery",
+        "flash_boot_success": "✅ تم تثبيت boot",
+        "reboot_recovery_after": "إعادة التشغيل إلى Recovery بعد الفلاش",
+        "download_twrp": "🌐 تحميل TWRP",
+        "download_magisk": "🌐 تحميل Magisk",
         # Flash
-        "flash_title": "📦 فلاش الروم الكامل",
+        "flash_title": "📦 فلاش الروم",
         "flash_select_zip": "📁 اختر ملف الروم",
         "flash_type": "النوع: {}",
         "flash_type_unknown": "غير معروف",
@@ -111,8 +106,25 @@ LANG = {
         "flash_status_done": "✅ اكتمل",
         "flash_status_error": "❌ فشل",
         "flash_status_cancelled": "⏹️ إلغاء",
+        # Samsung
+        "samsung_title": "📱 Samsung — Download Mode",
+        "samsung_warning": "⚠️ ضع الجهاز في Download Mode",
+        "samsung_detect": "🔍 كشف الجهاز",
+        "samsung_pit": "📋 قراءة PIT",
+        "samsung_flash_ap": "📦 AP",
+        "samsung_flash_bl": "📦 BL",
+        "samsung_flash_cp": "📦 CP",
+        "samsung_flash_csc": "📦 CSC",
+        "samsung_flash_all": "🚀 فلاش الكل",
+        "samsung_ap": "AP:",
+        "samsung_bl": "BL:",
+        "samsung_cp": "CP:",
+        "samsung_csc": "CSC:",
+        "samsung_no_file": "لم يتم اختيار ملف",
+        "samsung_reboot": "إعادة التشغيل",
+        "samsung_done": "✅ اكتمل",
         # Unlock
-        "unlock_title": "🔓 فك القفل و FRP",
+        "unlock_title": "🔒 فك القفل و FRP",
         "check_lock": "🔍 فحص القفل",
         "check_root": "👑 فحص الروت",
         "check_frp": "🚫 فحص FRP",
@@ -134,7 +146,7 @@ LANG = {
         "pick": "اختر",
         "write_btn": "كتابة",
         "advanced": "⚠️ متقدم",
-        "unlock_bl": "🔓 فك قفل البوتلودر",
+        "unlock_bl_mtk": "🔓 فك قفل MTK",
         "wipe_frp": "🧹 مسح FRP + Userdata",
         # EDL
         "edl_title": "⚡ Qualcomm EDL",
@@ -157,8 +169,7 @@ LANG = {
         "about_new_version": "🎉 إصدار جديد: {}",
         "about_checking": "⏳ فحص...",
         "about_error": "❌ فشل: {}",
-        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• فلاش الروم\n• Samsung Odin\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
-        # Log
+        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• فلاش الروم\n• Samsung Odin\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 السجل:",
         "log_save": "💾 حفظ",
         "log_copy": "📋 نسخ",
@@ -167,7 +178,6 @@ LANG = {
         "log_saved": "✅ تم الحفظ: {}",
         "log_copied": "✅ تم النسخ",
         "log_cleared": "🗑️ تم المسح",
-        # عام
         "lang_btn": "🌐 English",
         "msg_wait": "⏳ ...",
         "msg_tools_ok": "✅ Platform-Tools",
@@ -188,7 +198,6 @@ LANG = {
         "msg_no_embed": "❌ Python المدمج غير موجود",
         "msg_no_mtk": "❌ mtkclient غير موجود",
         "msg_no_edl": "❌ edl غير موجود",
-        "msg_no_heimdall": "❌ Heimdall غير موجود",
         "confirm_write": "كتابة {} من {}؟",
         "confirm_unlock": "فك القفل سيمسح البيانات!",
         "confirm_wipe": "مسح نهائياً!",
@@ -204,7 +213,8 @@ LANG = {
         "tab_adb": "ADB / Fastboot",
         "tab_flash": "📦 Flash ROM",
         "tab_samsung": "📱 Samsung",
-        "tab_unlock": "🔓 Unlock",
+        "tab_root": "🔓 TWRP & Root",
+        "tab_unlock": "🔒 Unlock",
         "tab_mtk": "MTK",
         "tab_edl": "Qualcomm EDL",
         "tab_about": "ℹ️ About",
@@ -216,32 +226,26 @@ LANG = {
         "reboot_recovery": "♻️ Recovery",
         "reboot_edl": "📡 EDL",
         "exit_fastboot": "🔌 Exit Fastboot",
-        "samsung_title": "📱 Samsung — Download Mode",
-        "samsung_warning": "⚠️ Device must be in Download Mode (Vol Down + Home + Power)",
-        "samsung_detect": "🔍 Detect Device",
-        "samsung_pit": "📋 Read PIT",
-        "samsung_print_pit": "🖨️ Print PIT Table",
-        "samsung_flash_ap": "📦 Flash AP",
-        "samsung_flash_bl": "📦 Flash BL",
-        "samsung_flash_cp": "📦 Flash CP",
-        "samsung_flash_csc": "📦 Flash CSC",
-        "samsung_flash_all": "🚀 Flash All",
-        "samsung_select_ap": "Select AP (.tar.md5)",
-        "samsung_select_bl": "Select BL",
-        "samsung_select_cp": "Select CP",
-        "samsung_select_csc": "Select CSC",
-        "samsung_ap": "AP (Boot/Recovery/System):",
-        "samsung_bl": "BL (Bootloader):",
-        "samsung_cp": "CP (Modem):",
-        "samsung_csc": "CSC (Region):",
-        "samsung_no_file": "No file selected",
-        "samsung_reboot": "Reboot after flash",
-        "samsung_no_reboot": "No reboot",
-        "samsung_flashing": "⏳ Flashing: {}",
-        "samsung_done": "✅ Done",
-        "samsung_failed": "❌ Failed",
-        "samsung_no_device": "❌ Samsung device not found",
-        "flash_title": "📦 Full ROM Flash",
+        "root_title": "🔓 TWRP & Root",
+        "root_warning": "⚠️ Make sure bootloader is unlocked",
+        "check_bl_status": "🔍 Check Bootloader",
+        "unlock_bl": "🔓 Unlock Bootloader",
+        "lock_bl": "🔒 Lock Bootloader",
+        "flash_twrp": "📥 Flash TWRP (recovery.img)",
+        "flash_magisk": "🎯 Install Magisk (patched boot)",
+        "select_recovery": "Select recovery.img",
+        "select_boot": "Select patched boot.img",
+        "bl_locked": "🔒 Bootloader locked",
+        "bl_unlocked": "🔓 Bootloader unlocked",
+        "bl_unknown": "❓ Unknown",
+        "unlock_confirm": "All data will be wiped! Sure?",
+        "unlock_warn_screen": "Look at phone screen and press Volume Up to confirm",
+        "flash_recovery_success": "✅ recovery flashed",
+        "flash_boot_success": "✅ boot flashed",
+        "reboot_recovery_after": "Reboot to Recovery after flash",
+        "download_twrp": "🌐 Get TWRP",
+        "download_magisk": "🌐 Get Magisk",
+        "flash_title": "📦 Flash ROM",
         "flash_select_zip": "📁 Select ROM",
         "flash_type": "Type: {}",
         "flash_type_unknown": "Unknown",
@@ -266,7 +270,23 @@ LANG = {
         "flash_status_done": "✅ Done",
         "flash_status_error": "❌ Failed",
         "flash_status_cancelled": "⏹️ Cancelled",
-        "unlock_title": "🔓 Unlock & FRP",
+        "samsung_title": "📱 Samsung — Download Mode",
+        "samsung_warning": "⚠️ Put device in Download Mode",
+        "samsung_detect": "🔍 Detect Device",
+        "samsung_pit": "📋 Read PIT",
+        "samsung_flash_ap": "📦 AP",
+        "samsung_flash_bl": "📦 BL",
+        "samsung_flash_cp": "📦 CP",
+        "samsung_flash_csc": "📦 CSC",
+        "samsung_flash_all": "🚀 Flash All",
+        "samsung_ap": "AP:",
+        "samsung_bl": "BL:",
+        "samsung_cp": "CP:",
+        "samsung_csc": "CSC:",
+        "samsung_no_file": "No file selected",
+        "samsung_reboot": "Reboot",
+        "samsung_done": "✅ Done",
+        "unlock_title": "🔒 Unlock & FRP",
         "check_lock": "🔍 Check Lock",
         "check_root": "👑 Check Root",
         "check_frp": "🚫 Check FRP",
@@ -287,7 +307,7 @@ LANG = {
         "pick": "Pick",
         "write_btn": "Write",
         "advanced": "⚠️ Advanced",
-        "unlock_bl": "🔓 Unlock Bootloader",
+        "unlock_bl_mtk": "🔓 MTK Unlock",
         "wipe_frp": "🧹 Wipe FRP + Userdata",
         "edl_title": "⚡ Qualcomm EDL",
         "edl_check": "🔍 Check Connection",
@@ -308,7 +328,7 @@ LANG = {
         "about_new_version": "🎉 New version: {}",
         "about_checking": "⏳ Checking...",
         "about_error": "❌ Failed: {}",
-        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Full ROM Flash\n• Samsung Odin\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Full ROM Flash\n• Samsung Odin\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 Log:",
         "log_save": "💾 Save",
         "log_copy": "📋 Copy",
@@ -337,7 +357,6 @@ LANG = {
         "msg_no_embed": "❌ Embedded Python missing",
         "msg_no_mtk": "❌ mtkclient missing",
         "msg_no_edl": "❌ edl missing",
-        "msg_no_heimdall": "❌ Heimdall missing",
         "confirm_write": "Write {} from {}?",
         "confirm_unlock": "Unlock will wipe data!",
         "confirm_wipe": "Wipe permanently!",
@@ -366,7 +385,6 @@ def detect_rom_type(path):
         return "unknown"
     name = os.path.basename(path).lower()
     ext = os.path.splitext(name)[1]
-
     if ext == ".zip":
         try:
             with zipfile.ZipFile(path) as z:
@@ -400,7 +418,10 @@ class App(ctk.CTk):
         self.samsung_cp = ""
         self.samsung_csc = ""
 
-        self.geometry("1020x890")
+        self.recovery_img = ""
+        self.boot_img = ""
+
+        self.geometry("1020x920")
         self.resizable(True, True)
 
         os.makedirs(LOGS_DIR, exist_ok=True)
@@ -434,12 +455,13 @@ class App(ctk.CTk):
         ctk.CTkButton(top, text=self.tr("lang_btn"), width=110, height=32,
                       command=self.toggle_lang).pack(side="right", padx=5)
 
-        self.tabs = ctk.CTkTabview(self, width=970, height=670)
+        self.tabs = ctk.CTkTabview(self, width=970, height=680)
         self.tabs.pack(padx=15, pady=5, fill="both", expand=True)
 
         self.tab_adb = self.tabs.add(self.tr("tab_adb"))
         self.tab_flash = self.tabs.add(self.tr("tab_flash"))
         self.tab_samsung = self.tabs.add(self.tr("tab_samsung"))
+        self.tab_root = self.tabs.add(self.tr("tab_root"))
         self.tab_unlock = self.tabs.add(self.tr("tab_unlock"))
         self.tab_mtk = self.tabs.add(self.tr("tab_mtk"))
         self.tab_edl = self.tabs.add(self.tr("tab_edl"))
@@ -448,6 +470,7 @@ class App(ctk.CTk):
         self.build_adb_tab()
         self.build_flash_tab()
         self.build_samsung_tab()
+        self.build_root_tab()
         self.build_unlock_tab()
         self.build_mtk_tab()
         self.build_edl_tab()
@@ -514,7 +537,6 @@ class App(ctk.CTk):
         except Exception as e:
             self.log(self.tr("msg_error", e))
 
-    # ============ Update ============
     def _bg_check_update(self):
         try:
             req = urllib.request.Request(GITHUB_API,
@@ -538,8 +560,7 @@ class App(ctk.CTk):
             pass
 
     def check_update(self):
-        self.about_status.configure(text=self.tr("about_checking"),
-                                     text_color="gray")
+        self.about_status.configure(text=self.tr("about_checking"), text_color="gray")
         def t():
             try:
                 req = urllib.request.Request(GITHUB_API,
@@ -571,7 +592,6 @@ class App(ctk.CTk):
     def open_github(self):
         webbrowser.open(f"https://github.com/{GITHUB_REPO}")
 
-    # ============ About ============
     def build_about_tab(self):
         f = self.tab_about
         ctk.CTkLabel(f, text=self.tr("about_title"),
@@ -580,10 +600,8 @@ class App(ctk.CTk):
                      font=("Arial", 14)).pack(pady=6)
         ctk.CTkLabel(f, text=self.tr("about_description"),
                      font=("Arial", 12), justify="center").pack(pady=15)
-
         self.about_status = ctk.CTkLabel(f, text="", font=("Arial", 12))
         self.about_status.pack(pady=5)
-
         bf = ctk.CTkFrame(f)
         bf.pack(pady=15)
         ctk.CTkButton(bf, text=self.tr("about_check_update"), width=200, height=40,
@@ -594,11 +612,10 @@ class App(ctk.CTk):
                                            state="disabled",
                                            command=self.open_update_page)
         self.download_btn.pack(side="left", padx=5)
-
         ctk.CTkButton(f, text=self.tr("about_github"), width=300, height=40,
                       command=self.open_github).pack(pady=10)
 
-    # ============ ADB ============
+    # ============ ADB Tab ============
     def build_adb_tab(self):
         f = self.tab_adb
         btns = [
@@ -615,12 +632,167 @@ class App(ctk.CTk):
             ctk.CTkButton(f, text=t, width=210, height=36,
                           command=fn).grid(row=i // 3, column=i % 3, padx=8, pady=8)
 
-    # ============ Flash ============
+    # ============ Root Tab ============
+    def build_root_tab(self):
+        f = self.tab_root
+        ctk.CTkLabel(f, text=self.tr("root_title"),
+                     font=("Arial", 16, "bold")).pack(pady=6)
+        ctk.CTkLabel(f, text=self.tr("root_warning"),
+                     font=("Arial", 11), text_color="orange").pack(pady=4)
+
+        # حالة البوتلودر
+        blf = ctk.CTkFrame(f)
+        blf.pack(pady=6)
+        ctk.CTkButton(blf, text=self.tr("check_bl_status"), width=200,
+                      command=self.check_bl_status).pack(side="left", padx=5)
+        self.bl_status_label = ctk.CTkLabel(blf, text=self.tr("bl_unknown"),
+                                             font=("Arial", 12, "bold"))
+        self.bl_status_label.pack(side="left", padx=10)
+
+        # فتح/قفل
+        blb = ctk.CTkFrame(f)
+        blb.pack(pady=4)
+        ctk.CTkButton(blb, text=self.tr("unlock_bl"), width=220,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.unlock_bootloader).pack(side="left", padx=5)
+        ctk.CTkButton(blb, text=self.tr("lock_bl"), width=220,
+                      fg_color="red", hover_color="darkred",
+                      command=self.lock_bootloader).pack(side="left", padx=5)
+
+        # TWRP
+        ctk.CTkLabel(f, text="— TWRP Recovery —",
+                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+        tw = ctk.CTkFrame(f)
+        tw.pack(pady=4)
+        ctk.CTkButton(tw, text=self.tr("select_recovery"), width=280,
+                      command=self.pick_recovery).pack(side="left", padx=5)
+        self.recovery_label = ctk.CTkLabel(tw, text=self.tr("samsung_no_file"),
+                                            font=("Arial", 10), text_color="gray")
+        self.recovery_label.pack(side="left", padx=5)
+
+        ctk.CTkButton(f, text=self.tr("flash_twrp"), width=350, height=45,
+                      fg_color="green", hover_color="darkgreen",
+                      font=("Arial", 14, "bold"),
+                      command=self.flash_recovery).pack(pady=6)
+
+        # Magisk
+        ctk.CTkLabel(f, text="— Magisk Root —",
+                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+        mg = ctk.CTkFrame(f)
+        mg.pack(pady=4)
+        ctk.CTkButton(mg, text=self.tr("select_boot"), width=280,
+                      command=self.pick_boot).pack(side="left", padx=5)
+        self.boot_label = ctk.CTkLabel(mg, text=self.tr("samsung_no_file"),
+                                        font=("Arial", 10), text_color="gray")
+        self.boot_label.pack(side="left", padx=5)
+
+        ctk.CTkButton(f, text=self.tr("flash_magisk"), width=350, height=45,
+                      fg_color="green", hover_color="darkgreen",
+                      font=("Arial", 14, "bold"),
+                      command=self.flash_boot).pack(pady=6)
+
+        # خيارات
+        opt = ctk.CTkFrame(f)
+        opt.pack(pady=10)
+        self.reboot_after_root = ctk.CTkCheckBox(opt, text=self.tr("reboot_recovery_after"))
+        self.reboot_after_root.grid(row=0, column=0, padx=10)
+        self.reboot_after_root.select()
+
+        # روابط
+        lf = ctk.CTkFrame(f)
+        lf.pack(pady=10)
+        ctk.CTkButton(lf, text=self.tr("download_twrp"), width=200,
+                      fg_color="gray", command=lambda: webbrowser.open("https://twrp.me/Devices/")).pack(side="left", padx=5)
+        ctk.CTkButton(lf, text=self.tr("download_magisk"), width=200,
+                      fg_color="gray", command=lambda: webbrowser.open("https://github.com/topjohnwu/Magisk/releases")).pack(side="left", padx=5)
+
+    def check_bl_status(self):
+        def t():
+            self.log("=" * 50)
+            out = run([FASTBOOT, "oem", "device-info"], timeout=30)
+            self.log(out)
+            out2 = run([FASTBOOT, "getvar", "unlocked"], timeout=15)
+            self.log(out2)
+            combined = (out + out2).lower()
+            if "unlocked: yes" in combined or "true" in combined:
+                self.bl_status_label.configure(
+                    text=self.tr("bl_unlocked"), text_color="lightgreen")
+            elif "unlocked: no" in combined or "false" in combined:
+                self.bl_status_label.configure(
+                    text=self.tr("bl_locked"), text_color="red")
+            else:
+                self.bl_status_label.configure(
+                    text=self.tr("bl_unknown"), text_color="orange")
+        threading.Thread(target=t, daemon=True).start()
+
+    def unlock_bootloader(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("unlock_confirm")):
+            return
+        def t():
+            self.log("=" * 50)
+            self.log(self.tr("unlock_warn_screen"))
+            out = run([FASTBOOT, "flashing", "unlock"], timeout=120)
+            self.log(out)
+            if "OKAY" in out or "finished" in out.lower():
+                self.log("✅ Bootloader unlocked")
+        threading.Thread(target=t, daemon=True).start()
+
+    def lock_bootloader(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("unlock_confirm")):
+            return
+        self.async_run(lambda: run([FASTBOOT, "flashing", "lock"], timeout=120))
+
+    def pick_recovery(self):
+        p = filedialog.askopenfilename(
+            filetypes=[("Recovery Image", "*.img"), ("All", "*.*")])
+        if p:
+            self.recovery_img = p
+            self.recovery_label.configure(text=os.path.basename(p),
+                                           text_color="lightgreen")
+
+    def pick_boot(self):
+        p = filedialog.askopenfilename(
+            filetypes=[("Boot Image", "*.img"), ("All", "*.*")])
+        if p:
+            self.boot_img = p
+            self.boot_label.configure(text=os.path.basename(p),
+                                       text_color="lightgreen")
+
+    def flash_recovery(self):
+        if not self.recovery_img or not os.path.exists(self.recovery_img):
+            messagebox.showerror(self.tr("err"), self.tr("samsung_no_file"))
+            return
+        if not messagebox.askyesno(self.tr("confirm"), "Flash recovery?"):
+            return
+        def t():
+            self.log("=" * 50)
+            out = run([FASTBOOT, "flash", "recovery", self.recovery_img], timeout=300)
+            self.log(out)
+            if "OKAY" in out or "finished" in out.lower():
+                self.log(self.tr("flash_recovery_success"))
+                if self.reboot_after_root.get():
+                    run([FASTBOOT, "reboot", "recovery"])
+        threading.Thread(target=t, daemon=True).start()
+
+    def flash_boot(self):
+        if not self.boot_img or not os.path.exists(self.boot_img):
+            messagebox.showerror(self.tr("err"), self.tr("samsung_no_file"))
+            return
+        if not messagebox.askyesno(self.tr("confirm"), "Flash boot?"):
+            return
+        def t():
+            self.log("=" * 50)
+            out = run([FASTBOOT, "flash", "boot", self.boot_img], timeout=300)
+            self.log(out)
+            if "OKAY" in out or "finished" in out.lower():
+                self.log(self.tr("flash_boot_success"))
+        threading.Thread(target=t, daemon=True).start()
+
+    # ============ Flash Tab ============
     def build_flash_tab(self):
         f = self.tab_flash
         ctk.CTkLabel(f, text=self.tr("flash_title"),
                      font=("Arial", 16, "bold")).pack(pady=8)
-
         zf = ctk.CTkFrame(f)
         zf.pack(pady=6, fill="x", padx=20)
         ctk.CTkButton(zf, text=self.tr("flash_select_zip"), width=230, height=38,
@@ -679,10 +851,10 @@ class App(ctk.CTk):
 
         ctk.CTkLabel(f, text="📋 Partitions:",
                      font=("Arial", 12, "bold")).pack(anchor="w", padx=20, pady=(10, 3))
-        self.part_list = ctk.CTkTextbox(f, height=120, font=("Consolas", 11))
+        self.part_list = ctk.CTkTextbox(f, height=110, font=("Consolas", 11))
         self.part_list.pack(fill="both", expand=True, padx=20, pady=(0, 10))
 
-    # ============ Samsung ============
+    # ============ Samsung Tab ============
     def build_samsung_tab(self):
         f = self.tab_samsung
         ctk.CTkLabel(f, text=self.tr("samsung_title"),
@@ -690,7 +862,6 @@ class App(ctk.CTk):
         ctk.CTkLabel(f, text=self.tr("samsung_warning"),
                      font=("Arial", 11), text_color="orange").pack(pady=4)
 
-        # فحص + PIT
         row0 = ctk.CTkFrame(f)
         row0.pack(pady=6)
         ctk.CTkButton(row0, text=self.tr("samsung_detect"), width=200, height=38,
@@ -698,47 +869,20 @@ class App(ctk.CTk):
         ctk.CTkButton(row0, text=self.tr("samsung_pit"), width=200, height=38,
                       command=self.samsung_pit).pack(side="left", padx=5)
 
-        # AP
-        row1 = ctk.CTkFrame(f)
-        row1.pack(pady=4, fill="x", padx=20)
-        ctk.CTkLabel(row1, text=self.tr("samsung_ap"), width=260, anchor="w").pack(side="left")
-        self.samsung_ap_label = ctk.CTkLabel(row1, text=self.tr("samsung_no_file"),
-                                              font=("Arial", 10), text_color="gray")
-        self.samsung_ap_label.pack(side="left", padx=5)
-        ctk.CTkButton(row1, text=self.tr("pick"), width=80,
-                      command=self.samsung_pick_ap).pack(side="right", padx=5)
+        for name, var in [("samsung_ap", "samsung_ap"),
+                          ("samsung_bl", "samsung_bl"),
+                          ("samsung_cp", "samsung_cp"),
+                          ("samsung_csc", "samsung_csc")]:
+            row = ctk.CTkFrame(f)
+            row.pack(pady=4, fill="x", padx=20)
+            ctk.CTkLabel(row, text=self.tr(name), width=260, anchor="w").pack(side="left")
+            lbl = ctk.CTkLabel(row, text=self.tr("samsung_no_file"),
+                                font=("Arial", 10), text_color="gray")
+            lbl.pack(side="left", padx=5)
+            setattr(self, f"{var}_label", lbl)
+            ctk.CTkButton(row, text=self.tr("pick"), width=80,
+                          command=lambda v=var: self.samsung_pick(v)).pack(side="right", padx=5)
 
-        # BL
-        row2 = ctk.CTkFrame(f)
-        row2.pack(pady=4, fill="x", padx=20)
-        ctk.CTkLabel(row2, text=self.tr("samsung_bl"), width=260, anchor="w").pack(side="left")
-        self.samsung_bl_label = ctk.CTkLabel(row2, text=self.tr("samsung_no_file"),
-                                              font=("Arial", 10), text_color="gray")
-        self.samsung_bl_label.pack(side="left", padx=5)
-        ctk.CTkButton(row2, text=self.tr("pick"), width=80,
-                      command=self.samsung_pick_bl).pack(side="right", padx=5)
-
-        # CP
-        row3 = ctk.CTkFrame(f)
-        row3.pack(pady=4, fill="x", padx=20)
-        ctk.CTkLabel(row3, text=self.tr("samsung_cp"), width=260, anchor="w").pack(side="left")
-        self.samsung_cp_label = ctk.CTkLabel(row3, text=self.tr("samsung_no_file"),
-                                              font=("Arial", 10), text_color="gray")
-        self.samsung_cp_label.pack(side="left", padx=5)
-        ctk.CTkButton(row3, text=self.tr("pick"), width=80,
-                      command=self.samsung_pick_cp).pack(side="right", padx=5)
-
-        # CSC
-        row4 = ctk.CTkFrame(f)
-        row4.pack(pady=4, fill="x", padx=20)
-        ctk.CTkLabel(row4, text=self.tr("samsung_csc"), width=260, anchor="w").pack(side="left")
-        self.samsung_csc_label = ctk.CTkLabel(row4, text=self.tr("samsung_no_file"),
-                                               font=("Arial", 10), text_color="gray")
-        self.samsung_csc_label.pack(side="left", padx=5)
-        ctk.CTkButton(row4, text=self.tr("pick"), width=80,
-                      command=self.samsung_pick_csc).pack(side="right", padx=5)
-
-        # خيارات + فلاش
         opt = ctk.CTkFrame(f)
         opt.pack(pady=10)
         self.samsung_reboot = ctk.CTkCheckBox(opt, text=self.tr("samsung_reboot"))
@@ -750,49 +894,19 @@ class App(ctk.CTk):
                       font=("Arial", 15, "bold"),
                       command=self.samsung_flash_all).pack(pady=15)
 
-        ctk.CTkLabel(f, text="─" * 60, text_color="gray").pack(pady=5)
         fl = ctk.CTkFrame(f)
         fl.pack(pady=5)
-        ctk.CTkButton(fl, text=self.tr("samsung_flash_ap"), width=140,
-                      command=lambda: self.samsung_flash_one("AP")).pack(side="left", padx=3)
-        ctk.CTkButton(fl, text=self.tr("samsung_flash_bl"), width=140,
-                      command=lambda: self.samsung_flash_one("BL")).pack(side="left", padx=3)
-        ctk.CTkButton(fl, text=self.tr("samsung_flash_cp"), width=140,
-                      command=lambda: self.samsung_flash_one("CP")).pack(side="left", padx=3)
-        ctk.CTkButton(fl, text=self.tr("samsung_flash_csc"), width=140,
-                      command=lambda: self.samsung_flash_one("CSC")).pack(side="left", padx=3)
+        for p in ["AP", "BL", "CP", "CSC"]:
+            ctk.CTkButton(fl, text=self.tr(f"samsung_flash_{p.lower()}"), width=140,
+                          command=lambda pp=p: self.samsung_flash_one(pp)).pack(side="left", padx=3)
 
-    def samsung_pick_ap(self):
+    def samsung_pick(self, var):
         p = filedialog.askopenfilename(
-            filetypes=[("Samsung AP", "*.tar.md5 *.tar"), ("All", "*.*")])
+            filetypes=[("Samsung", "*.tar.md5 *.tar"), ("All", "*.*")])
         if p:
-            self.samsung_ap = p
-            self.samsung_ap_label.configure(text=os.path.basename(p),
-                                             text_color="lightgreen")
-
-    def samsung_pick_bl(self):
-        p = filedialog.askopenfilename(
-            filetypes=[("Samsung BL", "*.tar.md5 *.tar"), ("All", "*.*")])
-        if p:
-            self.samsung_bl = p
-            self.samsung_bl_label.configure(text=os.path.basename(p),
-                                             text_color="lightgreen")
-
-    def samsung_pick_cp(self):
-        p = filedialog.askopenfilename(
-            filetypes=[("Samsung CP", "*.tar.md5 *.tar"), ("All", "*.*")])
-        if p:
-            self.samsung_cp = p
-            self.samsung_cp_label.configure(text=os.path.basename(p),
-                                             text_color="lightgreen")
-
-    def samsung_pick_csc(self):
-        p = filedialog.askopenfilename(
-            filetypes=[("Samsung CSC", "*.tar.md5 *.tar"), ("All", "*.*")])
-        if p:
-            self.samsung_csc = p
-            self.samsung_csc_label.configure(text=os.path.basename(p),
-                                              text_color="lightgreen")
+            setattr(self, var, p)
+            lbl = getattr(self, f"{var}_label")
+            lbl.configure(text=os.path.basename(p), text_color="lightgreen")
 
     def samsung_detect(self):
         def t():
@@ -800,9 +914,7 @@ class App(ctk.CTk):
             if not os.path.exists(HEIMDALL):
                 self.log(self.tr("msg_no_heimdall"))
                 return
-            self.log(self.tr("samsung_detect"))
-            out = run([HEIMDALL, "detect"], timeout=30)
-            self.log(out)
+            self.log(run([HEIMDALL, "detect"], timeout=30))
         threading.Thread(target=t, daemon=True).start()
 
     def samsung_pit(self):
@@ -811,35 +923,27 @@ class App(ctk.CTk):
             if not os.path.exists(HEIMDALL):
                 self.log(self.tr("msg_no_heimdall"))
                 return
-            out = run([HEIMDALL, "print-pit"], timeout=60)
-            self.log(out)
+            self.log(run([HEIMDALL, "print-pit"], timeout=60))
         threading.Thread(target=t, daemon=True).start()
 
     def samsung_flash_one(self, partition):
-        files = {
-            "AP": self.samsung_ap,
-            "BL": self.samsung_bl,
-            "CP": self.samsung_cp,
-            "CSC": self.samsung_csc,
-        }
-        f = files.get(partition, "")
+        key = {"AP": "samsung_ap", "BL": "samsung_bl",
+               "CP": "samsung_cp", "CSC": "samsung_csc"}[partition]
+        f = getattr(self, key, "")
         if not f or not os.path.exists(f):
             messagebox.showerror(self.tr("err"), self.tr("samsung_no_file"))
             return
-        if not messagebox.askyesno(self.tr("confirm"),
-                                    self.tr("confirm_flash_samsung", partition)):
-            return
-        self.samsung_flash([f])
+        self.samsung_flash([(partition, f)])
 
     def samsung_flash_all(self):
-        files = [f for f in [self.samsung_ap, self.samsung_bl,
-                              self.samsung_cp, self.samsung_csc]
-                 if f and os.path.exists(f)]
+        files = []
+        for p, k in [("AP", "samsung_ap"), ("BL", "samsung_bl"),
+                     ("CP", "samsung_cp"), ("CSC", "samsung_csc")]:
+            v = getattr(self, k, "")
+            if v and os.path.exists(v):
+                files.append((p, v))
         if not files:
             messagebox.showerror(self.tr("err"), self.tr("samsung_no_file"))
-            return
-        if not messagebox.askyesno(self.tr("confirm"),
-                                    self.tr("confirm_flash_samsung", "ALL")):
             return
         self.samsung_flash(files)
 
@@ -849,30 +953,18 @@ class App(ctk.CTk):
             if not os.path.exists(HEIMDALL):
                 self.log(self.tr("msg_no_heimdall"))
                 return
-
-            # فحص الجهاز
             det = run([HEIMDALL, "detect"], timeout=30)
             self.log(det)
             if "Detected" not in det and "Device" not in det:
-                self.log(self.tr("samsung_no_device"))
+                self.log("❌ No device")
                 return
-
-            total = len(files)
-            for i, f in enumerate(files):
-                self.log(self.tr("samsung_flashing", os.path.basename(f)))
-                args = [HEIMDALL, "flash",
-                        "--no-reboot" if not self.samsung_reboot.get() else "--reboot"]
-                # سنستخدم wait + partition detection
-                # Heimdall يستخدم خيار --<PARTITION> <file>
-                # لكن الصيغة الأدق: استخراج وقراءة الـ PIT أولاً
-                # مبسط: نستخدم flash --<filename> كما في الإصدارات الأخيرة
+            for part, f in files:
+                self.log(f"⏳ Flashing {part}: {os.path.basename(f)}")
                 args = [HEIMDALL, "flash",
                         "--no-reboot" if not self.samsung_reboot.get() else "--reboot",
-                        "--verbose"]
-                # إضافة الملف كـ AP (معظم الحالات)
-                out = run(args + ["--AP", f], timeout=3600, cwd=HEIMDALL_DIR)
+                        "--verbose", f"--{part}", f]
+                out = run(args, timeout=3600, cwd=HEIMDALL_DIR)
                 self.log(out[-1500:])
-
             self.log(self.tr("samsung_done"))
         threading.Thread(target=t, daemon=True).start()
 
@@ -883,7 +975,6 @@ class App(ctk.CTk):
                      font=("Arial", 15, "bold")).pack(pady=5)
         ctk.CTkLabel(f, text=self.tr("unlock_warning"),
                      font=("Arial", 11), text_color="orange").pack(pady=4)
-
         row = ctk.CTkFrame(f)
         row.pack(pady=6)
         ctk.CTkButton(row, text=self.tr("check_lock"), width=180,
@@ -892,7 +983,6 @@ class App(ctk.CTk):
                       command=self.check_root).pack(side="left", padx=4)
         ctk.CTkButton(row, text=self.tr("check_frp"), width=180,
                       command=self.check_frp).pack(side="left", padx=4)
-
         row2 = ctk.CTkFrame(f)
         row2.pack(pady=4)
         ctk.CTkButton(row2, text=self.tr("remove_locksettings"), width=250,
@@ -901,7 +991,6 @@ class App(ctk.CTk):
         ctk.CTkButton(row2, text=self.tr("remove_gatekeeper"), width=250,
                       fg_color="orange", hover_color="darkorange",
                       command=self.remove_gatekeeper).pack(side="left", padx=4)
-
         row3 = ctk.CTkFrame(f)
         row3.pack(pady=4)
         ctk.CTkButton(row3, text=self.tr("remove_pattern"), width=250,
@@ -909,13 +998,11 @@ class App(ctk.CTk):
                       command=self.remove_pattern).pack(side="left", padx=4)
         ctk.CTkButton(row3, text=self.tr("full_device_info"), width=250,
                       command=self.full_info).pack(side="left", padx=4)
-
         row4 = ctk.CTkFrame(f)
         row4.pack(pady=4)
         ctk.CTkButton(row4, text=self.tr("erase_frp_adb"), width=250,
                       fg_color="red", hover_color="darkred",
                       command=self.erase_frp_adb).pack(side="left", padx=4)
-
         row5 = ctk.CTkFrame(f)
         row5.pack(pady=4)
         ctk.CTkButton(row5, text=self.tr("erase_frp_fastboot"), width=250,
@@ -935,7 +1022,6 @@ class App(ctk.CTk):
                       command=self.run_mtk_gui).pack(pady=4)
         ctk.CTkButton(f, text=self.tr("read_gpt"), width=280,
                       command=lambda: self.mtk_cmd(["printgpt"])).pack(pady=4)
-
         row = ctk.CTkFrame(f)
         row.pack(pady=4)
         ctk.CTkLabel(row, text=self.tr("read_part")).pack(side="left", padx=5)
@@ -944,7 +1030,6 @@ class App(ctk.CTk):
         self.mtk_read_part.insert(0, "boot")
         ctk.CTkButton(row, text=self.tr("read_btn"), width=80,
                       command=self.mtk_read).pack(side="left")
-
         row2 = ctk.CTkFrame(f)
         row2.pack(pady=4)
         ctk.CTkLabel(row2, text=self.tr("write_part")).pack(side="left", padx=5)
@@ -958,10 +1043,9 @@ class App(ctk.CTk):
         ctk.CTkButton(row2, text=self.tr("write_btn"), width=70, fg_color="red",
                       hover_color="darkred",
                       command=self.mtk_write).pack(side="left", padx=5)
-
         ctk.CTkLabel(f, text=self.tr("advanced"), font=("Arial", 12, "bold"),
                      text_color="orange").pack(pady=(15, 3))
-        ctk.CTkButton(f, text=self.tr("unlock_bl"), width=300,
+        ctk.CTkButton(f, text=self.tr("unlock_bl_mtk"), width=300,
                       fg_color="orange", hover_color="darkorange",
                       command=self.mtk_unlock).pack(pady=3)
         ctk.CTkButton(f, text=self.tr("wipe_frp"), width=300,
@@ -973,7 +1057,6 @@ class App(ctk.CTk):
         f = self.tab_edl
         ctk.CTkLabel(f, text=self.tr("edl_title"),
                      font=("Arial", 15, "bold")).pack(pady=5)
-
         lf = ctk.CTkFrame(f)
         lf.pack(pady=4)
         ctk.CTkLabel(lf, text=self.tr("edl_firehose")).pack(side="left", padx=5)
@@ -981,14 +1064,12 @@ class App(ctk.CTk):
         self.edl_loader_entry.pack(side="left", padx=5)
         ctk.CTkButton(lf, text=self.tr("pick"), width=70,
                       command=self.pick_edl_loader).pack(side="left", padx=5)
-
         row = ctk.CTkFrame(f)
         row.pack(pady=4)
         ctk.CTkButton(row, text=self.tr("edl_check"), width=200,
                       command=self.edl_check).pack(side="left", padx=5)
         ctk.CTkButton(row, text=self.tr("edl_printgpt"), width=200,
                       command=self.edl_printgpt).pack(side="left", padx=5)
-
         rp = ctk.CTkFrame(f)
         rp.pack(pady=4)
         ctk.CTkLabel(rp, text=self.tr("edl_partition")).pack(side="left", padx=5)
@@ -997,7 +1078,6 @@ class App(ctk.CTk):
         self.edl_read_part.insert(0, "boot")
         ctk.CTkButton(rp, text=self.tr("edl_dump"), width=120,
                       command=self.edl_dump).pack(side="left", padx=5)
-
         wp = ctk.CTkFrame(f)
         wp.pack(pady=4)
         ctk.CTkLabel(wp, text=self.tr("edl_partition")).pack(side="left", padx=5)
@@ -1011,7 +1091,6 @@ class App(ctk.CTk):
         ctk.CTkButton(wp, text=self.tr("edl_load"), width=90, fg_color="red",
                       hover_color="darkred",
                       command=self.edl_write).pack(side="left", padx=5)
-
         ops = ctk.CTkFrame(f)
         ops.pack(pady=15)
         ctk.CTkButton(ops, text=self.tr("edl_rw"), width=200,
@@ -1074,7 +1153,7 @@ class App(ctk.CTk):
                 self.log(f"{p}: {run([ADB, 'shell', 'getprop', p]).strip()}")
         threading.Thread(target=t, daemon=True).start()
 
-    # ============ Flash (same as before) ============
+    # ============ Flash Logic ============
     def pick_flash_file(self):
         p = filedialog.askopenfilename(
             filetypes=[("ROM Files", "*.zip *.tar *.md5 *.tgz *.tar.gz"),
@@ -1098,7 +1177,6 @@ class App(ctk.CTk):
         }.get(self.flash_rom_type, "flash_type_unknown")
         label = self.tr(type_key)
         self.flash_type_label.configure(text=self.tr("flash_type", label))
-        self.log(f"🔍 {label}")
 
     def extract_archive(self, path, dest):
         os.makedirs(dest, exist_ok=True)
@@ -1150,7 +1228,6 @@ class App(ctk.CTk):
                 if payloads:
                     self.flash_status.configure(
                         text=self.tr("flash_status_extracting_payload"))
-                    self.log("⚠️ payload.bin found")
                     try:
                         p_url = "https://github.com/ssut/payload-dumper-go/releases/download/1.2.2/payload-dumper-go_1.2.2_windows_amd64.tar.gz"
                         tgz = os.path.join(BASE_DIR, "pdg.tgz")
@@ -1163,18 +1240,17 @@ class App(ctk.CTk):
                             out_dir = os.path.join(TEMP_FLASH, "extracted")
                             os.makedirs(out_dir, exist_ok=True)
                             for pl in payloads:
-                                self.log(f"🔧 {os.path.basename(pl)}...")
                                 self.log(run([exe, "-o", out_dir, pl], timeout=1800))
                     except Exception as e:
                         self.log(f"⚠️ {e}")
 
                 images = self.find_images()
                 if not images:
-                    self.log("❌ No .img files")
+                    self.log("❌ No images")
                     self.flash_status.configure(text=self.tr("flash_status_error"))
                     return
 
-                self.log(f"✅ Found {len(images)} images")
+                self.log(f"✅ {len(images)} images")
                 for name in sorted(images.keys()):
                     self.part_list.insert("end", f"{name}\n")
 
@@ -1185,23 +1261,18 @@ class App(ctk.CTk):
 
                 for name in sorted(images.keys()):
                     if self.flash_cancel:
-                        self.flash_status.configure(
-                            text=self.tr("flash_status_cancelled"))
+                        self.flash_status.configure(text=self.tr("flash_status_cancelled"))
                         return
                     if mode == self.tr("flash_mode_keep") and name in ["userdata", "metadata"]:
                         done += 1
                         continue
-
-                    self.flash_status.configure(
-                        text=self.tr("flash_status_flashing", name))
+                    self.flash_status.configure(text=self.tr("flash_status_flashing", name))
                     self.log(f"🚀 {name}")
                     out = run([FASTBOOT, "flash", name, images[name]], timeout=1200)
                     self.log(out[-500:])
-                    if "FAILED" in out or "error" in out.lower():
-                        self.log(f"❌ {name} failed")
+                    if "FAILED" in out:
                         if self.chk_stop.get():
-                            self.flash_status.configure(
-                                text=self.tr("flash_status_error"))
+                            self.flash_status.configure(text=self.tr("flash_status_error"))
                             return
                     done += 1
                     self.flash_progress.set(done / total)
@@ -1210,21 +1281,17 @@ class App(ctk.CTk):
                     run([FASTBOOT, "reboot"])
                 self.flash_status.configure(text=self.tr("flash_status_done"))
                 self.flash_progress.set(1)
-                self.log("🎉 Done!")
             except Exception as e:
                 self.log(f"❌ {e}")
-                self.flash_status.configure(text=self.tr("flash_status_error"))
 
         threading.Thread(target=task, daemon=True).start()
 
     def cancel_flash(self):
         self.flash_cancel = True
-        self.log("⏹️ Cancelling...")
 
     # ============ Unlock Ops ============
     def check_lock(self):
         def t():
-            self.log("=" * 50)
             out = run([ADB, "shell", "dumpsys", "device_policy"])
             for line in out.splitlines():
                 if "mPasswordOwner" in line or "PasswordQuality" in line:
