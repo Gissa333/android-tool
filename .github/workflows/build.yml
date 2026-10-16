@@ -18,38 +18,46 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Python dependencies
+      - name: Install dependencies
         run: |
           pip install -r requirements.txt
           pip install pyinstaller
 
+      - name: Download mtkclient
+        run: |
+          curl -L -o mtk.zip https://github.com/bkerler/mtkclient/archive/refs/heads/main.zip
+          tar -xf mtk.zip
+          Move-Item mtkclient-main mtkclient
+        shell: pwsh
+
+      - name: Install mtkclient requirements
+        run: |
+          pip install -r mtkclient/requirements.txt
+        shell: pwsh
+
       - name: Build EXE with PyInstaller
         run: |
-          pyinstaller --noconfirm --onefile --windowed --name "AndroidTool" main.py
+          pyinstaller --noconfirm --onedir --windowed ^
+            --name "AndroidTool" ^
+            --add-data "mtkclient;mtkclient" ^
+            main.py
+        shell: cmd
 
       - name: Install Inno Setup
         run: choco install innosetup -y
 
-      - name: Build Installer with Inno Setup
+      - name: Build Installer
         run: |
           & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\setup.iss
 
-      - name: Upload Portable EXE
+      - name: Upload Portable
         uses: actions/upload-artifact@v4
         with:
           name: AndroidTool-Portable
-          path: dist/AndroidTool.exe
+          path: dist/AndroidTool/
 
       - name: Upload Installer
         uses: actions/upload-artifact@v4
         with:
           name: AndroidTool-Setup
           path: installer/Output/AndroidTool-Setup.exe
-
-      - name: Create Release (on tag)
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            dist/AndroidTool.exe
-            installer/Output/AndroidTool-Setup.exe
