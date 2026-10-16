@@ -23,18 +23,55 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Download and Install mtkclient
+      - name: Download mtkclient
         shell: pwsh
         run: |
           Invoke-WebRequest -Uri "https://github.com/bkerler/mtkclient/archive/refs/heads/main.zip" -OutFile mtk.zip
           Expand-Archive mtk.zip -DestinationPath .
           Move-Item mtkclient-main mtkclient
-          cd mtkclient
-          pip install -r requirements.txt
-          pip install -e .
+
+      - name: Download Python Embeddable
+        shell: pwsh
+        run: |
+          $url = "https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-amd64.zip"
+          Invoke-WebRequest -Uri $url -OutFile python-embed.zip
+          New-Item -ItemType Directory -Path python-embed -Force | Out-Null
+          Expand-Archive python-embed.zip -DestinationPath python-embed -Force
+
+      - name: Enable site-packages in embedded Python
+        shell: pwsh
+        run: |
+          $pth = Get-ChildItem python-embed\python*._pth | Select-Object -First 1
+          $content = Get-Content $pth.FullName
+          $content = $content -replace '#import site', 'import site'
+          Add-Content $pth.FullName "Lib\site-packages"
+          Add-Content $pth.FullName "..\mtkclient"
+          Set-Content $pth.FullName $content
+          Get-Content $pth.FullName
+
+      - name: Install pip into embedded Python
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://bootstrap.pypa.io/get-pip.py" -OutFile get-pip.py
+          .\python-embed\python.exe get-pip.py --no-warn-script-location
+
+      - name: Install mtkclient requirements into embedded Python
+        shell: pwsh
+        run: |
+          .\python-embed\python.exe -m pip install --no-warn-script-location -r mtkclient\requirements.txt
+          .\python-embed\python.exe -m pip install --no-warn-script-location pyusb pyserial pycryptodome capstone colorama
 
       - name: Build with Spec file
         run: pyinstaller --noconfirm AndroidTool.spec
+
+      - name: Copy python-embed and mtkclient into dist
+        shell: pwsh
+        run: |
+          Copy-Item -Recurse -Force python-embed dist\AndroidTool\python-embed
+          Copy-Item -Recurse -Force mtkclient dist\AndroidTool\mtkclient
+          # حذف المجلدات الثقيلة غير الضرورية
+          Remove-Item -Recurse -Force dist\AndroidTool\mtkclient\.git -ErrorAction SilentlyContinue
+          Remove-Item -Recurse -Force dist\AndroidTool\mtkclient\__pycache__ -ErrorAction SilentlyContinue
 
       - name: Install Inno Setup
         run: choco install innosetup -y
