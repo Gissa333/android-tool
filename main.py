@@ -37,6 +37,20 @@ def run(cmd, timeout=60, cwd=None):
         return f"خطأ: {e}"
 
 
+def find_python():
+    """البحث عن Python في النظام"""
+    for name in ["python", "python3", "py"]:
+        try:
+            r = subprocess.run([name, "--version"],
+                               capture_output=True, text=True, timeout=5,
+                               creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
+            if r.returncode == 0:
+                return name
+        except Exception:
+            continue
+    return None
+
+
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -151,6 +165,11 @@ class App(ctk.CTk):
         else:
             self.log("⚠️ mtkclient غير مثبت — اضغط زر التثبيت")
 
+        if find_python():
+            self.log("✅ Python موجود على النظام")
+        else:
+            self.log("⚠️ Python غير موجود — حمّله من python.org")
+
     def download_tools(self):
         def task():
             try:
@@ -205,9 +224,13 @@ class App(ctk.CTk):
                         break
 
                 self.log("📥 تثبيت متطلبات mtkclient...")
-                out = run([sys.executable, "-m", "pip", "install", "-r",
+                py = find_python()
+                if not py:
+                    self.log("❌ Python غير موجود — حمّله من python.org")
+                    return
+                out = run([py, "-m", "pip", "install", "-r",
                            os.path.join(MTK_DIR, "requirements.txt")], timeout=600)
-                self.log(out[-1000:])  # آخر جزء فقط
+                self.log(out[-1500:])
                 self.log("✅ تم تثبيت mtkclient")
                 self.check_tools()
             except Exception as e:
@@ -218,18 +241,26 @@ class App(ctk.CTk):
         if not os.path.exists(MTK_SCRIPT):
             self.log("❌ ثبّت mtkclient أولاً")
             return
-        self.log("🖥️ تشغيل mtk_gui...")
-        subprocess.Popen([sys.executable, "mtk_gui.py"], cwd=MTK_DIR,
+        py = find_python()
+        if not py:
+            self.log("❌ Python غير موجود على النظام! حمّله من python.org")
+            return
+        self.log(f"🖥️ تشغيل mtk_gui عبر {py}...")
+        subprocess.Popen([py, "mtk_gui.py"], cwd=MTK_DIR,
                          creationflags=subprocess.CREATE_NEW_CONSOLE if os.name == "nt" else 0)
 
     def mtk_cmd(self, args, timeout=600):
         if not os.path.exists(MTK_SCRIPT):
             self.log("❌ mtkclient غير مثبت")
             return
+        py = find_python()
+        if not py:
+            self.log("❌ Python غير موجود — حمّله من python.org")
+            return
         def t():
             self.log("=" * 50)
             self.log(f"⚙️ mtk {' '.join(args)}")
-            self.log(run([sys.executable, "mtk.py"] + args, timeout=timeout, cwd=MTK_DIR))
+            self.log(run([py, "mtk.py"] + args, timeout=timeout, cwd=MTK_DIR))
         threading.Thread(target=t, daemon=True).start()
 
     def mtk_read(self):
