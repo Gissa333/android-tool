@@ -1,6 +1,6 @@
 [Setup]
 AppName=Android Tool
-AppVersion=0.3.0
+AppVersion=0.4.0
 AppPublisher=Gissa333
 DefaultDirName={autopf}\AndroidTool
 DefaultGroupName=Android Tool
@@ -12,6 +12,8 @@ ArchitecturesInstallIn64BitMode=x64
 PrivilegesRequired=admin
 DisableProgramGroupPage=yes
 WizardStyle=modern
+DiskSpanning=no
+LZMAUseSeparateProcess=yes
 
 [Files]
 Source: "..\dist\AndroidTool\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
