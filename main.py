@@ -26,6 +26,107 @@ MTK_SCRIPT = os.path.join(MTK_DIR, "mtk.py")
 PLATFORM_TOOLS_URL = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
 
 
+# ============ قاموس الترجمة ============
+LANG = {
+    "ar": {
+        "title": "🛠️ أداة الأندرويد",
+        "tab_adb": "ADB / Fastboot",
+        "tab_mtk": "MTK (ميدياتك)",
+        "download_tools": "📥 تحميل Platform-Tools",
+        "detect": "🔍 اكتشاف الأجهزة",
+        "device_info": "📱 معلومات الجهاز",
+        "reboot": "🔄 إعادة تشغيل",
+        "fastboot": "⚡ وضع Fastboot",
+        "exit_fastboot": "🔌 خروج من Fastboot",
+        "mtk_title": "⚙️ mtkclient — ميدياتك (مدمج)",
+        "run_gui": "🖥️ تشغيل الواجهة الرسمية",
+        "read_gpt": "📋 قراءة GPT",
+        "read_part": "قراءة قسم:",
+        "read_btn": "قراءة",
+        "write_part": "كتابة قسم:",
+        "pick": "اختر",
+        "write_btn": "كتابة",
+        "advanced": "⚠️ عمليات متقدمة",
+        "unlock_bl": "🔓 فك قفل البوتلودر",
+        "wipe_frp": "🧹 مسح FRP + Userdata",
+        "log": "📋 السجل:",
+        "lang_btn": "🌐 English",
+        "msg_wait": "⏳ ...",
+        "msg_tools_ok": "✅ Platform-Tools: {}",
+        "msg_tools_missing": "⚠️ Platform-Tools غير مثبتة — اضغط الزر",
+        "msg_python_ok": "✅ Python مدمج: {}",
+        "msg_python_missing": "⚠️ Python المدمج غير موجود",
+        "msg_mtk_ok": "✅ mtkclient: {}",
+        "msg_mtk_missing": "⚠️ mtkclient غير موجود",
+        "msg_downloading_pt": "📥 تحميل Platform-Tools...",
+        "msg_installed": "✅ تم التثبيت",
+        "msg_error": "❌ {}",
+        "msg_adb": "— ADB —",
+        "msg_fastboot": "— Fastboot —",
+        "msg_running_gui": "🖥️ تشغيل mtk_gui...",
+        "msg_no_embed": "❌ Python المدمج غير موجود",
+        "msg_no_gui": "❌ mtk_gui.py غير موجود",
+        "msg_no_mtk": "❌ mtkclient غير موجود",
+        "msg_running_cmd": "⚙️ mtk {}",
+        "confirm_write": "كتابة {} من {}؟",
+        "confirm_unlock": "فك قفل البوتلودر سيمسح كل البيانات!\nمتأكد؟",
+        "confirm_wipe": "مسح FRP و Userdata نهائياً!",
+        "err_check": "تحقق من القسم والملف",
+        "err": "خطأ",
+        "confirm": "تأكيد",
+        "warn": "تحذير",
+    },
+    "en": {
+        "title": "🛠️ Android Tool",
+        "tab_adb": "ADB / Fastboot",
+        "tab_mtk": "MTK (MediaTek)",
+        "download_tools": "📥 Download Platform-Tools",
+        "detect": "🔍 Detect Devices",
+        "device_info": "📱 Device Info",
+        "reboot": "🔄 Reboot",
+        "fastboot": "⚡ Fastboot Mode",
+        "exit_fastboot": "🔌 Exit Fastboot",
+        "mtk_title": "⚙️ mtkclient — MediaTek (Integrated)",
+        "run_gui": "🖥️ Launch Official GUI",
+        "read_gpt": "📋 Read GPT",
+        "read_part": "Read partition:",
+        "read_btn": "Read",
+        "write_part": "Write partition:",
+        "pick": "Pick",
+        "write_btn": "Write",
+        "advanced": "⚠️ Advanced Operations",
+        "unlock_bl": "🔓 Unlock Bootloader",
+        "wipe_frp": "🧹 Wipe FRP + Userdata",
+        "log": "📋 Log:",
+        "lang_btn": "🌐 العربية",
+        "msg_wait": "⏳ ...",
+        "msg_tools_ok": "✅ Platform-Tools: {}",
+        "msg_tools_missing": "⚠️ Platform-Tools not installed — click button",
+        "msg_python_ok": "✅ Embedded Python: {}",
+        "msg_python_missing": "⚠️ Embedded Python not found",
+        "msg_mtk_ok": "✅ mtkclient: {}",
+        "msg_mtk_missing": "⚠️ mtkclient not found",
+        "msg_downloading_pt": "📥 Downloading Platform-Tools...",
+        "msg_installed": "✅ Installed",
+        "msg_error": "❌ {}",
+        "msg_adb": "— ADB —",
+        "msg_fastboot": "— Fastboot —",
+        "msg_running_gui": "🖥️ Launching mtk_gui...",
+        "msg_no_embed": "❌ Embedded Python not found",
+        "msg_no_gui": "❌ mtk_gui.py not found",
+        "msg_no_mtk": "❌ mtkclient not found",
+        "msg_running_cmd": "⚙️ mtk {}",
+        "confirm_write": "Write {} from {}?",
+        "confirm_unlock": "Unlocking bootloader will erase all data!\nAre you sure?",
+        "confirm_wipe": "Wipe FRP and Userdata permanently!",
+        "err_check": "Check partition and file",
+        "err": "Error",
+        "confirm": "Confirm",
+        "warn": "Warning",
+    },
+}
+
+
 def run(cmd, timeout=60, cwd=None, env=None):
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout,
@@ -33,31 +134,66 @@ def run(cmd, timeout=60, cwd=None, env=None):
                            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
         return (r.stdout or "") + (r.stderr or "")
     except Exception as e:
-        return f"خطأ: {e}"
+        return f"Error: {e}"
 
 
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Android Tool v0.4")
+        self.lang = "ar"
+        self.t = LANG[self.lang]
+
         self.geometry("950x750")
+        self.resizable(True, True)
 
-        ctk.CTkLabel(self, text="🛠️ Android Tool",
-                     font=("Arial", 22, "bold")).pack(pady=5)
+        self.build_ui()
+        self.check_tools()
 
-        self.tabs = ctk.CTkTabview(self, width=900, height=650)
+    def tr(self, key, *args):
+        s = self.t.get(key, key)
+        if args:
+            try:
+                return s.format(*args)
+            except Exception:
+                return s
+        return s
+
+    def build_ui(self):
+        # مسح كل شيء قبل إعادة البناء
+        for w in self.winfo_children():
+            w.destroy()
+
+        self.title(self.tr("title"))
+
+        # شريط علوي: العنوان + زر اللغة
+        top = ctk.CTkFrame(self)
+        top.pack(fill="x", padx=15, pady=(10, 0))
+
+        ctk.CTkLabel(top, text=self.tr("title"),
+                     font=("Arial", 22, "bold")).pack(side="left", padx=5)
+
+        ctk.CTkButton(top, text=self.tr("lang_btn"), width=110, height=32,
+                      command=self.toggle_lang).pack(side="right", padx=5)
+
+        self.tabs = ctk.CTkTabview(self, width=900, height=580)
         self.tabs.pack(padx=15, pady=5, fill="both", expand=True)
 
-        self.tab_adb = self.tabs.add("ADB/Fastboot")
-        self.tab_mtk = self.tabs.add("MTK (MediaTek)")
+        self.tab_adb = self.tabs.add(self.tr("tab_adb"))
+        self.tab_mtk = self.tabs.add(self.tr("tab_mtk"))
 
         self.build_adb_tab()
         self.build_mtk_tab()
 
-        ctk.CTkLabel(self, text="📋 السجل:", font=("Arial", 13, "bold")).pack(anchor="w", padx=15)
-        self.log_box = ctk.CTkTextbox(self, height=130, font=("Consolas", 11))
+        ctk.CTkLabel(self, text=self.tr("log"),
+                     font=("Arial", 13, "bold")).pack(anchor="w", padx=15)
+
+        self.log_box = ctk.CTkTextbox(self, height=110, font=("Consolas", 11))
         self.log_box.pack(fill="x", padx=15, pady=(0, 10))
 
+    def toggle_lang(self):
+        self.lang = "en" if self.lang == "ar" else "ar"
+        self.t = LANG[self.lang]
+        self.build_ui()
         self.check_tools()
 
     def log(self, t):
@@ -67,19 +203,19 @@ class App(ctk.CTk):
 
     def async_run(self, fn):
         def wrap():
-            self.log("⏳ ...")
+            self.log(self.tr("msg_wait"))
             self.log(fn())
         threading.Thread(target=wrap, daemon=True).start()
 
     def build_adb_tab(self):
         f = self.tab_adb
         btns = [
-            ("📥 تحميل Platform-Tools", self.download_tools),
-            ("🔍 اكتشاف الأجهزة", self.detect),
-            ("📱 معلومات الجهاز", self.info),
-            ("🔄 إعادة تشغيل", lambda: self.async_run(lambda: run([ADB, "reboot"]))),
-            ("⚡ Fastboot", lambda: self.async_run(lambda: run([ADB, "reboot", "bootloader"]))),
-            ("🔌 خروج من Fastboot", lambda: self.async_run(lambda: run([FASTBOOT, "reboot"]))),
+            (self.tr("download_tools"), self.download_tools),
+            (self.tr("detect"), self.detect),
+            (self.tr("device_info"), self.info),
+            (self.tr("reboot"), lambda: self.async_run(lambda: run([ADB, "reboot"]))),
+            (self.tr("fastboot"), lambda: self.async_run(lambda: run([ADB, "reboot", "bootloader"]))),
+            (self.tr("exit_fastboot"), lambda: self.async_run(lambda: run([FASTBOOT, "reboot"]))),
         ]
         for i, (t, fn) in enumerate(btns):
             ctk.CTkButton(f, text=t, width=200, height=36,
@@ -88,72 +224,72 @@ class App(ctk.CTk):
     def build_mtk_tab(self):
         f = self.tab_mtk
 
-        ctk.CTkLabel(f, text="⚙️ mtkclient — MediaTek (مدمج)",
+        ctk.CTkLabel(f, text=self.tr("mtk_title"),
                      font=("Arial", 15, "bold")).pack(pady=5)
 
-        ctk.CTkButton(f, text="🖥️ تشغيل الواجهة الرسمية", width=280,
+        ctk.CTkButton(f, text=self.tr("run_gui"), width=280,
                       fg_color="green", hover_color="darkgreen",
                       command=self.run_mtk_gui).pack(pady=4)
 
-        ctk.CTkButton(f, text="📋 قراءة GPT", width=280,
+        ctk.CTkButton(f, text=self.tr("read_gpt"), width=280,
                       command=lambda: self.mtk_cmd(["printgpt"])).pack(pady=4)
 
         row = ctk.CTkFrame(f)
         row.pack(pady=4)
-        ctk.CTkLabel(row, text="قراءة قسم:").pack(side="left", padx=5)
+        ctk.CTkLabel(row, text=self.tr("read_part")).pack(side="left", padx=5)
         self.mtk_read_part = ctk.CTkEntry(row, width=120)
         self.mtk_read_part.pack(side="left", padx=5)
         self.mtk_read_part.insert(0, "boot")
-        ctk.CTkButton(row, text="قراءة", width=80,
+        ctk.CTkButton(row, text=self.tr("read_btn"), width=80,
                       command=self.mtk_read).pack(side="left")
 
         row2 = ctk.CTkFrame(f)
         row2.pack(pady=4)
-        ctk.CTkLabel(row2, text="كتابة قسم:").pack(side="left", padx=5)
+        ctk.CTkLabel(row2, text=self.tr("write_part")).pack(side="left", padx=5)
         self.mtk_write_part = ctk.CTkEntry(row2, width=120)
         self.mtk_write_part.pack(side="left", padx=5)
         self.mtk_write_part.insert(0, "boot")
         self.mtk_write_file = ctk.CTkEntry(row2, width=200)
         self.mtk_write_file.pack(side="left", padx=5)
-        ctk.CTkButton(row2, text="اختر", width=60,
+        ctk.CTkButton(row2, text=self.tr("pick"), width=60,
                       command=self.pick_mtk_file).pack(side="left")
-        ctk.CTkButton(row2, text="كتابة", width=70, fg_color="red",
+        ctk.CTkButton(row2, text=self.tr("write_btn"), width=70, fg_color="red",
                       hover_color="darkred",
                       command=self.mtk_write).pack(side="left", padx=5)
 
-        ctk.CTkLabel(f, text="⚠️ عمليات متقدمة", font=("Arial", 12, "bold"),
+        ctk.CTkLabel(f, text=self.tr("advanced"), font=("Arial", 12, "bold"),
                      text_color="orange").pack(pady=(15, 3))
 
-        ctk.CTkButton(f, text="🔓 فك قفل البوتلودر", width=300,
+        ctk.CTkButton(f, text=self.tr("unlock_bl"), width=300,
                       fg_color="orange", hover_color="darkorange",
                       command=self.mtk_unlock).pack(pady=3)
 
-        ctk.CTkButton(f, text="🧹 مسح FRP + Userdata", width=300,
+        ctk.CTkButton(f, text=self.tr("wipe_frp"), width=300,
                       fg_color="orange", hover_color="darkorange",
                       command=self.mtk_wipe).pack(pady=3)
 
     def check_tools(self):
         if os.path.exists(ADB):
-            self.log(f"✅ Platform-Tools: {TOOLS_DIR}")
+            self.log(self.tr("msg_tools_ok", TOOLS_DIR))
         else:
-            self.log("⚠️ Platform-Tools غير مثبتة — اضغط الزر")
+            self.log(self.tr("msg_tools_missing"))
 
         if os.path.exists(EMBED_PY):
-            self.log(f"✅ Python مدمج: {EMBED_PY}")
+            self.log(self.tr("msg_python_ok", EMBED_PY))
         else:
-            self.log("⚠️ Python المدمج غير موجود")
+            self.log(self.tr("msg_python_missing"))
 
         if os.path.exists(MTK_SCRIPT):
-            self.log(f"✅ mtkclient: {MTK_DIR}")
+            self.log(self.tr("msg_mtk_ok", MTK_DIR))
         else:
-            self.log("⚠️ mtkclient غير موجود")
+            self.log(self.tr("msg_mtk_missing"))
 
     def download_tools(self):
         def task():
             try:
                 os.makedirs(TOOLS_DIR, exist_ok=True)
                 zip_path = os.path.join(BASE_DIR, "pt.zip")
-                self.log("📥 تحميل Platform-Tools...")
+                self.log(self.tr("msg_downloading_pt"))
                 urllib.request.urlretrieve(PLATFORM_TOOLS_URL, zip_path)
                 with zipfile.ZipFile(zip_path, "r") as z:
                     z.extractall(TOOLS_DIR)
@@ -163,17 +299,17 @@ class App(ctk.CTk):
                         shutil.move(os.path.join(sub, item), TOOLS_DIR)
                     shutil.rmtree(sub, ignore_errors=True)
                 os.remove(zip_path)
-                self.log("✅ تم التثبيت")
+                self.log(self.tr("msg_installed"))
                 self.check_tools()
             except Exception as e:
-                self.log(f"❌ {e}")
+                self.log(self.tr("msg_error", e))
         threading.Thread(target=task, daemon=True).start()
 
     def detect(self):
         def t():
             self.log("=" * 50)
-            self.log("— ADB —\n" + run([ADB, "devices", "-l"]))
-            self.log("— Fastboot —\n" + run([FASTBOOT, "devices"]))
+            self.log(self.tr("msg_adb") + "\n" + run([ADB, "devices", "-l"]))
+            self.log(self.tr("msg_fastboot") + "\n" + run([FASTBOOT, "devices"]))
         threading.Thread(target=t, daemon=True).start()
 
     def info(self):
@@ -187,26 +323,26 @@ class App(ctk.CTk):
 
     def run_mtk_gui(self):
         if not os.path.exists(EMBED_PY):
-            self.log("❌ Python المدمج غير موجود في مجلد البرنامج")
+            self.log(self.tr("msg_no_embed"))
             return
         mtk_gui = os.path.join(MTK_DIR, "mtk_gui.py")
         if not os.path.exists(mtk_gui):
-            self.log("❌ mtk_gui.py غير موجود")
+            self.log(self.tr("msg_no_gui"))
             return
-        self.log("🖥️ تشغيل mtk_gui...")
+        self.log(self.tr("msg_running_gui"))
         subprocess.Popen([EMBED_PY, "mtk_gui.py"], cwd=MTK_DIR,
                          creationflags=subprocess.CREATE_NEW_CONSOLE if os.name == "nt" else 0)
 
     def mtk_cmd(self, args, timeout=600):
         if not os.path.exists(EMBED_PY):
-            self.log("❌ Python المدمج غير موجود")
+            self.log(self.tr("msg_no_embed"))
             return
         if not os.path.exists(MTK_SCRIPT):
-            self.log("❌ mtkclient غير موجود")
+            self.log(self.tr("msg_no_mtk"))
             return
         def t():
             self.log("=" * 50)
-            self.log(f"⚙️ mtk {' '.join(args)}")
+            self.log(self.tr("msg_running_cmd", " ".join(args)))
             self.log(run([EMBED_PY, "mtk.py"] + args, timeout=timeout, cwd=MTK_DIR))
         threading.Thread(target=t, daemon=True).start()
 
@@ -225,19 +361,19 @@ class App(ctk.CTk):
         part = self.mtk_write_part.get().strip()
         f = self.mtk_write_file.get().strip()
         if not part or not os.path.exists(f):
-            messagebox.showerror("خطأ", "تحقق من القسم والملف")
+            messagebox.showerror(self.tr("err"), self.tr("err_check"))
             return
-        if not messagebox.askyesno("تأكيد", f"كتابة {part} من {f}؟"):
+        if not messagebox.askyesno(self.tr("confirm"), self.tr("confirm_write", part, f)):
             return
         self.mtk_cmd(["w", part, f])
 
     def mtk_unlock(self):
-        if not messagebox.askyesno("تحذير", "فك قفل البوتلودر سيمسح كل البيانات!\nمتأكد؟"):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_unlock")):
             return
         self.mtk_cmd(["da", "seccfg", "unlock"])
 
     def mtk_wipe(self):
-        if not messagebox.askyesno("تحذير", "مسح FRP و Userdata نهائياً!"):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_wipe")):
             return
         self.mtk_cmd(["e", "frp,userdata,metadata,md_udc"])
 
