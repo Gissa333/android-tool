@@ -2,27 +2,33 @@
 import os
 from PyInstaller.utils.hooks import collect_data_files, collect_submodules
 
-# جمع بيانات mtkclient
-mtk_datas = []
-mtk_hidden = []
+datas = []
+hidden = []
 
-if os.path.isdir('mtkclient'):
-    mtk_datas = collect_data_files('mtkclient', include_py_files=False)
-    mtk_hidden = collect_submodules('mtkclient')
+# تضمين مكتبات mtkclient بالكامل
+mtk_packages = ['mtkclient', 'usb', 'serial', 'Crypto', 'capstone']
+for pkg in mtk_packages:
+    try:
+        datas += collect_data_files(pkg)
+        hidden += collect_submodules(pkg)
+    except Exception:
+        pass
 
-# مكتبات مخفية إضافية
-hidden = [
+# مكتبات مخفية أساسية
+hidden += [
     'usb', 'usb.core', 'usb.util', 'usb.backend.libusb1',
     'serial', 'serial.tools.list_ports',
     'Crypto', 'Crypto.Cipher.AES',
     'capstone',
     'customtkinter',
     'PIL', 'PIL.Image', 'PIL.ImageTk',
-] + mtk_hidden
+    'PySide6', 'PySide6.QtCore', 'PySide6.QtWidgets',
+    'PySide6.QtGui',
+]
 
-datas = [
-    ('mtkclient', 'mtkclient'),
-] + mtk_datas
+# تضمين mtkclient كامل كمجلد
+if os.path.isdir('mtkclient'):
+    datas.append(('mtkclient', 'mtkclient'))
 
 a = Analysis(
     ['main.py'],
@@ -33,10 +39,7 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[
-        'tkinter.test', 'test', 'unittest',
-        'matplotlib', 'numpy', 'scipy', 'pandas',
-    ],
+    excludes=['tkinter.test', 'test', 'unittest', 'matplotlib', 'numpy'],
     noarchive=False,
 )
 
