@@ -2,18 +2,25 @@ import customtkinter as ctk
 from tkinter import filedialog, messagebox
 import subprocess
 import os
+import sys
 import threading
 import urllib.request
 import zipfile
+import shutil
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
-APP_DIR = os.path.join(os.environ.get("LOCALAPPDATA", "."), "AndroidTool")
-TOOLS_DIR = os.path.join(APP_DIR, "platform-tools")
+# مجلد الموارد — يعمل في التطوير وفي exe
+if getattr(sys, 'frozen', False):
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+TOOLS_DIR = os.path.join(BASE_DIR, "platform-tools")
+MTK_DIR = os.path.join(BASE_DIR, "mtkclient")
 ADB = os.path.join(TOOLS_DIR, "adb.exe")
 FASTBOOT = os.path.join(TOOLS_DIR, "fastboot.exe")
-MTK_DIR = os.path.join(APP_DIR, "mtkclient")
 MTK_SCRIPT = os.path.join(MTK_DIR, "mtk.py")
 
 PLATFORM_TOOLS_URL = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
@@ -33,11 +40,10 @@ def run(cmd, timeout=60, cwd=None):
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Android Tool v0.3 - MTK Support")
+        self.title("Android Tool v0.3 - MTK Integrated")
         self.geometry("950x750")
 
-        ctk.CTkLabel(self, text="🛠️ Android Tool",
-                     font=("Arial", 22, "bold")).pack(pady=5)
+        ctk.CTkLabel(self, text="🛠️ Android Tool", font=("Arial", 22, "bold")).pack(pady=5)
 
         self.tabs = ctk.CTkTabview(self, width=900, height=650)
         self.tabs.pack(padx=15, pady=5, fill="both", expand=True)
@@ -65,6 +71,7 @@ class App(ctk.CTk):
             self.log(fn())
         threading.Thread(target=wrap, daemon=True).start()
 
+    # ============ تبويب ADB/Fastboot ============
     def build_adb_tab(self):
         f = self.tab_adb
         btns = [
@@ -79,20 +86,21 @@ class App(ctk.CTk):
             ctk.CTkButton(f, text=t, width=200, height=36,
                           command=fn).grid(row=i // 3, column=i % 3, padx=8, pady=8)
 
+    # ============ تبويب MTK ============
     def build_mtk_tab(self):
         f = self.tab_mtk
 
-        ctk.CTkLabel(f, text="⚙️ mtkclient — MediaTek",
+        ctk.CTkLabel(f, text="⚙️ mtkclient — MediaTek مدمج",
                      font=("Arial", 15, "bold")).pack(pady=5)
 
-        ctk.CTkButton(f, text="📥 تحميل mtkclient", width=250,
-                      command=self.download_mtk).pack(pady=4)
+        ctk.CTkButton(f, text="📥 تثبيت/تحديث mtkclient", width=250,
+                      command=self.install_mtk).pack(pady=4)
 
-        ctk.CTkButton(f, text="🖥️ تشغيل الواجهة الرسمية (GUI)", width=250,
+        ctk.CTkButton(f, text="🖥️ تشغيل الواجهة الرسمية", width=250,
                       fg_color="green", hover_color="darkgreen",
                       command=self.run_mtk_gui).pack(pady=4)
 
-        ctk.CTkButton(f, text="📋 قراءة GPT (جدول الأقسام)", width=250,
+        ctk.CTkButton(f, text="📋 قراءة GPT", width=250,
                       command=lambda: self.mtk_cmd(["printgpt"])).pack(pady=4)
 
         # قراءة قسم
@@ -120,11 +128,11 @@ class App(ctk.CTk):
                       hover_color="darkred",
                       command=self.mtk_write).pack(side="left", padx=5)
 
-        # أدوات خطيرة
+        # عمليات متقدمة
         ctk.CTkLabel(f, text="⚠️ عمليات متقدمة", font=("Arial", 12, "bold"),
                      text_color="orange").pack(pady=(15, 3))
 
-        ctk.CTkButton(f, text="🔓 فك قفل البوتلودر (seccfg unlock)", width=300,
+        ctk.CTkButton(f, text="🔓 فك قفل البوتلودر", width=300,
                       fg_color="orange", hover_color="darkorange",
                       command=self.mtk_unlock).pack(pady=3)
 
@@ -132,7 +140,6 @@ class App(ctk.CTk):
                       fg_color="orange", hover_color="darkorange",
                       command=self.mtk_wipe).pack(pady=3)
 
-    # ============ ADB/Fastboot ============
     def check_tools(self):
         if os.path.exists(ADB):
             self.log(f"✅ Platform-Tools: {TOOLS_DIR}")
@@ -142,19 +149,19 @@ class App(ctk.CTk):
         if os.path.exists(MTK_SCRIPT):
             self.log(f"✅ mtkclient: {MTK_DIR}")
         else:
-            self.log("⚠️ mtkclient غير مثبت")
+            self.log("⚠️ mtkclient غير مثبت — اضغط زر التثبيت")
 
     def download_tools(self):
         def task():
             try:
-                os.makedirs(APP_DIR, exist_ok=True)
-                zip_path = os.path.join(APP_DIR, "pt.zip")
-                self.log(f"📥 تحميل: {PLATFORM_TOOLS_URL}")
+                os.makedirs(TOOLS_DIR, exist_ok=True)
+                zip_path = os.path.join(BASE_DIR, "pt.zip")
+                self.log("📥 تحميل Platform-Tools...")
                 urllib.request.urlretrieve(PLATFORM_TOOLS_URL, zip_path)
                 with zipfile.ZipFile(zip_path, "r") as z:
-                    z.extractall(APP_DIR)
+                    z.extractall(TOOLS_DIR)
                 os.remove(zip_path)
-                self.log("✅ تم تثبيت Platform-Tools")
+                self.log("✅ تم التثبيت")
                 self.check_tools()
             except Exception as e:
                 self.log(f"❌ {e}")
@@ -177,26 +184,31 @@ class App(ctk.CTk):
         threading.Thread(target=t, daemon=True).start()
 
     # ============ MTK ============
-    def download_mtk(self):
+    def install_mtk(self):
         def task():
             try:
-                os.makedirs(APP_DIR, exist_ok=True)
-                zip_path = os.path.join(APP_DIR, "mtk.zip")
+                zip_path = os.path.join(BASE_DIR, "mtk.zip")
                 self.log("📥 تحميل mtkclient...")
                 urllib.request.urlretrieve(MTKCLIENT_URL, zip_path)
+                self.log("📦 فك الضغط...")
                 with zipfile.ZipFile(zip_path, "r") as z:
-                    z.extractall(APP_DIR)
+                    z.extractall(BASE_DIR)
                 os.remove(zip_path)
-                # إعادة تسمية
-                for d in os.listdir(APP_DIR):
+
+                # إعادة تسمية المجلد
+                for d in os.listdir(BASE_DIR):
                     if d.startswith("mtkclient-"):
-                        src = os.path.join(APP_DIR, d)
+                        src = os.path.join(BASE_DIR, d)
                         if os.path.exists(MTK_DIR):
-                            import shutil
                             shutil.rmtree(MTK_DIR)
                         os.rename(src, MTK_DIR)
-                self.log("✅ تم تحميل mtkclient")
-                self.log("⚠️ ثبّت المتطلبات: pip install -r requirements.txt داخل المجلد")
+                        break
+
+                self.log("📥 تثبيت متطلبات mtkclient...")
+                out = run([sys.executable, "-m", "pip", "install", "-r",
+                           os.path.join(MTK_DIR, "requirements.txt")], timeout=600)
+                self.log(out[-1000:])  # آخر جزء فقط
+                self.log("✅ تم تثبيت mtkclient")
                 self.check_tools()
             except Exception as e:
                 self.log(f"❌ {e}")
@@ -204,20 +216,20 @@ class App(ctk.CTk):
 
     def run_mtk_gui(self):
         if not os.path.exists(MTK_SCRIPT):
-            self.log("❌ حمّل mtkclient أولاً")
+            self.log("❌ ثبّت mtkclient أولاً")
             return
         self.log("🖥️ تشغيل mtk_gui...")
-        subprocess.Popen(["python", "mtk_gui.py"], cwd=MTK_DIR,
+        subprocess.Popen([sys.executable, "mtk_gui.py"], cwd=MTK_DIR,
                          creationflags=subprocess.CREATE_NEW_CONSOLE if os.name == "nt" else 0)
 
-    def mtk_cmd(self, args, timeout=300):
+    def mtk_cmd(self, args, timeout=600):
         if not os.path.exists(MTK_SCRIPT):
-            self.log("❌ mtkclient غير موجود")
+            self.log("❌ mtkclient غير مثبت")
             return
         def t():
             self.log("=" * 50)
             self.log(f"⚙️ mtk {' '.join(args)}")
-            self.log(run(["python", "mtk.py"] + args, timeout=timeout, cwd=MTK_DIR))
+            self.log(run([sys.executable, "mtk.py"] + args, timeout=timeout, cwd=MTK_DIR))
         threading.Thread(target=t, daemon=True).start()
 
     def mtk_read(self):
@@ -242,7 +254,7 @@ class App(ctk.CTk):
         self.mtk_cmd(["w", part, f])
 
     def mtk_unlock(self):
-        if not messagebox.askyesno("تحذير", "فك قفل البوتلودر سيمسح كل البيانات!\nهل أنت متأكد؟"):
+        if not messagebox.askyesno("تحذير", "فك قفل البوتلودر سيمسح كل البيانات!\nمتأكد؟"):
             return
         self.mtk_cmd(["da", "seccfg", "unlock"])
 
