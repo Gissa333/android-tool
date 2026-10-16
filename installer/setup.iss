@@ -1,6 +1,6 @@
 [Setup]
 AppName=Android Tool
-AppVersion=0.2.0
+AppVersion=0.3.0
 AppPublisher=Gissa333
 DefaultDirName={autopf}\AndroidTool
 DefaultGroupName=Android Tool
@@ -13,11 +13,8 @@ PrivilegesRequired=admin
 DisableProgramGroupPage=yes
 WizardStyle=modern
 
-[Languages]
-Name: "english"; MessagesFile: "compiler:Default.isl"
-
 [Files]
-Source: "..\dist\AndroidTool.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\dist\AndroidTool\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\Android Tool"; Filename: "{app}\AndroidTool.exe"
