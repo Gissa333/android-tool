@@ -11,11 +11,16 @@ import shutil
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
-# مجلد الموارد — يعمل في التطوير وفي exe
+# مسار الموارد
 if getattr(sys, 'frozen', False):
     BASE_DIR = os.path.dirname(sys.executable)
+    BUNDLE_DIR = sys._MEIPASS
 else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    BUNDLE_DIR = BASE_DIR
+
+# مسار Python الداخلي (المضمّن في PyInstaller)
+PYTHON_EXE = sys.executable if getattr(sys, 'frozen', False) else sys.executable
 
 TOOLS_DIR = os.path.join(BASE_DIR, "platform-tools")
 MTK_DIR = os.path.join(BASE_DIR, "mtkclient")
@@ -24,40 +29,49 @@ FASTBOOT = os.path.join(TOOLS_DIR, "fastboot.exe")
 MTK_SCRIPT = os.path.join(MTK_DIR, "mtk.py")
 
 PLATFORM_TOOLS_URL = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
-MTKCLIENT_URL = "https://github.com/bkerler/mtkclient/archive/refs/heads/main.zip"
 
 
-def run(cmd, timeout=60, cwd=None):
+def run(cmd, timeout=60, cwd=None, env=None):
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout,
-                           encoding="utf-8", errors="ignore", cwd=cwd,
+                           encoding="utf-8", errors="ignore", cwd=cwd, env=env,
                            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
         return (r.stdout or "") + (r.stderr or "")
     except Exception as e:
         return f"خطأ: {e}"
 
 
-def find_python():
-    """البحث عن Python في النظام"""
-    for name in ["python", "python3", "py"]:
-        try:
-            r = subprocess.run([name, "--version"],
-                               capture_output=True, text=True, timeout=5,
-                               creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
-            if r.returncode == 0:
-                return name
-        except Exception:
-            continue
-    return None
+def run_mtk(args, timeout=600):
+    """تشغيل mtkclient كـ module داخلي بدون Python خارجي"""
+    if not os.path.exists(os.path.join(MTK_DIR, "mtkclient")):
+        return "❌ mtkclient غير موجود في المجلد"
+
+    env = os.environ.copy()
+    env["PYTHONPATH"] = MTK_DIR + os.pathsep + env.get("PYTHONPATH", "")
+
+    try:
+        # استخدام Python المضمّن في PyInstaller مباشرة
+        r = subprocess.run(
+            [PYTHON_EXE, "-c",
+             f"import sys; sys.path.insert(0, r'{MTK_DIR}'); "
+             f"import mtkclient.mtk as m; m.main({args!r})"],
+            capture_output=True, text=True, timeout=timeout,
+            encoding="utf-8", errors="ignore", env=env, cwd=MTK_DIR,
+            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+        )
+        return (r.stdout or "") + (r.stderr or "")
+    except Exception as e:
+        return f"خطأ: {e}"
 
 
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Android Tool v0.3 - MTK Integrated")
+        self.title("Android Tool v0.4")
         self.geometry("950x750")
 
-        ctk.CTkLabel(self, text="🛠️ Android Tool", font=("Arial", 22, "bold")).pack(pady=5)
+        ctk.CTkLabel(self, text="🛠️ Android Tool",
+                     font=("Arial", 22, "bold")).pack(pady=5)
 
         self.tabs = ctk.CTkTabview(self, width=900, height=650)
         self.tabs.pack(padx=15, pady=5, fill="both", expand=True)
@@ -85,7 +99,6 @@ class App(ctk.CTk):
             self.log(fn())
         threading.Thread(target=wrap, daemon=True).start()
 
-    # ============ تبويب ADB/Fastboot ============
     def build_adb_tab(self):
         f = self.tab_adb
         btns = [
@@ -100,24 +113,19 @@ class App(ctk.CTk):
             ctk.CTkButton(f, text=t, width=200, height=36,
                           command=fn).grid(row=i // 3, column=i % 3, padx=8, pady=8)
 
-    # ============ تبويب MTK ============
     def build_mtk_tab(self):
         f = self.tab_mtk
 
-        ctk.CTkLabel(f, text="⚙️ mtkclient — MediaTek مدمج",
+        ctk.CTkLabel(f, text="⚙️ mtkclient — MediaTek (مدمج)",
                      font=("Arial", 15, "bold")).pack(pady=5)
 
-        ctk.CTkButton(f, text="📥 تثبيت/تحديث mtkclient", width=250,
-                      command=self.install_mtk).pack(pady=4)
-
-        ctk.CTkButton(f, text="🖥️ تشغيل الواجهة الرسمية", width=250,
+        ctk.CTkButton(f, text="🖥️ تشغيل الواجهة الرسمية", width=280,
                       fg_color="green", hover_color="darkgreen",
                       command=self.run_mtk_gui).pack(pady=4)
 
-        ctk.CTkButton(f, text="📋 قراءة GPT", width=250,
+        ctk.CTkButton(f, text="📋 قراءة GPT", width=280,
                       command=lambda: self.mtk_cmd(["printgpt"])).pack(pady=4)
 
-        # قراءة قسم
         row = ctk.CTkFrame(f)
         row.pack(pady=4)
         ctk.CTkLabel(row, text="قراءة قسم:").pack(side="left", padx=5)
@@ -127,7 +135,6 @@ class App(ctk.CTk):
         ctk.CTkButton(row, text="قراءة", width=80,
                       command=self.mtk_read).pack(side="left")
 
-        # كتابة قسم
         row2 = ctk.CTkFrame(f)
         row2.pack(pady=4)
         ctk.CTkLabel(row2, text="كتابة قسم:").pack(side="left", padx=5)
@@ -142,7 +149,6 @@ class App(ctk.CTk):
                       hover_color="darkred",
                       command=self.mtk_write).pack(side="left", padx=5)
 
-        # عمليات متقدمة
         ctk.CTkLabel(f, text="⚠️ عمليات متقدمة", font=("Arial", 12, "bold"),
                      text_color="orange").pack(pady=(15, 3))
 
@@ -158,17 +164,12 @@ class App(ctk.CTk):
         if os.path.exists(ADB):
             self.log(f"✅ Platform-Tools: {TOOLS_DIR}")
         else:
-            self.log("⚠️ Platform-Tools غير مثبتة")
+            self.log("⚠️ Platform-Tools غير مثبتة — اضغط الزر")
 
-        if os.path.exists(MTK_SCRIPT):
-            self.log(f"✅ mtkclient: {MTK_DIR}")
+        if os.path.exists(os.path.join(MTK_DIR, "mtkclient")):
+            self.log(f"✅ mtkclient مدمج: {MTK_DIR}")
         else:
-            self.log("⚠️ mtkclient غير مثبت — اضغط زر التثبيت")
-
-        if find_python():
-            self.log("✅ Python موجود على النظام")
-        else:
-            self.log("⚠️ Python غير موجود — حمّله من python.org")
+            self.log("⚠️ mtkclient غير موجود في المجلد")
 
     def download_tools(self):
         def task():
@@ -179,6 +180,12 @@ class App(ctk.CTk):
                 urllib.request.urlretrieve(PLATFORM_TOOLS_URL, zip_path)
                 with zipfile.ZipFile(zip_path, "r") as z:
                     z.extractall(TOOLS_DIR)
+                # نقل المحتوى من platform-tools الفرعي
+                sub = os.path.join(TOOLS_DIR, "platform-tools")
+                if os.path.isdir(sub):
+                    for item in os.listdir(sub):
+                        shutil.move(os.path.join(sub, item), TOOLS_DIR)
+                    shutil.rmtree(sub, ignore_errors=True)
                 os.remove(zip_path)
                 self.log("✅ تم التثبيت")
                 self.check_tools()
@@ -202,65 +209,22 @@ class App(ctk.CTk):
                 self.log(f"{p}: {run([ADB, 'shell', 'getprop', p]).strip()}")
         threading.Thread(target=t, daemon=True).start()
 
-    # ============ MTK ============
-    def install_mtk(self):
-        def task():
-            try:
-                zip_path = os.path.join(BASE_DIR, "mtk.zip")
-                self.log("📥 تحميل mtkclient...")
-                urllib.request.urlretrieve(MTKCLIENT_URL, zip_path)
-                self.log("📦 فك الضغط...")
-                with zipfile.ZipFile(zip_path, "r") as z:
-                    z.extractall(BASE_DIR)
-                os.remove(zip_path)
-
-                # إعادة تسمية المجلد
-                for d in os.listdir(BASE_DIR):
-                    if d.startswith("mtkclient-"):
-                        src = os.path.join(BASE_DIR, d)
-                        if os.path.exists(MTK_DIR):
-                            shutil.rmtree(MTK_DIR)
-                        os.rename(src, MTK_DIR)
-                        break
-
-                self.log("📥 تثبيت متطلبات mtkclient...")
-                py = find_python()
-                if not py:
-                    self.log("❌ Python غير موجود — حمّله من python.org")
-                    return
-                out = run([py, "-m", "pip", "install", "-r",
-                           os.path.join(MTK_DIR, "requirements.txt")], timeout=600)
-                self.log(out[-1500:])
-                self.log("✅ تم تثبيت mtkclient")
-                self.check_tools()
-            except Exception as e:
-                self.log(f"❌ {e}")
-        threading.Thread(target=task, daemon=True).start()
-
     def run_mtk_gui(self):
-        if not os.path.exists(MTK_SCRIPT):
-            self.log("❌ ثبّت mtkclient أولاً")
+        mtk_gui = os.path.join(MTK_DIR, "mtk_gui.py")
+        if not os.path.exists(mtk_gui):
+            self.log("❌ mtk_gui.py غير موجود في مجلد mtkclient")
             return
-        py = find_python()
-        if not py:
-            self.log("❌ Python غير موجود على النظام! حمّله من python.org")
-            return
-        self.log(f"🖥️ تشغيل mtk_gui عبر {py}...")
-        subprocess.Popen([py, "mtk_gui.py"], cwd=MTK_DIR,
+        env = os.environ.copy()
+        env["PYTHONPATH"] = MTK_DIR + os.pathsep + env.get("PYTHONPATH", "")
+        self.log("🖥️ تشغيل mtk_gui...")
+        subprocess.Popen([PYTHON_EXE, mtk_gui], cwd=MTK_DIR, env=env,
                          creationflags=subprocess.CREATE_NEW_CONSOLE if os.name == "nt" else 0)
 
     def mtk_cmd(self, args, timeout=600):
-        if not os.path.exists(MTK_SCRIPT):
-            self.log("❌ mtkclient غير مثبت")
-            return
-        py = find_python()
-        if not py:
-            self.log("❌ Python غير موجود — حمّله من python.org")
-            return
         def t():
             self.log("=" * 50)
             self.log(f"⚙️ mtk {' '.join(args)}")
-            self.log(run([py, "mtk.py"] + args, timeout=timeout, cwd=MTK_DIR))
+            self.log(run_mtk(args, timeout=timeout))
         threading.Thread(target=t, daemon=True).start()
 
     def mtk_read(self):
