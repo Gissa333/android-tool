@@ -5,11 +5,23 @@ from PyInstaller.utils.hooks import collect_data_files, collect_submodules
 datas = []
 hidden = []
 
-# تضمين مكتبات mtkclient بالكامل
-mtk_packages = ['mtkclient', 'usb', 'serial', 'Crypto', 'capstone']
-for pkg in mtk_packages:
+# تضمين mtkclient
+if os.path.isdir('mtkclient'):
+    datas.append(('mtkclient', 'mtkclient'))
+    for root, dirs, files in os.walk('mtkclient'):
+        dirs[:] = [d for d in dirs if d not in ['.git', '__pycache__', 'test', 'tests']]
+        for f in files:
+            if f.endswith('.py'):
+                rel = os.path.relpath(os.path.join(root, f), '.')
+                module = rel[:-3].replace(os.sep, '.')
+                if not module.endswith('__init__'):
+                    hidden.append(module)
+                else:
+                    hidden.append(module[:-9])
+
+# مكتبات mtkclient
+for pkg in ['usb', 'serial', 'Crypto', 'capstone']:
     try:
-        datas += collect_data_files(pkg)
         hidden += collect_submodules(pkg)
     except Exception:
         pass
@@ -22,17 +34,11 @@ hidden += [
     'capstone',
     'customtkinter',
     'PIL', 'PIL.Image', 'PIL.ImageTk',
-    'PySide6', 'PySide6.QtCore', 'PySide6.QtWidgets',
-    'PySide6.QtGui',
 ]
-
-# تضمين mtkclient كامل كمجلد
-if os.path.isdir('mtkclient'):
-    datas.append(('mtkclient', 'mtkclient'))
 
 a = Analysis(
     ['main.py'],
-    pathex=[],
+    pathex=['.'],
     binaries=[],
     datas=datas,
     hiddenimports=hidden,
