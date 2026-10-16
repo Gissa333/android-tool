@@ -23,19 +23,15 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Download mtkclient
+      - name: Download and Install mtkclient
         shell: pwsh
         run: |
           Invoke-WebRequest -Uri "https://github.com/bkerler/mtkclient/archive/refs/heads/main.zip" -OutFile mtk.zip
           Expand-Archive mtk.zip -DestinationPath .
           Move-Item mtkclient-main mtkclient
-
-      - name: Install mtkclient requirements
-        shell: pwsh
-        run: |
-          if (Test-Path mtkclient/requirements.txt) {
-            pip install -r mtkclient/requirements.txt
-          }
+          cd mtkclient
+          pip install -r requirements.txt
+          pip install -e .
 
       - name: Build with Spec file
         run: pyinstaller --noconfirm AndroidTool.spec
