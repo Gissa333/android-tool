@@ -11,7 +11,6 @@ import shutil
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
-# مسار الموارد
 if getattr(sys, 'frozen', False):
     BASE_DIR = os.path.dirname(sys.executable)
     BUNDLE_DIR = sys._MEIPASS
@@ -19,8 +18,7 @@ else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     BUNDLE_DIR = BASE_DIR
 
-# مسار Python الداخلي (المضمّن في PyInstaller)
-PYTHON_EXE = sys.executable if getattr(sys, 'frozen', False) else sys.executable
+PYTHON_EXE = sys.executable
 
 TOOLS_DIR = os.path.join(BASE_DIR, "platform-tools")
 MTK_DIR = os.path.join(BASE_DIR, "mtkclient")
@@ -42,7 +40,6 @@ def run(cmd, timeout=60, cwd=None, env=None):
 
 
 def run_mtk(args, timeout=600):
-    """تشغيل mtkclient كـ module داخلي بدون Python خارجي"""
     if not os.path.exists(os.path.join(MTK_DIR, "mtkclient")):
         return "❌ mtkclient غير موجود في المجلد"
 
@@ -50,7 +47,6 @@ def run_mtk(args, timeout=600):
     env["PYTHONPATH"] = MTK_DIR + os.pathsep + env.get("PYTHONPATH", "")
 
     try:
-        # استخدام Python المضمّن في PyInstaller مباشرة
         r = subprocess.run(
             [PYTHON_EXE, "-c",
              f"import sys; sys.path.insert(0, r'{MTK_DIR}'); "
@@ -180,7 +176,6 @@ class App(ctk.CTk):
                 urllib.request.urlretrieve(PLATFORM_TOOLS_URL, zip_path)
                 with zipfile.ZipFile(zip_path, "r") as z:
                     z.extractall(TOOLS_DIR)
-                # نقل المحتوى من platform-tools الفرعي
                 sub = os.path.join(TOOLS_DIR, "platform-tools")
                 if os.path.isdir(sub):
                     for item in os.listdir(sub):
