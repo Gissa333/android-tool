@@ -35,7 +35,7 @@ HEIMDALL = os.path.join(HEIMDALL_DIR, "heimdall.exe")
 
 PLATFORM_TOOLS_URL = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
 
-APP_VERSION = "0.8.0"
+APP_VERSION = "0.9.0"
 GITHUB_REPO = "Gissa333/android-tool"
 GITHUB_API = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
@@ -45,6 +45,7 @@ LANG = {
         "title": "🛠️ أداة الأندرويد",
         "tab_adb": "ADB / Fastboot",
         "tab_flash": "📦 فلاش الروم",
+        "tab_xiaomi": "🟠 Xiaomi",
         "tab_samsung": "📱 Samsung",
         "tab_root": "🔓 TWRP & Root",
         "tab_unlock": "🔒 فك القفل",
@@ -60,26 +61,28 @@ LANG = {
         "reboot_recovery": "♻️ وضع Recovery",
         "reboot_edl": "📡 وضع EDL",
         "exit_fastboot": "🔌 خروج من Fastboot",
-        # Root
-        "root_title": "🔓 TWRP & Root",
-        "root_warning": "⚠️ تأكد من فتح البوتلودر أولاً",
-        "check_bl_status": "🔍 فحص حالة البوتلودر",
-        "unlock_bl": "🔓 فتح البوتلودر",
-        "lock_bl": "🔒 قفل البوتلودر",
-        "flash_twrp": "📥 تثبيت TWRP (recovery.img)",
-        "flash_magisk": "🎯 تثبيت Magisk (patched boot)",
-        "select_recovery": "اختر ملف recovery.img",
-        "select_boot": "اختر ملف boot patched",
-        "bl_locked": "🔒 البوتلودر مقفل",
-        "bl_unlocked": "🔓 البوتلودر مفتوح",
-        "bl_unknown": "❓ غير معروف",
-        "unlock_confirm": "سيتم محو كل البيانات! متأكد؟",
-        "unlock_warn_screen": "انظر لشاشة الهاتف واضغط Volume Up للموافقة",
-        "flash_recovery_success": "✅ تم تثبيت recovery",
-        "flash_boot_success": "✅ تم تثبيت boot",
-        "reboot_recovery_after": "إعادة التشغيل إلى Recovery بعد الفلاش",
-        "download_twrp": "🌐 تحميل TWRP",
-        "download_magisk": "🌐 تحميل Magisk",
+        # Xiaomi
+        "xiaomi_title": "🟠 Xiaomi / Redmi / POCO",
+        "xiaomi_warning": "⚠️ الأجهزة الحديثة (HyperOS) لها قيود إضافية",
+        "xiaomi_info": "📱 معلومات الجهاز",
+        "xiaomi_unlock_help": "🔓 مساعدة فتح البوتلودر",
+        "xiaomi_mi_assistant": "🎯 Mi Assistant Mode",
+        "xiaomi_fastboot_rom": "📦 فلاش Fastboot ROM",
+        "xiaomi_select_rom": "اختر ROM (.tgz)",
+        "xiaomi_flash_all": "🚀 فلاش كامل",
+        "xiaomi_flash_all_no_data": "فلاش (بدون data)",
+        "xiaomi_flash_boot": "فلاش boot.img",
+        "xiaomi_flash_recovery": "فلاش recovery.img",
+        "xiaomi_flash_vbmeta": "فلاش vbmeta.img",
+        "xiaomi_flash_partition": "فلاش قسم مخصص",
+        "xiaomi_partition_name": "اسم القسم:",
+        "xiaomi_image_file": "ملف الصورة:",
+        "xiaomi_remove_mi_account": "🚫 إزالة Mi Account",
+        "xiaomi_remove_mi_account_help": "يتطلب وضع EDL أو MTK",
+        "xiaomi_clean_and_lock": "🔒 فلاش + قفل البوتلودر",
+        "xiaomi_reboot_edl": "📡 إعادة تشغيل إلى EDL",
+        "xiaomi_reboot_fastboot": "⚡ إعادة تشغيل إلى Fastboot",
+        "xiaomi_reboot_recovery": "♻️ إعادة تشغيل إلى Recovery",
         # Flash
         "flash_title": "📦 فلاش الروم",
         "flash_select_zip": "📁 اختر ملف الروم",
@@ -123,6 +126,26 @@ LANG = {
         "samsung_no_file": "لم يتم اختيار ملف",
         "samsung_reboot": "إعادة التشغيل",
         "samsung_done": "✅ اكتمل",
+        # Root
+        "root_title": "🔓 TWRP & Root",
+        "root_warning": "⚠️ تأكد من فتح البوتلودر أولاً",
+        "check_bl_status": "🔍 فحص حالة البوتلودر",
+        "unlock_bl": "🔓 فتح البوتلودر",
+        "lock_bl": "🔒 قفل البوتلودر",
+        "flash_twrp": "📥 تثبيت TWRP",
+        "flash_magisk": "🎯 تثبيت Magisk",
+        "select_recovery": "اختر ملف recovery.img",
+        "select_boot": "اختر ملف boot patched",
+        "bl_locked": "🔒 مقفل",
+        "bl_unlocked": "🔓 مفتوح",
+        "bl_unknown": "❓ غير معروف",
+        "unlock_confirm": "سيتم محو كل البيانات! متأكد؟",
+        "unlock_warn_screen": "انظر لشاشة الهاتف واضغط Volume Up",
+        "flash_recovery_success": "✅ تم تثبيت recovery",
+        "flash_boot_success": "✅ تم تثبيت boot",
+        "reboot_recovery_after": "إعادة إلى Recovery",
+        "download_twrp": "🌐 TWRP",
+        "download_magisk": "🌐 Magisk",
         # Unlock
         "unlock_title": "🔒 فك القفل و FRP",
         "check_lock": "🔍 فحص القفل",
@@ -169,7 +192,7 @@ LANG = {
         "about_new_version": "🎉 إصدار جديد: {}",
         "about_checking": "⏳ فحص...",
         "about_error": "❌ فشل: {}",
-        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• فلاش الروم\n• Samsung Odin\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• فلاش الروم\n• Xiaomi / Redmi / POCO\n• Samsung Odin\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 السجل:",
         "log_save": "💾 حفظ",
         "log_copy": "📋 نسخ",
@@ -212,6 +235,7 @@ LANG = {
         "title": "🛠️ Android Tool",
         "tab_adb": "ADB / Fastboot",
         "tab_flash": "📦 Flash ROM",
+        "tab_xiaomi": "🟠 Xiaomi",
         "tab_samsung": "📱 Samsung",
         "tab_root": "🔓 TWRP & Root",
         "tab_unlock": "🔒 Unlock",
@@ -226,25 +250,27 @@ LANG = {
         "reboot_recovery": "♻️ Recovery",
         "reboot_edl": "📡 EDL",
         "exit_fastboot": "🔌 Exit Fastboot",
-        "root_title": "🔓 TWRP & Root",
-        "root_warning": "⚠️ Make sure bootloader is unlocked",
-        "check_bl_status": "🔍 Check Bootloader",
-        "unlock_bl": "🔓 Unlock Bootloader",
-        "lock_bl": "🔒 Lock Bootloader",
-        "flash_twrp": "📥 Flash TWRP (recovery.img)",
-        "flash_magisk": "🎯 Install Magisk (patched boot)",
-        "select_recovery": "Select recovery.img",
-        "select_boot": "Select patched boot.img",
-        "bl_locked": "🔒 Bootloader locked",
-        "bl_unlocked": "🔓 Bootloader unlocked",
-        "bl_unknown": "❓ Unknown",
-        "unlock_confirm": "All data will be wiped! Sure?",
-        "unlock_warn_screen": "Look at phone screen and press Volume Up to confirm",
-        "flash_recovery_success": "✅ recovery flashed",
-        "flash_boot_success": "✅ boot flashed",
-        "reboot_recovery_after": "Reboot to Recovery after flash",
-        "download_twrp": "🌐 Get TWRP",
-        "download_magisk": "🌐 Get Magisk",
+        "xiaomi_title": "🟠 Xiaomi / Redmi / POCO",
+        "xiaomi_warning": "⚠️ Modern devices (HyperOS) have extra restrictions",
+        "xiaomi_info": "📱 Device Info",
+        "xiaomi_unlock_help": "🔓 Bootloader Unlock Help",
+        "xiaomi_mi_assistant": "🎯 Mi Assistant Mode",
+        "xiaomi_fastboot_rom": "📦 Flash Fastboot ROM",
+        "xiaomi_select_rom": "Select ROM (.tgz)",
+        "xiaomi_flash_all": "🚀 Flash All",
+        "xiaomi_flash_all_no_data": "Flash (No Data)",
+        "xiaomi_flash_boot": "Flash boot.img",
+        "xiaomi_flash_recovery": "Flash recovery.img",
+        "xiaomi_flash_vbmeta": "Flash vbmeta.img",
+        "xiaomi_flash_partition": "Custom Partition Flash",
+        "xiaomi_partition_name": "Partition:",
+        "xiaomi_image_file": "Image:",
+        "xiaomi_remove_mi_account": "🚫 Remove Mi Account",
+        "xiaomi_remove_mi_account_help": "Requires EDL or MTK mode",
+        "xiaomi_clean_and_lock": "🔒 Flash + Lock Bootloader",
+        "xiaomi_reboot_edl": "📡 Reboot to EDL",
+        "xiaomi_reboot_fastboot": "⚡ Reboot to Fastboot",
+        "xiaomi_reboot_recovery": "♻️ Reboot to Recovery",
         "flash_title": "📦 Flash ROM",
         "flash_select_zip": "📁 Select ROM",
         "flash_type": "Type: {}",
@@ -271,7 +297,7 @@ LANG = {
         "flash_status_error": "❌ Failed",
         "flash_status_cancelled": "⏹️ Cancelled",
         "samsung_title": "📱 Samsung — Download Mode",
-        "samsung_warning": "⚠️ Put device in Download Mode",
+        "samsung_warning": "⚠️ Device must be in Download Mode",
         "samsung_detect": "🔍 Detect Device",
         "samsung_pit": "📋 Read PIT",
         "samsung_flash_ap": "📦 AP",
@@ -286,6 +312,25 @@ LANG = {
         "samsung_no_file": "No file selected",
         "samsung_reboot": "Reboot",
         "samsung_done": "✅ Done",
+        "root_title": "🔓 TWRP & Root",
+        "root_warning": "⚠️ Make sure bootloader is unlocked",
+        "check_bl_status": "🔍 Check Bootloader",
+        "unlock_bl": "🔓 Unlock Bootloader",
+        "lock_bl": "🔒 Lock Bootloader",
+        "flash_twrp": "📥 Flash TWRP",
+        "flash_magisk": "🎯 Install Magisk",
+        "select_recovery": "Select recovery.img",
+        "select_boot": "Select patched boot.img",
+        "bl_locked": "🔒 Locked",
+        "bl_unlocked": "🔓 Unlocked",
+        "bl_unknown": "❓ Unknown",
+        "unlock_confirm": "All data will be wiped! Sure?",
+        "unlock_warn_screen": "Look at phone and press Volume Up",
+        "flash_recovery_success": "✅ recovery flashed",
+        "flash_boot_success": "✅ boot flashed",
+        "reboot_recovery_after": "Reboot to Recovery",
+        "download_twrp": "🌐 TWRP",
+        "download_magisk": "🌐 Magisk",
         "unlock_title": "🔒 Unlock & FRP",
         "check_lock": "🔍 Check Lock",
         "check_root": "👑 Check Root",
@@ -328,7 +373,7 @@ LANG = {
         "about_new_version": "🎉 New version: {}",
         "about_checking": "⏳ Checking...",
         "about_error": "❌ Failed: {}",
-        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Full ROM Flash\n• Samsung Odin\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Full ROM Flash\n• Xiaomi / Redmi / POCO\n• Samsung Odin\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 Log:",
         "log_save": "💾 Save",
         "log_copy": "📋 Copy",
@@ -420,6 +465,7 @@ class App(ctk.CTk):
 
         self.recovery_img = ""
         self.boot_img = ""
+        self.xiaomi_rom = ""
 
         self.geometry("1020x920")
         self.resizable(True, True)
@@ -460,6 +506,7 @@ class App(ctk.CTk):
 
         self.tab_adb = self.tabs.add(self.tr("tab_adb"))
         self.tab_flash = self.tabs.add(self.tr("tab_flash"))
+        self.tab_xiaomi = self.tabs.add(self.tr("tab_xiaomi"))
         self.tab_samsung = self.tabs.add(self.tr("tab_samsung"))
         self.tab_root = self.tabs.add(self.tr("tab_root"))
         self.tab_unlock = self.tabs.add(self.tr("tab_unlock"))
@@ -469,6 +516,7 @@ class App(ctk.CTk):
 
         self.build_adb_tab()
         self.build_flash_tab()
+        self.build_xiaomi_tab()
         self.build_samsung_tab()
         self.build_root_tab()
         self.build_unlock_tab()
@@ -615,7 +663,7 @@ class App(ctk.CTk):
         ctk.CTkButton(f, text=self.tr("about_github"), width=300, height=40,
                       command=self.open_github).pack(pady=10)
 
-    # ============ ADB Tab ============
+    # ============ ADB ============
     def build_adb_tab(self):
         f = self.tab_adb
         btns = [
@@ -632,6 +680,272 @@ class App(ctk.CTk):
             ctk.CTkButton(f, text=t, width=210, height=36,
                           command=fn).grid(row=i // 3, column=i % 3, padx=8, pady=8)
 
+    # ============ Xiaomi ============
+    def build_xiaomi_tab(self):
+        f = self.tab_xiaomi
+        ctk.CTkLabel(f, text=self.tr("xiaomi_title"),
+                     font=("Arial", 16, "bold")).pack(pady=6)
+        ctk.CTkLabel(f, text=self.tr("xiaomi_warning"),
+                     font=("Arial", 11), text_color="orange").pack(pady=4)
+
+        # معلومات وأدوات
+        row = ctk.CTkFrame(f)
+        row.pack(pady=6)
+        ctk.CTkButton(row, text=self.tr("xiaomi_info"), width=180,
+                      command=self.xiaomi_info).pack(side="left", padx=4)
+        ctk.CTkButton(row, text=self.tr("xiaomi_unlock_help"), width=180,
+                      fg_color="gray",
+                      command=lambda: webbrowser.open(
+                          "https://en.miui.com/unlock/")).pack(side="left", padx=4)
+        ctk.CTkButton(row, text=self.tr("xiaomi_mi_assistant"), width=180,
+                      fg_color="gray",
+                      command=self.xiaomi_mi_assistant).pack(side="left", padx=4)
+
+        # ROM
+        ctk.CTkLabel(f, text="— Fastboot ROM —",
+                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+
+        rf = ctk.CTkFrame(f)
+        rf.pack(pady=4)
+        ctk.CTkButton(rf, text=self.tr("xiaomi_select_rom"), width=250,
+                      command=self.xiaomi_select_rom).pack(side="left", padx=5)
+        self.xiaomi_rom_label = ctk.CTkLabel(rf, text=self.tr("samsung_no_file"),
+                                              font=("Arial", 10), text_color="gray")
+        self.xiaomi_rom_label.pack(side="left", padx=5)
+
+        # أزرار الفلاش
+        fl = ctk.CTkFrame(f)
+        fl.pack(pady=6)
+        ctk.CTkButton(fl, text=self.tr("xiaomi_flash_all"), width=200, height=42,
+                      fg_color="green", hover_color="darkgreen",
+                      command=lambda: self.xiaomi_flash_rom(wipe=False)).pack(side="left", padx=4)
+        ctk.CTkButton(fl, text=self.tr("xiaomi_flash_all_no_data"), width=200, height=42,
+                      fg_color="orange", hover_color="darkorange",
+                      command=lambda: self.xiaomi_flash_rom(wipe=True)).pack(side="left", padx=4)
+
+        # فلاش فردي
+        ctk.CTkLabel(f, text="— Partitions —",
+                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+        pf = ctk.CTkFrame(f)
+        pf.pack(pady=4)
+        ctk.CTkButton(pf, text=self.tr("xiaomi_flash_boot"), width=180,
+                      command=lambda: self.xiaomi_flash_single("boot")).pack(side="left", padx=3)
+        ctk.CTkButton(pf, text=self.tr("xiaomi_flash_recovery"), width=180,
+                      command=lambda: self.xiaomi_flash_single("recovery")).pack(side="left", padx=3)
+        ctk.CTkButton(pf, text=self.tr("xiaomi_flash_vbmeta"), width=180,
+                      command=lambda: self.xiaomi_flash_single("vbmeta")).pack(side="left", padx=3)
+
+        # قسم مخصص
+        cf = ctk.CTkFrame(f)
+        cf.pack(pady=6)
+        ctk.CTkLabel(cf, text=self.tr("xiaomi_partition_name")).pack(side="left", padx=4)
+        self.xiaomi_part_name = ctk.CTkEntry(cf, width=140)
+        self.xiaomi_part_name.pack(side="left", padx=4)
+        self.xiaomi_part_name.insert(0, "boot")
+        ctk.CTkLabel(cf, text=self.tr("xiaomi_image_file")).pack(side="left", padx=4)
+        self.xiaomi_img_file = ctk.CTkEntry(cf, width=220)
+        self.xiaomi_img_file.pack(side="left", padx=4)
+        ctk.CTkButton(cf, text=self.tr("pick"), width=60,
+                      command=self.xiaomi_pick_img).pack(side="left", padx=4)
+        ctk.CTkButton(cf, text=self.tr("write_btn"), width=90, fg_color="red",
+                      hover_color="darkred",
+                      command=self.xiaomi_flash_custom).pack(side="left", padx=4)
+
+        # عمليات متقدمة
+        ctk.CTkLabel(f, text=self.tr("advanced"), font=("Arial", 12, "bold"),
+                     text_color="orange").pack(pady=(15, 3))
+        af = ctk.CTkFrame(f)
+        af.pack(pady=4)
+        ctk.CTkButton(af, text=self.tr("xiaomi_remove_mi_account"), width=220,
+                      fg_color="red", hover_color="darkred",
+                      command=self.xiaomi_remove_account).pack(side="left", padx=3)
+        ctk.CTkButton(af, text=self.tr("xiaomi_clean_and_lock"), width=220,
+                      fg_color="red", hover_color="darkred",
+                      command=self.xiaomi_clean_lock).pack(side="left", padx=3)
+
+        # إعادة التشغيل
+        ctk.CTkLabel(f, text="— Reboot —",
+                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+        rbf = ctk.CTkFrame(f)
+        rbf.pack(pady=4)
+        ctk.CTkButton(rbf, text=self.tr("xiaomi_reboot_fastboot"), width=180,
+                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "bootloader"]))).pack(side="left", padx=3)
+        ctk.CTkButton(rbf, text=self.tr("xiaomi_reboot_recovery"), width=180,
+                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "recovery"]))).pack(side="left", padx=3)
+        ctk.CTkButton(rbf, text=self.tr("xiaomi_reboot_edl"), width=180,
+                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "edl"]))).pack(side="left", padx=3)
+
+    def xiaomi_info(self):
+        def t():
+            self.log("=" * 50)
+            props = [
+                "ro.product.model", "ro.product.brand",
+                "ro.miui.ui.version.name", "ro.mi.os.version.incremental",
+                "ro.build.version.release", "ro.boot.hwc",
+                "ro.boot.hwlevel", "ro.secureboot.lockstate",
+                "ro.boot.verifiedbootstate", "ro.serialno",
+                "ro.product.cpu.abi",
+            ]
+            for p in props:
+                self.log(f"{p}: {run([ADB, 'shell', 'getprop', p]).strip()}")
+        threading.Thread(target=t, daemon=True).start()
+
+    def xiaomi_mi_assistant(self):
+        def t():
+            self.log("=" * 50)
+            self.log("🎯 Mi Assistant Mode:")
+            self.log(run([ADB, "shell", "getprop", "ro.boot.mode"]))
+            self.log(run([ADB, "shell", "getprop", "ro.boot.midevicemode"]))
+        threading.Thread(target=t, daemon=True).start()
+
+    def xiaomi_select_rom(self):
+        p = filedialog.askopenfilename(
+            filetypes=[("Xiaomi ROM", "*.tgz *.tar.gz *.zip"), ("All", "*.*")])
+        if p:
+            self.xiaomi_rom = p
+            self.xiaomi_rom_label.configure(text=os.path.basename(p),
+                                             text_color="lightgreen")
+            self.log(f"🟠 Xiaomi ROM: {os.path.basename(p)}")
+
+    def xiaomi_flash_rom(self, wipe=False):
+        if not self.xiaomi_rom or not os.path.exists(self.xiaomi_rom):
+            messagebox.showerror(self.tr("err"), self.tr("samsung_no_file"))
+            return
+        if not messagebox.askyesno(self.tr("confirm"),
+                                    self.tr("confirm_flash_samsung",
+                                            os.path.basename(self.xiaomi_rom))):
+            return
+
+        def t():
+            try:
+                if os.path.exists(TEMP_FLASH):
+                    shutil.rmtree(TEMP_FLASH, ignore_errors=True)
+                os.makedirs(TEMP_FLASH, exist_ok=True)
+
+                name = os.path.basename(self.xiaomi_rom).lower()
+                self.log("📦 Extracting Xiaomi ROM...")
+
+                if name.endswith(".zip"):
+                    with zipfile.ZipFile(self.xiaomi_rom) as z:
+                        z.extractall(TEMP_FLASH)
+                elif name.endswith((".tgz", ".tar.gz")):
+                    with tarfile.open(self.xiaomi_rom, "r:gz") as tar:
+                        tar.extractall(TEMP_FLASH)
+
+                # البحث عن مجلد images
+                images_dir = None
+                for root, dirs, files in os.walk(TEMP_FLASH):
+                    if "images" in os.path.basename(root).lower():
+                        images_dir = root
+                        break
+
+                if not images_dir:
+                    for root, dirs, files in os.walk(TEMP_FLASH):
+                        for f in files:
+                            if f.endswith(".img"):
+                                images_dir = root
+                                break
+                        if images_dir:
+                            break
+
+                if not images_dir:
+                    self.log("❌ No images found")
+                    return
+
+                self.log(f"📁 Images: {images_dir}")
+
+                # ترتيب الفلاش الصحيح لشاومي
+                order = ["gpt", "tz", "xbl", "abl", "aop", "bluetooth",
+                          "keymaster", "devcfg", "dsp", "featenabler",
+                          "hyp", "imagefv", "qupfw", "shrm", "uefisecapp",
+                          "vbmeta_system", "vbmeta_vendor", "vbmeta", "modem",
+                          "boot", "dtbo", "recovery", "super",
+                          "cust", "countrycode", "frp", "persist",
+                          "metadata", "userdata"]
+
+                images = {}
+                for f in os.listdir(images_dir):
+                    if f.endswith(".img"):
+                        name_only = os.path.splitext(f)[0]
+                        images[name_only] = os.path.join(images_dir, f)
+
+                total = len(images)
+                done = 0
+                for part in order:
+                    if part not in images:
+                        continue
+                    if wipe and part == "userdata":
+                        self.log("⏭️ Skipping userdata")
+                        done += 1
+                        continue
+                    self.log(f"🚀 flash {part}")
+                    out = run([FASTBOOT, "flash", part, images[part]], timeout=1800)
+                    self.log(out[-300:])
+                    done += 1
+
+                # الأقسام المتبقية
+                for part, path in images.items():
+                    if part in order:
+                        continue
+                    if wipe and part == "userdata":
+                        continue
+                    self.log(f"🚀 flash {part} (extra)")
+                    out = run([FASTBOOT, "flash", part, path], timeout=1800)
+                    self.log(out[-300:])
+
+                self.log("🎉 Xiaomi ROM flashed!")
+                run([FASTBOOT, "reboot"])
+            except Exception as e:
+                self.log(f"❌ {e}")
+        threading.Thread(target=t, daemon=True).start()
+
+    def xiaomi_flash_single(self, partition):
+        p = filedialog.askopenfilename(
+            filetypes=[("Image", "*.img"), ("All", "*.*")])
+        if not p:
+            return
+        def t():
+            self.log(f"🚀 flash {partition}: {os.path.basename(p)}")
+            out = run([FASTBOOT, "flash", partition, p], timeout=600)
+            self.log(out[-500:])
+        threading.Thread(target=t, daemon=True).start()
+
+    def xiaomi_pick_img(self):
+        p = filedialog.askopenfilename(filetypes=[("Image", "*.img")])
+        if p:
+            self.xiaomi_img_file.delete(0, "end")
+            self.xiaomi_img_file.insert(0, p)
+
+    def xiaomi_flash_custom(self):
+        part = self.xiaomi_part_name.get().strip()
+        f = self.xiaomi_img_file.get().strip()
+        if not part or not os.path.exists(f):
+            messagebox.showerror(self.tr("err"), self.tr("err_check"))
+            return
+        def t():
+            out = run([FASTBOOT, "flash", part, f], timeout=600)
+            self.log(out[-500:])
+        threading.Thread(target=t, daemon=True).start()
+
+    def xiaomi_remove_account(self):
+        messagebox.showinfo("Info", self.tr("xiaomi_remove_mi_account_help"))
+        def t():
+            self.log("=" * 50)
+            self.log("⚠️ Mi Account removal requires MTK/EDL")
+            self.log(run([ADB, "shell", "pm", "list", "packages", "|", "grep", "miui"]))
+        threading.Thread(target=t, daemon=True).start()
+
+    def xiaomi_clean_lock(self):
+        if not messagebox.askyesno(self.tr("warn"),
+                                    "⚠️ Flash ROM + Lock bootloader?"):
+            return
+        def t():
+            self.log("🔒 Locking bootloader...")
+            run([FASTBOOT, "flashing", "lock"], timeout=120)
+            self.log("Rebooting...")
+            run([FASTBOOT, "reboot"])
+        threading.Thread(target=t, daemon=True).start()
+
     # ============ Root Tab ============
     def build_root_tab(self):
         f = self.tab_root
@@ -640,7 +954,6 @@ class App(ctk.CTk):
         ctk.CTkLabel(f, text=self.tr("root_warning"),
                      font=("Arial", 11), text_color="orange").pack(pady=4)
 
-        # حالة البوتلودر
         blf = ctk.CTkFrame(f)
         blf.pack(pady=6)
         ctk.CTkButton(blf, text=self.tr("check_bl_status"), width=200,
@@ -649,7 +962,6 @@ class App(ctk.CTk):
                                              font=("Arial", 12, "bold"))
         self.bl_status_label.pack(side="left", padx=10)
 
-        # فتح/قفل
         blb = ctk.CTkFrame(f)
         blb.pack(pady=4)
         ctk.CTkButton(blb, text=self.tr("unlock_bl"), width=220,
@@ -659,7 +971,6 @@ class App(ctk.CTk):
                       fg_color="red", hover_color="darkred",
                       command=self.lock_bootloader).pack(side="left", padx=5)
 
-        # TWRP
         ctk.CTkLabel(f, text="— TWRP Recovery —",
                      font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
         tw = ctk.CTkFrame(f)
@@ -675,7 +986,6 @@ class App(ctk.CTk):
                       font=("Arial", 14, "bold"),
                       command=self.flash_recovery).pack(pady=6)
 
-        # Magisk
         ctk.CTkLabel(f, text="— Magisk Root —",
                      font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
         mg = ctk.CTkFrame(f)
@@ -691,20 +1001,20 @@ class App(ctk.CTk):
                       font=("Arial", 14, "bold"),
                       command=self.flash_boot).pack(pady=6)
 
-        # خيارات
         opt = ctk.CTkFrame(f)
         opt.pack(pady=10)
         self.reboot_after_root = ctk.CTkCheckBox(opt, text=self.tr("reboot_recovery_after"))
         self.reboot_after_root.grid(row=0, column=0, padx=10)
         self.reboot_after_root.select()
 
-        # روابط
         lf = ctk.CTkFrame(f)
         lf.pack(pady=10)
         ctk.CTkButton(lf, text=self.tr("download_twrp"), width=200,
-                      fg_color="gray", command=lambda: webbrowser.open("https://twrp.me/Devices/")).pack(side="left", padx=5)
+                      fg_color="gray",
+                      command=lambda: webbrowser.open("https://twrp.me/Devices/")).pack(side="left", padx=5)
         ctk.CTkButton(lf, text=self.tr("download_magisk"), width=200,
-                      fg_color="gray", command=lambda: webbrowser.open("https://github.com/topjohnwu/Magisk/releases")).pack(side="left", padx=5)
+                      fg_color="gray",
+                      command=lambda: webbrowser.open("https://github.com/topjohnwu/Magisk/releases")).pack(side="left", padx=5)
 
     def check_bl_status(self):
         def t():
@@ -729,12 +1039,9 @@ class App(ctk.CTk):
         if not messagebox.askyesno(self.tr("warn"), self.tr("unlock_confirm")):
             return
         def t():
-            self.log("=" * 50)
             self.log(self.tr("unlock_warn_screen"))
             out = run([FASTBOOT, "flashing", "unlock"], timeout=120)
             self.log(out)
-            if "OKAY" in out or "finished" in out.lower():
-                self.log("✅ Bootloader unlocked")
         threading.Thread(target=t, daemon=True).start()
 
     def lock_bootloader(self):
@@ -762,13 +1069,10 @@ class App(ctk.CTk):
         if not self.recovery_img or not os.path.exists(self.recovery_img):
             messagebox.showerror(self.tr("err"), self.tr("samsung_no_file"))
             return
-        if not messagebox.askyesno(self.tr("confirm"), "Flash recovery?"):
-            return
         def t():
-            self.log("=" * 50)
             out = run([FASTBOOT, "flash", "recovery", self.recovery_img], timeout=300)
             self.log(out)
-            if "OKAY" in out or "finished" in out.lower():
+            if "OKAY" in out:
                 self.log(self.tr("flash_recovery_success"))
                 if self.reboot_after_root.get():
                     run([FASTBOOT, "reboot", "recovery"])
@@ -778,13 +1082,10 @@ class App(ctk.CTk):
         if not self.boot_img or not os.path.exists(self.boot_img):
             messagebox.showerror(self.tr("err"), self.tr("samsung_no_file"))
             return
-        if not messagebox.askyesno(self.tr("confirm"), "Flash boot?"):
-            return
         def t():
-            self.log("=" * 50)
             out = run([FASTBOOT, "flash", "boot", self.boot_img], timeout=300)
             self.log(out)
-            if "OKAY" in out or "finished" in out.lower():
+            if "OKAY" in out:
                 self.log(self.tr("flash_boot_success"))
         threading.Thread(target=t, daemon=True).start()
 
@@ -861,14 +1162,12 @@ class App(ctk.CTk):
                      font=("Arial", 16, "bold")).pack(pady=6)
         ctk.CTkLabel(f, text=self.tr("samsung_warning"),
                      font=("Arial", 11), text_color="orange").pack(pady=4)
-
         row0 = ctk.CTkFrame(f)
         row0.pack(pady=6)
         ctk.CTkButton(row0, text=self.tr("samsung_detect"), width=200, height=38,
                       command=self.samsung_detect).pack(side="left", padx=5)
         ctk.CTkButton(row0, text=self.tr("samsung_pit"), width=200, height=38,
                       command=self.samsung_pit).pack(side="left", padx=5)
-
         for name, var in [("samsung_ap", "samsung_ap"),
                           ("samsung_bl", "samsung_bl"),
                           ("samsung_cp", "samsung_cp"),
@@ -882,18 +1181,15 @@ class App(ctk.CTk):
             setattr(self, f"{var}_label", lbl)
             ctk.CTkButton(row, text=self.tr("pick"), width=80,
                           command=lambda v=var: self.samsung_pick(v)).pack(side="right", padx=5)
-
         opt = ctk.CTkFrame(f)
         opt.pack(pady=10)
         self.samsung_reboot = ctk.CTkCheckBox(opt, text=self.tr("samsung_reboot"))
         self.samsung_reboot.grid(row=0, column=0, padx=10)
         self.samsung_reboot.select()
-
         ctk.CTkButton(f, text=self.tr("samsung_flash_all"), width=350, height=50,
                       fg_color="green", hover_color="darkgreen",
                       font=("Arial", 15, "bold"),
                       command=self.samsung_flash_all).pack(pady=15)
-
         fl = ctk.CTkFrame(f)
         fl.pack(pady=5)
         for p in ["AP", "BL", "CP", "CSC"]:
@@ -1153,7 +1449,7 @@ class App(ctk.CTk):
                 self.log(f"{p}: {run([ADB, 'shell', 'getprop', p]).strip()}")
         threading.Thread(target=t, daemon=True).start()
 
-    # ============ Flash Logic ============
+    # ============ Flash ============
     def pick_flash_file(self):
         p = filedialog.askopenfilename(
             filetypes=[("ROM Files", "*.zip *.tar *.md5 *.tgz *.tar.gz"),
