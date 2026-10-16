@@ -1,4 +1,4 @@
-name: Build Windows EXE
+name: Build Windows EXE + Installer
 
 on:
   workflow_dispatch:
@@ -18,17 +18,38 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Build EXE
+      - name: Build EXE with PyInstaller
         run: |
           pyinstaller --noconfirm --onefile --windowed --name "AndroidTool" main.py
 
-      - name: Upload EXE
+      - name: Install Inno Setup
+        run: choco install innosetup -y
+
+      - name: Build Installer with Inno Setup
+        run: |
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\setup.iss
+
+      - name: Upload Portable EXE
         uses: actions/upload-artifact@v4
         with:
-          name: AndroidTool
+          name: AndroidTool-Portable
           path: dist/AndroidTool.exe
+
+      - name: Upload Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: AndroidTool-Setup
+          path: installer/Output/AndroidTool-Setup.exe
+
+      - name: Create Release (on tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/AndroidTool.exe
+            installer/Output/AndroidTool-Setup.exe
