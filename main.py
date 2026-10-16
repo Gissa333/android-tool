@@ -6,6 +6,7 @@ import sys
 import threading
 import urllib.request
 import zipfile
+import tarfile
 import shutil
 import time
 
@@ -49,38 +50,47 @@ LANG = {
         "exit_fastboot": "🔌 خروج من Fastboot",
         # Flash
         "flash_title": "📦 فلاش الروم الكامل",
-        "flash_select_zip": "📁 اختر ملف الروم (ZIP)",
-        "flash_selected": "الملف المختار:",
-        "flash_mode": "وضعية الفلاش:",
+        "flash_select_zip": "📁 اختر ملف الروم",
+        "flash_type": "النوع: {}",
+        "flash_type_unknown": "غير معروف",
+        "flash_type_fastboot_zip": "Fastboot ZIP (Google/AOSP)",
+        "flash_type_samsung_tar": "Samsung TAR",
+        "flash_type_payload": "Payload.bin (Xiaomi/OnePlus)",
+        "flash_type_tgz": "TGZ (Xiaomi)",
+        "flash_type_mtk_scatter": "MTK Scatter",
+        "flash_selected": "الملف:",
+        "flash_mode": "الوضعية:",
         "flash_mode_normal": "عادي",
         "flash_mode_keep": "الاحتفاظ بالبيانات",
-        "flash_mode_wipe": "محو كل شيء",
+        "flash_mode_wipe": "محو الكل",
         "flash_stop_on_error": "التوقف عند الخطأ",
         "flash_auto_reboot": "إعادة التشغيل تلقائياً",
         "flash_start": "🚀 بدء الفلاش",
         "flash_cancel": "⏹️ إلغاء",
+        "flash_scan": "🔍 فحص الروم",
         "flash_progress": "التقدم:",
         "flash_status_idle": "بانتظار البدء",
         "flash_status_extracting": "جاري فك الضغط...",
-        "flash_status_flashing": "جاري فلاش: {}",
-        "flash_status_done": "✅ اكتمل الفلاش",
+        "flash_status_extracting_payload": "جاري استخراج payload.bin...",
+        "flash_status_flashing": "جاري الفلاش: {}",
+        "flash_status_done": "✅ اكتمل",
         "flash_status_error": "❌ فشل",
         "flash_status_cancelled": "⏹️ تم الإلغاء",
         # Unlock
         "unlock_title": "🔓 فك القفل و FRP",
-        "check_lock": "🔍 فحص حالة القفل",
+        "check_lock": "🔍 فحص القفل",
         "check_root": "👑 فحص الروت",
-        "check_frp": "🚫 فحص حالة FRP",
-        "remove_locksettings": "🗑️ حذف locksettings.db",
+        "check_frp": "🚫 فحص FRP",
+        "remove_locksettings": "🗑️ حذف locksettings",
         "remove_gatekeeper": "🔑 حذف gatekeeper",
         "remove_pattern": "📐 حذف النمط",
         "format_data_fastboot": "🔐 فورمات Data",
-        "erase_frp_fastboot": "🚫 مسح FRP (Fastboot)",
+        "erase_frp_fastboot": "🚫 مسح FRP (FB)",
         "erase_frp_adb": "🚫 مسح FRP (ADB)",
         "full_device_info": "📊 معلومات كاملة",
-        "unlock_warning": "⚠️ استخدم على مسؤوليتك — قد تُفقد البيانات",
+        "unlock_warning": "⚠️ استخدم على مسؤوليتك",
         # MTK
-        "mtk_title": "⚙️ mtkclient — مدمج",
+        "mtk_title": "⚙️ mtkclient",
         "run_gui": "🖥️ الواجهة الرسمية",
         "read_gpt": "📋 قراءة GPT",
         "read_part": "قراءة قسم:",
@@ -88,30 +98,28 @@ LANG = {
         "write_part": "كتابة قسم:",
         "pick": "اختر",
         "write_btn": "كتابة",
-        "advanced": "⚠️ عمليات متقدمة",
+        "advanced": "⚠️ متقدم",
         "unlock_bl": "🔓 فك قفل البوتلودر",
         "wipe_frp": "🧹 مسح FRP + Userdata",
         # EDL
         "edl_title": "⚡ Qualcomm EDL",
         "edl_check": "🔍 فحص الاتصال",
-        "edl_gpt": "📋 قراءة GPT",
         "edl_printgpt": "🖨️ طباعة الأقسام",
         "edl_dump": "💾 استخراج قسم",
         "edl_load": "📤 كتابة قسم",
         "edl_rw": "🔐 Read/Write",
         "edl_reset": "🔄 Reset",
         "edl_wipe": "🧹 محو Userdata",
-        "edl_firehose": "🔥 Firehose Loader:",
+        "edl_firehose": "🔥 Firehose:",
         "edl_partition": "القسم:",
-        "edl_image": "الصورة:",
         # عام
         "log": "📋 السجل:",
         "lang_btn": "🌐 English",
         "msg_wait": "⏳ ...",
-        "msg_tools_ok": "✅ Platform-Tools: {}",
+        "msg_tools_ok": "✅ Platform-Tools",
         "msg_tools_missing": "⚠️ Platform-Tools غير مثبتة",
         "msg_python_ok": "✅ Python مدمج",
-        "msg_python_missing": "⚠️ Python المدمج غير موجود",
+        "msg_python_missing": "⚠️ Python غير موجود",
         "msg_mtk_ok": "✅ mtkclient جاهز",
         "msg_mtk_missing": "⚠️ mtkclient غير موجود",
         "msg_edl_ok": "✅ edl جاهز",
@@ -121,17 +129,13 @@ LANG = {
         "msg_error": "❌ {}",
         "msg_adb": "— ADB —",
         "msg_fastboot": "— Fastboot —",
-        "msg_running_gui": "🖥️ تشغيل mtk_gui...",
         "msg_no_embed": "❌ Python المدمج غير موجود",
-        "msg_no_gui": "❌ mtk_gui.py غير موجود",
         "msg_no_mtk": "❌ mtkclient غير موجود",
         "msg_no_edl": "❌ edl غير موجود",
-        "msg_running_cmd": "⚙️ {}",
         "confirm_write": "كتابة {} من {}؟",
-        "confirm_unlock": "فك قفل البوتلودر سيمسح كل البيانات! متأكد؟",
-        "confirm_wipe": "مسح FRP و Userdata نهائياً!",
-        "confirm_format": "سيتم محو كل بيانات الجهاز! متأكد؟",
-        "confirm_flash": "بدء فلاش {} قسم؟",
+        "confirm_unlock": "فك القفل سيمسح البيانات! متأكد؟",
+        "confirm_wipe": "مسح نهائياً!",
+        "confirm_format": "سيتم محو كل شيء! متأكد؟",
         "err_check": "تحقق من الحقول",
         "err": "خطأ",
         "confirm": "تأكيد",
@@ -153,9 +157,16 @@ LANG = {
         "reboot_edl": "📡 EDL",
         "exit_fastboot": "🔌 Exit Fastboot",
         "flash_title": "📦 Full ROM Flash",
-        "flash_select_zip": "📁 Select ROM (ZIP)",
-        "flash_selected": "Selected:",
-        "flash_mode": "Flash Mode:",
+        "flash_select_zip": "📁 Select ROM file",
+        "flash_type": "Type: {}",
+        "flash_type_unknown": "Unknown",
+        "flash_type_fastboot_zip": "Fastboot ZIP (Google/AOSP)",
+        "flash_type_samsung_tar": "Samsung TAR",
+        "flash_type_payload": "Payload.bin (Xiaomi/OnePlus)",
+        "flash_type_tgz": "TGZ (Xiaomi)",
+        "flash_type_mtk_scatter": "MTK Scatter",
+        "flash_selected": "File:",
+        "flash_mode": "Mode:",
         "flash_mode_normal": "Normal",
         "flash_mode_keep": "Keep Data",
         "flash_mode_wipe": "Wipe All",
@@ -163,9 +174,11 @@ LANG = {
         "flash_auto_reboot": "Auto Reboot",
         "flash_start": "🚀 Start Flash",
         "flash_cancel": "⏹️ Cancel",
+        "flash_scan": "🔍 Scan ROM",
         "flash_progress": "Progress:",
         "flash_status_idle": "Idle",
         "flash_status_extracting": "Extracting...",
+        "flash_status_extracting_payload": "Extracting payload.bin...",
         "flash_status_flashing": "Flashing: {}",
         "flash_status_done": "✅ Done",
         "flash_status_error": "❌ Failed",
@@ -181,8 +194,8 @@ LANG = {
         "erase_frp_fastboot": "🚫 Erase FRP (FB)",
         "erase_frp_adb": "🚫 Erase FRP (ADB)",
         "full_device_info": "📊 Full Info",
-        "unlock_warning": "⚠️ Use at your own risk — data may be lost",
-        "mtk_title": "⚙️ mtkclient — Integrated",
+        "unlock_warning": "⚠️ Use at your own risk",
+        "mtk_title": "⚙️ mtkclient",
         "run_gui": "🖥️ Official GUI",
         "read_gpt": "📋 Read GPT",
         "read_part": "Read partition:",
@@ -195,23 +208,21 @@ LANG = {
         "wipe_frp": "🧹 Wipe FRP + Userdata",
         "edl_title": "⚡ Qualcomm EDL",
         "edl_check": "🔍 Check Connection",
-        "edl_gpt": "📋 Read GPT",
         "edl_printgpt": "🖨️ Print Partitions",
         "edl_dump": "💾 Dump Partition",
         "edl_load": "📤 Write Partition",
         "edl_rw": "🔐 Read/Write",
         "edl_reset": "🔄 Reset",
         "edl_wipe": "🧹 Wipe Userdata",
-        "edl_firehose": "🔥 Firehose Loader:",
+        "edl_firehose": "🔥 Firehose:",
         "edl_partition": "Partition:",
-        "edl_image": "Image:",
         "log": "📋 Log:",
         "lang_btn": "🌐 العربية",
         "msg_wait": "⏳ ...",
-        "msg_tools_ok": "✅ Platform-Tools ready",
+        "msg_tools_ok": "✅ Platform-Tools",
         "msg_tools_missing": "⚠️ Platform-Tools missing",
-        "msg_python_ok": "✅ Embedded Python ready",
-        "msg_python_missing": "⚠️ Embedded Python missing",
+        "msg_python_ok": "✅ Embedded Python",
+        "msg_python_missing": "⚠️ Python missing",
         "msg_mtk_ok": "✅ mtkclient ready",
         "msg_mtk_missing": "⚠️ mtkclient missing",
         "msg_edl_ok": "✅ edl ready",
@@ -221,17 +232,13 @@ LANG = {
         "msg_error": "❌ {}",
         "msg_adb": "— ADB —",
         "msg_fastboot": "— Fastboot —",
-        "msg_running_gui": "🖥️ Launching mtk_gui...",
         "msg_no_embed": "❌ Embedded Python missing",
-        "msg_no_gui": "❌ mtk_gui.py missing",
         "msg_no_mtk": "❌ mtkclient missing",
         "msg_no_edl": "❌ edl missing",
-        "msg_running_cmd": "⚙️ {}",
         "confirm_write": "Write {} from {}?",
-        "confirm_unlock": "Unlocking bootloader will erase all data! Sure?",
-        "confirm_wipe": "Wipe FRP and Userdata permanently!",
+        "confirm_unlock": "Unlock will wipe data! Sure?",
+        "confirm_wipe": "Wipe permanently!",
         "confirm_format": "All data will be wiped! Sure?",
-        "confirm_flash": "Start flashing {} partitions?",
         "err_check": "Check fields",
         "err": "Error",
         "confirm": "Confirm",
@@ -250,17 +257,45 @@ def run(cmd, timeout=60, cwd=None, env=None):
         return f"Error: {e}"
 
 
+def detect_rom_type(path):
+    """كشف نوع ملف الروم"""
+    if not path or not os.path.exists(path):
+        return "unknown"
+    name = os.path.basename(path).lower()
+    ext = os.path.splitext(name)[1]
+
+    if ext == ".zip":
+        try:
+            with zipfile.ZipFile(path) as z:
+                names = z.namelist()
+                if any(n.endswith("payload.bin") for n in names):
+                    return "payload"
+                if any(n.endswith(".img") for n in names):
+                    return "fastboot_zip"
+        except Exception:
+            pass
+        return "fastboot_zip"
+
+    if ext in [".tar", ".md5"] or name.endswith(".tar.md5"):
+        return "samsung_tar"
+
+    if ext in [".tgz", ".tar.gz"]:
+        return "tgz"
+
+    return "unknown"
+
+
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.lang = "ar"
         self.t = LANG[self.lang]
 
-        self.flash_zip = ""
+        self.flash_file = ""
+        self.flash_rom_type = "unknown"
         self.flash_cancel = False
-        self.flash_temp = TEMP_FLASH
 
-        self.geometry("1020x820")
+        self.geometry("1020x840")
         self.resizable(True, True)
 
         self.build_ui()
@@ -290,7 +325,7 @@ class App(ctk.CTk):
         ctk.CTkButton(top, text=self.tr("lang_btn"), width=110, height=32,
                       command=self.toggle_lang).pack(side="right", padx=5)
 
-        self.tabs = ctk.CTkTabview(self, width=970, height=640)
+        self.tabs = ctk.CTkTabview(self, width=970, height=660)
         self.tabs.pack(padx=15, pady=5, fill="both", expand=True)
 
         self.tab_adb = self.tabs.add(self.tr("tab_adb"))
@@ -352,15 +387,24 @@ class App(ctk.CTk):
         ctk.CTkLabel(f, text=self.tr("flash_title"),
                      font=("Arial", 16, "bold")).pack(pady=8)
 
-        # اختيار ZIP
+        # اختيار الملف
         zf = ctk.CTkFrame(f)
-        zf.pack(pady=6)
-        ctk.CTkButton(zf, text=self.tr("flash_select_zip"), width=250, height=38,
+        zf.pack(pady=6, fill="x", padx=20)
+        ctk.CTkButton(zf, text=self.tr("flash_select_zip"), width=230, height=38,
                       fg_color="green", hover_color="darkgreen",
-                      command=self.pick_flash_zip).pack(side="left", padx=8)
-        self.flash_zip_label = ctk.CTkLabel(zf, text=self.tr("flash_status_idle"),
-                                             font=("Arial", 11), text_color="gray")
-        self.flash_zip_label.pack(side="left", padx=10)
+                      command=self.pick_flash_file).pack(side="left", padx=8)
+        self.flash_file_label = ctk.CTkLabel(zf, text=self.tr("flash_status_idle"),
+                                              font=("Arial", 11), text_color="gray")
+        self.flash_file_label.pack(side="left", padx=10)
+
+        # نوع الروم
+        tf = ctk.CTkFrame(f)
+        tf.pack(pady=4)
+        ctk.CTkButton(tf, text=self.tr("flash_scan"), width=150,
+                      command=self.scan_rom).pack(side="left", padx=5)
+        self.flash_type_label = ctk.CTkLabel(tf, text=self.tr("flash_type", self.tr("flash_type_unknown")),
+                                              font=("Arial", 11), text_color="lightblue")
+        self.flash_type_label.pack(side="left", padx=10)
 
         # الإعدادات
         opts = ctk.CTkFrame(f)
@@ -396,7 +440,7 @@ class App(ctk.CTk):
                                           font=("Arial", 11))
         self.flash_status.pack()
 
-        # أزرار البدء/الإلغاء
+        # أزرار
         bf = ctk.CTkFrame(f)
         bf.pack(pady=8)
         ctk.CTkButton(bf, text=self.tr("flash_start"), width=200, height=45,
@@ -411,16 +455,14 @@ class App(ctk.CTk):
         # قائمة الأقسام
         ctk.CTkLabel(f, text="📋 Partitions:",
                      font=("Arial", 12, "bold")).pack(anchor="w", padx=20, pady=(15, 3))
-        self.part_list = ctk.CTkTextbox(f, height=150, font=("Consolas", 11))
+        self.part_list = ctk.CTkTextbox(f, height=140, font=("Consolas", 11))
         self.part_list.pack(fill="both", expand=True, padx=20, pady=(0, 10))
 
     # ============ Unlock Tab ============
     def build_unlock_tab(self):
         f = self.tab_unlock
-
         ctk.CTkLabel(f, text=self.tr("unlock_title"),
                      font=("Arial", 15, "bold")).pack(pady=5)
-
         ctk.CTkLabel(f, text=self.tr("unlock_warning"),
                      font=("Arial", 11), text_color="orange").pack(pady=4)
 
@@ -552,10 +594,8 @@ class App(ctk.CTk):
                       hover_color="darkred",
                       command=self.edl_write).pack(side="left", padx=5)
 
-        ctk.CTkLabel(f, text=self.tr("advanced"), font=("Arial", 12, "bold"),
-                     text_color="orange").pack(pady=(15, 3))
         ops = ctk.CTkFrame(f)
-        ops.pack(pady=4)
+        ops.pack(pady=15)
         ctk.CTkButton(ops, text=self.tr("edl_rw"), width=200,
                       fg_color="orange", hover_color="darkorange",
                       command=self.edl_rw).pack(side="left", padx=3)
@@ -566,26 +606,61 @@ class App(ctk.CTk):
                       command=self.edl_wipe).pack(side="left", padx=3)
 
     # ============ Flash Logic ============
-    def pick_flash_zip(self):
+    def pick_flash_file(self):
         p = filedialog.askopenfilename(
-            filetypes=[("ROM ZIP", "*.zip"), ("All", "*.*")])
+            filetypes=[
+                ("ROM Files", "*.zip *.tar *.md5 *.tgz *.tar.gz"),
+                ("All files", "*.*"),
+            ])
         if p:
-            self.flash_zip = p
-            self.flash_zip_label.configure(
+            self.flash_file = p
+            self.flash_file_label.configure(
                 text=os.path.basename(p), text_color="lightgreen")
             self.log(f"📁 {p}")
+            # فحص تلقائي
+            self.scan_rom()
 
-    def extract_zip(self, zip_path):
-        if os.path.exists(self.flash_temp):
-            shutil.rmtree(self.flash_temp, ignore_errors=True)
-        os.makedirs(self.flash_temp, exist_ok=True)
-        with zipfile.ZipFile(zip_path, "r") as z:
-            z.extractall(self.flash_temp)
+    def scan_rom(self):
+        if not self.flash_file:
+            messagebox.showerror(self.tr("err"), "Select a ROM file first")
+            return
+        self.flash_rom_type = detect_rom_type(self.flash_file)
+        type_key = {
+            "fastboot_zip": "flash_type_fastboot_zip",
+            "samsung_tar": "flash_type_samsung_tar",
+            "payload": "flash_type_payload",
+            "tgz": "flash_type_tgz",
+        }.get(self.flash_rom_type, "flash_type_unknown")
+        label = self.tr(type_key)
+        self.flash_type_label.configure(text=self.tr("flash_type", label))
+        self.log(f"🔍 ROM Type: {label}")
+
+    def extract_archive(self, path, dest):
+        """فك أي نوع أرشيف"""
+        os.makedirs(dest, exist_ok=True)
+        name = os.path.basename(path).lower()
+
+        if name.endswith(".zip"):
+            with zipfile.ZipFile(path) as z:
+                z.extractall(dest)
+        elif name.endswith((".tar", ".md5", ".tar.md5", ".tgz", ".tar.gz")):
+            if name.endswith((".tgz", ".tar.gz")):
+                with tarfile.open(path, "r:gz") as t:
+                    t.extractall(dest)
+            else:
+                # tar أو tar.md5 — جرب gzip ثم plain tar
+                try:
+                    with tarfile.open(path, "r:gz") as t:
+                        t.extractall(dest)
+                except tarfile.ReadError:
+                    with tarfile.open(path, "r:") as t:
+                        t.extractall(dest)
+        else:
+            raise ValueError(f"Unsupported archive: {name}")
 
     def find_images(self):
-        """البحث عن ملفات img في مجلد الروم"""
         images = {}
-        for root, dirs, files in os.walk(self.flash_temp):
+        for root, dirs, files in os.walk(TEMP_FLASH):
             for f in files:
                 if f.endswith(".img"):
                     name = os.path.splitext(f)[0]
@@ -593,20 +668,52 @@ class App(ctk.CTk):
         return images
 
     def start_flash(self):
-        if not self.flash_zip or not os.path.exists(self.flash_zip):
-            messagebox.showerror(self.tr("err"), "Select a ROM ZIP first")
+        if not self.flash_file or not os.path.exists(self.flash_file):
+            messagebox.showerror(self.tr("err"), "Select a ROM first")
             return
 
         self.flash_cancel = False
 
         def task():
             try:
-                # فك الضغط
-                self.flash_status.configure(text=self.tr("flash_status_extracting"))
-                self.update_idletasks()
-                self.log("📦 Extracting...")
-                self.extract_zip(self.flash_zip)
+                # فك الأرشيف
+                if os.path.exists(TEMP_FLASH):
+                    shutil.rmtree(TEMP_FLASH, ignore_errors=True)
 
+                self.flash_status.configure(text=self.tr("flash_status_extracting"))
+                self.log("📦 Extracting...")
+                self.extract_archive(self.flash_file, TEMP_FLASH)
+
+                # دعم payload.bin
+                payloads = []
+                for root, dirs, files in os.walk(TEMP_FLASH):
+                    for f in files:
+                        if f == "payload.bin":
+                            payloads.append(os.path.join(root, f))
+
+                if payloads:
+                    self.flash_status.configure(
+                        text=self.tr("flash_status_extracting_payload"))
+                    self.log("⚠️ payload.bin found — extraction needs payload-dumper-go")
+                    self.log("📥 Downloading payload-dumper-go...")
+                    try:
+                        p_url = "https://github.com/ssut/payload-dumper-go/releases/download/1.2.2/payload-dumper-go_1.2.2_windows_amd64.tar.gz"
+                        tgz = os.path.join(BASE_DIR, "pdg.tgz")
+                        urllib.request.urlretrieve(p_url, tgz)
+                        with tarfile.open(tgz, "r:gz") as t:
+                            t.extractall(BASE_DIR)
+                        os.remove(tgz)
+                        exe = os.path.join(BASE_DIR, "payload-dumper-go.exe")
+                        if os.path.exists(exe):
+                            out_dir = os.path.join(TEMP_FLASH, "extracted")
+                            os.makedirs(out_dir, exist_ok=True)
+                            for pl in payloads:
+                                self.log(f"🔧 Extracting {os.path.basename(pl)}...")
+                                self.log(run([exe, "-o", out_dir, pl], timeout=1800))
+                    except Exception as e:
+                        self.log(f"⚠️ payload extraction failed: {e}")
+
+                # البحث عن الصور
                 images = self.find_images()
                 if not images:
                     self.log("❌ No .img files found")
@@ -614,7 +721,7 @@ class App(ctk.CTk):
                     return
 
                 self.log(f"✅ Found {len(images)} images:")
-                for name in images:
+                for name in sorted(images.keys()):
                     self.log(f"  • {name}")
                     self.part_list.insert("end", f"{name}\n")
 
@@ -624,16 +731,15 @@ class App(ctk.CTk):
                 done = 0
 
                 self.flash_progress.set(0)
-                self.flash_status.configure(text="...")
 
-                for name, path in images.items():
+                for name in sorted(images.keys()):
                     if self.flash_cancel:
-                        self.flash_status.configure(text=self.tr("flash_status_cancelled"))
+                        self.flash_status.configure(
+                            text=self.tr("flash_status_cancelled"))
                         return
 
-                    # skip userdata إذا "الاحتفاظ بالبيانات"
                     if mode == self.tr("flash_mode_keep") and name in ["userdata", "metadata"]:
-                        self.log(f"⏭️ Skipping {name} (keep data)")
+                        self.log(f"⏭️ Skipping {name}")
                         done += 1
                         continue
 
@@ -641,26 +747,26 @@ class App(ctk.CTk):
                         text=self.tr("flash_status_flashing", name))
                     self.log(f"🚀 Flashing: {name}")
 
-                    out = run([FASTBOOT, "flash", name, path], timeout=1200)
+                    out = run([FASTBOOT, "flash", name, images[name]], timeout=1200)
                     self.log(out[-500:])
 
                     if "FAILED" in out or "error" in out.lower():
                         self.log(f"❌ {name} failed")
                         if self.chk_stop.get():
-                            self.flash_status.configure(text=self.tr("flash_status_error"))
+                            self.flash_status.configure(
+                                text=self.tr("flash_status_error"))
                             return
 
                     done += 1
                     self.flash_progress.set(done / total)
 
-                # إعادة تشغيل
                 if self.chk_reboot.get() and not self.flash_cancel:
                     self.log("🔄 Rebooting...")
                     run([FASTBOOT, "reboot"])
 
                 self.flash_status.configure(text=self.tr("flash_status_done"))
                 self.flash_progress.set(1)
-                self.log("🎉 Flash completed!")
+                self.log("🎉 Done!")
 
             except Exception as e:
                 self.log(f"❌ {e}")
@@ -676,7 +782,7 @@ class App(ctk.CTk):
     # ============ Common ============
     def check_tools(self):
         if os.path.exists(ADB):
-            self.log(self.tr("msg_tools_ok", TOOLS_DIR))
+            self.log(self.tr("msg_tools_ok"))
         else:
             self.log(self.tr("msg_tools_missing"))
         if os.path.exists(EMBED_PY):
@@ -741,16 +847,14 @@ class App(ctk.CTk):
 
     def check_root(self):
         def t():
-            self.log("=" * 50)
             out = run([ADB, "shell", "which", "su"]).strip()
             self.log(f"👑 Root: {'✅ ' + out if out else '❌'}")
         threading.Thread(target=t, daemon=True).start()
 
     def check_frp(self):
         def t():
-            self.log("=" * 50)
             out = run([ADB, "shell", "getprop", "ro.frp.pst"]).strip()
-            self.log(f"FRP partition: {out or 'N/A'}")
+            self.log(f"FRP: {out or 'N/A'}")
         threading.Thread(target=t, daemon=True).start()
 
     def remove_locksettings(self):
@@ -758,7 +862,6 @@ class App(ctk.CTk):
             for c in ["rm -f /data/system/locksettings.db",
                       "rm -f /data/system/locksettings.db-shm",
                       "rm -f /data/system/locksettings.db-wal"]:
-                self.log(f"$ {c}")
                 self.log(run([ADB, "shell", "su", "-c", c]))
         threading.Thread(target=t, daemon=True).start()
 
@@ -766,29 +869,25 @@ class App(ctk.CTk):
         def t():
             for c in ["rm -f /data/system/gatekeeper.password.key",
                       "rm -f /data/system/gatekeeper.pattern.key"]:
-                self.log(f"$ {c}")
                 self.log(run([ADB, "shell", "su", "-c", c]))
         threading.Thread(target=t, daemon=True).start()
 
     def remove_pattern(self):
         def t():
-            c = "rm -f /data/system/gesture.key"
-            self.log(f"$ {c}")
-            self.log(run([ADB, "shell", "su", "-c", c]))
+            self.log(run([ADB, "shell", "su", "-c", "rm -f /data/system/gesture.key"]))
         threading.Thread(target=t, daemon=True).start()
 
     def full_info(self):
         def t():
-            out = run([ADB, "shell", "getprop"], timeout=30)
-            self.log(out[:5000])
+            self.log(run([ADB, "shell", "getprop"], timeout=30)[:5000])
         threading.Thread(target=t, daemon=True).start()
 
     def erase_frp_adb(self):
         if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_wipe")):
             return
         def t():
-            c = "rm -rf /persistent/frp/* /data/system/users/0/frp/*"
-            self.log(run([ADB, "shell", "su", "-c", c]))
+            self.log(run([ADB, "shell", "su", "-c",
+                          "rm -rf /persistent/frp/* /data/system/users/0/frp/*"]))
         threading.Thread(target=t, daemon=True).start()
 
     def erase_frp_fastboot(self):
@@ -808,7 +907,7 @@ class App(ctk.CTk):
             return
         gui = os.path.join(MTK_DIR, "mtk_gui.py")
         if not os.path.exists(gui):
-            self.log(self.tr("msg_no_gui"))
+            self.log("❌ mtk_gui.py missing")
             return
         subprocess.Popen([EMBED_PY, "mtk_gui.py"], cwd=MTK_DIR,
                          creationflags=subprocess.CREATE_NEW_CONSOLE if os.name == "nt" else 0)
