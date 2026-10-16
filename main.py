@@ -13,15 +13,12 @@ ctk.set_default_color_theme("blue")
 
 if getattr(sys, 'frozen', False):
     BASE_DIR = os.path.dirname(sys.executable)
-    BUNDLE_DIR = sys._MEIPASS
 else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    BUNDLE_DIR = BASE_DIR
-
-PYTHON_EXE = sys.executable
 
 TOOLS_DIR = os.path.join(BASE_DIR, "platform-tools")
 MTK_DIR = os.path.join(BASE_DIR, "mtkclient")
+EMBED_PY = os.path.join(BASE_DIR, "python-embed", "python.exe")
 ADB = os.path.join(TOOLS_DIR, "adb.exe")
 FASTBOOT = os.path.join(TOOLS_DIR, "fastboot.exe")
 MTK_SCRIPT = os.path.join(MTK_DIR, "mtk.py")
@@ -34,27 +31,6 @@ def run(cmd, timeout=60, cwd=None, env=None):
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout,
                            encoding="utf-8", errors="ignore", cwd=cwd, env=env,
                            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
-        return (r.stdout or "") + (r.stderr or "")
-    except Exception as e:
-        return f"خطأ: {e}"
-
-
-def run_mtk(args, timeout=600):
-    if not os.path.exists(os.path.join(MTK_DIR, "mtkclient")):
-        return "❌ mtkclient غير موجود في المجلد"
-
-    env = os.environ.copy()
-    env["PYTHONPATH"] = MTK_DIR + os.pathsep + env.get("PYTHONPATH", "")
-
-    try:
-        r = subprocess.run(
-            [PYTHON_EXE, "-c",
-             f"import sys; sys.path.insert(0, r'{MTK_DIR}'); "
-             f"import mtkclient.mtk as m; m.main({args!r})"],
-            capture_output=True, text=True, timeout=timeout,
-            encoding="utf-8", errors="ignore", env=env, cwd=MTK_DIR,
-            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
-        )
         return (r.stdout or "") + (r.stderr or "")
     except Exception as e:
         return f"خطأ: {e}"
@@ -162,10 +138,15 @@ class App(ctk.CTk):
         else:
             self.log("⚠️ Platform-Tools غير مثبتة — اضغط الزر")
 
-        if os.path.exists(os.path.join(MTK_DIR, "mtkclient")):
-            self.log(f"✅ mtkclient مدمج: {MTK_DIR}")
+        if os.path.exists(EMBED_PY):
+            self.log(f"✅ Python مدمج: {EMBED_PY}")
         else:
-            self.log("⚠️ mtkclient غير موجود في المجلد")
+            self.log("⚠️ Python المدمج غير موجود")
+
+        if os.path.exists(MTK_SCRIPT):
+            self.log(f"✅ mtkclient: {MTK_DIR}")
+        else:
+            self.log("⚠️ mtkclient غير موجود")
 
     def download_tools(self):
         def task():
@@ -205,21 +186,28 @@ class App(ctk.CTk):
         threading.Thread(target=t, daemon=True).start()
 
     def run_mtk_gui(self):
+        if not os.path.exists(EMBED_PY):
+            self.log("❌ Python المدمج غير موجود في مجلد البرنامج")
+            return
         mtk_gui = os.path.join(MTK_DIR, "mtk_gui.py")
         if not os.path.exists(mtk_gui):
-            self.log("❌ mtk_gui.py غير موجود في مجلد mtkclient")
+            self.log("❌ mtk_gui.py غير موجود")
             return
-        env = os.environ.copy()
-        env["PYTHONPATH"] = MTK_DIR + os.pathsep + env.get("PYTHONPATH", "")
         self.log("🖥️ تشغيل mtk_gui...")
-        subprocess.Popen([PYTHON_EXE, mtk_gui], cwd=MTK_DIR, env=env,
+        subprocess.Popen([EMBED_PY, "mtk_gui.py"], cwd=MTK_DIR,
                          creationflags=subprocess.CREATE_NEW_CONSOLE if os.name == "nt" else 0)
 
     def mtk_cmd(self, args, timeout=600):
+        if not os.path.exists(EMBED_PY):
+            self.log("❌ Python المدمج غير موجود")
+            return
+        if not os.path.exists(MTK_SCRIPT):
+            self.log("❌ mtkclient غير موجود")
+            return
         def t():
             self.log("=" * 50)
             self.log(f"⚙️ mtk {' '.join(args)}")
-            self.log(run_mtk(args, timeout=timeout))
+            self.log(run([EMBED_PY, "mtk.py"] + args, timeout=timeout, cwd=MTK_DIR))
         threading.Thread(target=t, daemon=True).start()
 
     def mtk_read(self):
