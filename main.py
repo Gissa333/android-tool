@@ -37,7 +37,7 @@ EDL_SCRIPT = os.path.join(EDL_DIR, "edl.py")
 HEIMDALL = os.path.join(HEIMDALL_DIR, "heimdall.exe")
 
 PLATFORM_TOOLS_URL = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
-APP_VERSION = "1.5.0"
+APP_VERSION = "1.6.0"
 GITHUB_REPO = "Gissa333/android-tool"
 GITHUB_API = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
@@ -86,6 +86,38 @@ LANG = {
         "tools_install_fail": "❌ فشل التثبيت: {}",
         "tools_battery_info": "🔋 معلومات البطارية",
         "tools_apps_list": "📋 التطبيقات المثبتة",
+        "sys_title": "⚙️ أدوات النظام المتقدمة",
+        "sys_nav_bar": "إخفاء/إظهار شريط التنقل",
+        "sys_nav_hide": "🙈 إخفاء شريط التنقل",
+        "sys_nav_show": "👁️ إظهار شريط التنقل",
+        "sys_dpi_title": "تغيير كثافة الشاشة (DPI):",
+        "sys_dpi_placeholder": "مثال: 420",
+        "sys_dpi_apply": "تطبيق DPI",
+        "sys_dpi_reset": "إعادة DPI الافتراضي",
+        "sys_res_reset": "🔄 إعادة دقة الشاشة الافتراضية",
+        "sys_res_custom": "تخصيص الدقة:",
+        "sys_res_width": "العرض:",
+        "sys_res_height": "الطول:",
+        "sys_res_apply": "تطبيق الدقة",
+        "sys_anim": "🎬 تسريع الحركة (Animation):",
+        "sys_anim_fast": "🚀 تسريع (0.5x)",
+        "sys_anim_normal": "🔄 إعادة للوضع الطبيعي (1x)",
+        "sys_anim_custom": "تخصيص المقياس:",
+        "sys_anim_value": "مثال: 0.5",
+        "sys_anim_apply": "تطبيق",
+        "sys_sysui": "🔄 إعادة تشغيل واجهة النظام (SystemUI)",
+        "sys_screenshot_ui": "📸 لقطة الشاشة",
+        "sys_gms": "تعطيل/تفعيل خدمات جوجل (GMS):",
+        "sys_gms_disable": "🚫 تعطيل GMS",
+        "sys_gms_enable": "✅ تفعيل GMS",
+        "sys_restart": "♻️ إعادة تشغيل الهاتف",
+        "sys_info": "📊 معلومات النظام",
+        "sys_applied": "✅ تم التطبيق",
+        "sys_reset": "✅ تم إعادة القيمة الافتراضية",
+        "sys_no_device": "❌ لا يوجد جهاز متصل",
+        "sys_sysui_restarting": "🔄 جاري إعادة تشغيل SystemUI...",
+        "sys_gms_disabled": "✅ GMS معطل",
+        "sys_gms_enabled": "✅ GMS مفعل",
         "apps_title": "📱 إدارة التطبيقات",
         "apps_load": "📋 تحميل قائمة التطبيقات",
         "apps_uninstall": "🗑️ حذف التطبيق",
@@ -323,7 +355,7 @@ LANG = {
         "about_new_version": "🎉 جديد: {}",
         "about_checking": "⏳ فحص...",
         "about_error": "❌ {}",
-        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• أدوات يومية\n• إدارة التطبيقات\n• النسخ الاحتياطي\n• فلاش الروم\n• Xiaomi / Huawei / Samsung / Oppo / Vivo\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• أدوات يومية\n• أدوات النظام\n• إدارة التطبيقات\n• النسخ الاحتياطي\n• فلاش الروم\n• Xiaomi / Huawei / Samsung / Oppo / Vivo\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 السجل:",
         "log_save": "💾 حفظ",
         "log_copy": "📋 نسخ",
@@ -360,6 +392,9 @@ LANG = {
         "confirm_uninstall": "حذف {}؟",
         "confirm_disable": "تعطيل {}؟",
         "confirm_clear": "مسح بيانات {}؟",
+        "confirm_reset_dpi": "إعادة DPI الافتراضي؟",
+        "confirm_sysui": "إعادة تشغيل واجهة النظام؟",
+        "confirm_reboot": "إعادة تشغيل الهاتف؟",
         "err_check": "تحقق",
         "err": "خطأ",
         "confirm": "تأكيد",
@@ -409,6 +444,38 @@ LANG = {
         "tools_install_fail": "❌ Install failed: {}",
         "tools_battery_info": "🔋 Battery Info",
         "tools_apps_list": "📋 Installed apps",
+        "sys_title": "⚙️ Advanced System Tools",
+        "sys_nav_bar": "Hide/Show Navigation Bar",
+        "sys_nav_hide": "🙈 Hide Navigation Bar",
+        "sys_nav_show": "👁️ Show Navigation Bar",
+        "sys_dpi_title": "Change Screen Density (DPI):",
+        "sys_dpi_placeholder": "e.g. 420",
+        "sys_dpi_apply": "Apply DPI",
+        "sys_dpi_reset": "Reset DPI to Default",
+        "sys_res_reset": "🔄 Reset Screen Resolution",
+        "sys_res_custom": "Custom Resolution:",
+        "sys_res_width": "Width:",
+        "sys_res_height": "Height:",
+        "sys_res_apply": "Apply Resolution",
+        "sys_anim": "🎬 Speed Up Animation:",
+        "sys_anim_fast": "🚀 Faster (0.5x)",
+        "sys_anim_normal": "🔄 Reset (1x)",
+        "sys_anim_custom": "Custom Scale:",
+        "sys_anim_value": "e.g. 0.5",
+        "sys_anim_apply": "Apply",
+        "sys_sysui": "🔄 Restart System UI",
+        "sys_screenshot_ui": "📸 Screenshot",
+        "sys_gms": "Disable/Enable Google Services (GMS):",
+        "sys_gms_disable": "🚫 Disable GMS",
+        "sys_gms_enable": "✅ Enable GMS",
+        "sys_restart": "♻️ Restart Device",
+        "sys_info": "📊 System Info",
+        "sys_applied": "✅ Applied",
+        "sys_reset": "✅ Reset to default",
+        "sys_no_device": "❌ No device connected",
+        "sys_sysui_restarting": "🔄 Restarting SystemUI...",
+        "sys_gms_disabled": "✅ GMS disabled",
+        "sys_gms_enabled": "✅ GMS enabled",
         "apps_title": "📱 App Manager",
         "apps_load": "📋 Load Apps List",
         "apps_uninstall": "🗑️ Uninstall App",
@@ -646,7 +713,7 @@ LANG = {
         "about_new_version": "🎉 New: {}",
         "about_checking": "⏳ Checking...",
         "about_error": "❌ {}",
-        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Daily Tools\n• App Manager\n• Backup\n• Full ROM Flash\n• Xiaomi / Huawei / Samsung / Oppo / Vivo\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Daily Tools\n• System Tools\n• App Manager\n• Backup\n• Full ROM Flash\n• Xiaomi / Huawei / Samsung / Oppo / Vivo\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 Log:",
         "log_save": "💾 Save",
         "log_copy": "📋 Copy",
@@ -683,6 +750,9 @@ LANG = {
         "confirm_uninstall": "Uninstall {}?",
         "confirm_disable": "Disable {}?",
         "confirm_clear": "Clear {} data?",
+        "confirm_reset_dpi": "Reset DPI to default?",
+        "confirm_sysui": "Restart SystemUI?",
+        "confirm_reboot": "Reboot device?",
         "err_check": "Check",
         "err": "Error",
         "confirm": "Confirm",
@@ -789,6 +859,7 @@ class App(ctk.CTk):
 
         self.tab_adb = self.tabs.add(self.tr("tab_adb"))
         self.tab_tools = self.tabs.add(self.tr("tab_tools"))
+        self.tab_system = self.tabs.add(self.tr("sys_title"))
         self.tab_apps = self.tabs.add(self.tr("tab_apps"))
         self.tab_backup = self.tabs.add(self.tr("tab_backup"))
         self.tab_flash = self.tabs.add(self.tr("tab_flash"))
@@ -805,6 +876,7 @@ class App(ctk.CTk):
 
         self.build_adb_tab()
         self.build_tools_tab()
+        self.build_system_tab()
         self.build_apps_tab()
         self.build_backup_tab()
         self.build_flash_tab()
@@ -1015,6 +1087,180 @@ class App(ctk.CTk):
         ctk.CTkButton(f, text=self.tr("tools_export_dir"), width=350, height=45,
                       fg_color="gray",
                       command=self.open_exports).pack(pady=15)
+
+    def build_system_tab(self):
+        f = self.tab_system
+        ctk.CTkLabel(f, text=self.tr("sys_title"),
+                     font=("Arial", 16, "bold")).pack(pady=10)
+
+        # إخفاء شريط التنقل
+        row1 = ctk.CTkFrame(f)
+        row1.pack(pady=4)
+        ctk.CTkButton(row1, text=self.tr("sys_nav_hide"), width=200,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.sys_hide_nav).pack(side="left", padx=3)
+        ctk.CTkButton(row1, text=self.tr("sys_nav_show"), width=200,
+                      fg_color="green", hover_color="darkgreen",
+                      command=self.sys_show_nav).pack(side="left", padx=3)
+
+        # DPI
+        ctk.CTkLabel(f, text=self.tr("sys_dpi_title"),
+                     font=("Arial", 12, "bold")).pack(pady=(15, 3))
+        row2 = ctk.CTkFrame(f)
+        row2.pack(pady=4)
+        self.dpi_entry = ctk.CTkEntry(row2, width=120,
+                                       placeholder_text=self.tr("sys_dpi_placeholder"))
+        self.dpi_entry.pack(side="left", padx=5)
+        ctk.CTkButton(row2, text=self.tr("sys_dpi_apply"), width=150,
+                      command=self.sys_dpi_apply).pack(side="left", padx=5)
+        ctk.CTkButton(row2, text=self.tr("sys_dpi_reset"), width=150,
+                      fg_color="red", hover_color="darkred",
+                      command=self.sys_dpi_reset).pack(side="left", padx=5)
+
+        # Animation
+        ctk.CTkLabel(f, text=self.tr("sys_anim"),
+                     font=("Arial", 12, "bold")).pack(pady=(15, 3))
+        row3 = ctk.CTkFrame(f)
+        row3.pack(pady=4)
+        ctk.CTkButton(row3, text=self.tr("sys_anim_fast"), width=170,
+                      fg_color="green", hover_color="darkgreen",
+                      command=self.sys_anim_fast).pack(side="left", padx=3)
+        ctk.CTkButton(row3, text=self.tr("sys_anim_normal"), width=170,
+                      fg_color="gray",
+                      command=self.sys_anim_normal).pack(side="left", padx=3)
+
+        row4 = ctk.CTkFrame(f)
+        row4.pack(pady=4)
+        self.anim_entry = ctk.CTkEntry(row4, width=120,
+                                        placeholder_text=self.tr("sys_anim_value"))
+        self.anim_entry.pack(side="left", padx=5)
+        ctk.CTkButton(row4, text=self.tr("sys_anim_apply"), width=120,
+                      command=self.sys_anim_custom).pack(side="left", padx=5)
+
+        # SystemUI
+        ctk.CTkLabel(f, text="—",
+                     text_color="gray").pack(pady=10)
+        row5 = ctk.CTkFrame(f)
+        row5.pack(pady=4)
+        ctk.CTkButton(row5, text=self.tr("sys_sysui"), width=220,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.sys_restart_sysui).pack(side="left", padx=3)
+        ctk.CTkButton(row5, text=self.tr("sys_restart"), width=220,
+                      fg_color="red", hover_color="darkred",
+                      command=self.sys_restart_device).pack(side="left", padx=3)
+
+        # GMS
+        ctk.CTkLabel(f, text=self.tr("sys_gms"),
+                     font=("Arial", 12, "bold")).pack(pady=(15, 3))
+        row6 = ctk.CTkFrame(f)
+        row6.pack(pady=4)
+        ctk.CTkButton(row6, text=self.tr("sys_gms_disable"), width=170,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.sys_gms_disable).pack(side="left", padx=3)
+        ctk.CTkButton(row6, text=self.tr("sys_gms_enable"), width=170,
+                      fg_color="green", hover_color="darkgreen",
+                      command=self.sys_gms_enable).pack(side="left", padx=3)
+
+    def sys_hide_nav(self):
+        def t():
+            self.log("🙈 Hiding nav bar...")
+            run([ADB, "shell", "settings", "put", "global", "policy_control",
+                 "immersive.full=*"])
+            self.log(self.tr("sys_applied"))
+        threading.Thread(target=t, daemon=True).start()
+
+    def sys_show_nav(self):
+        def t():
+            self.log("👁️ Showing nav bar...")
+            run([ADB, "shell", "settings", "put", "global", "policy_control", "null"])
+            self.log(self.tr("sys_applied"))
+        threading.Thread(target=t, daemon=True).start()
+
+    def sys_dpi_apply(self):
+        val = self.dpi_entry.get().strip()
+        if not val.isdigit():
+            messagebox.showerror(self.tr("err"), self.tr("err_check"))
+            return
+        def t():
+            self.log(f"⚙️ Setting DPI to {val}...")
+            run([ADB, "shell", "wm", "density", val])
+            self.log(self.tr("sys_applied"))
+        threading.Thread(target=t, daemon=True).start()
+
+    def sys_dpi_reset(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_reset_dpi")):
+            return
+        def t():
+            self.log("🔄 Resetting DPI...")
+            run([ADB, "shell", "wm", "density", "reset"])
+            self.log(self.tr("sys_reset"))
+        threading.Thread(target=t, daemon=True).start()
+
+    def sys_anim_fast(self):
+        def t():
+            self.log("🚀 Speeding up animations...")
+            for key in ["window_animation_scale",
+                        "transition_animation_scale",
+                        "animator_duration_scale"]:
+                run([ADB, "shell", "settings", "put", "global", key, "0.5"])
+            self.log(self.tr("sys_applied"))
+        threading.Thread(target=t, daemon=True).start()
+
+    def sys_anim_normal(self):
+        def t():
+            self.log("🔄 Resetting animations...")
+            for key in ["window_animation_scale",
+                        "transition_animation_scale",
+                        "animator_duration_scale"]:
+                run([ADB, "shell", "settings", "put", "global", key, "1.0"])
+            self.log(self.tr("sys_reset"))
+        threading.Thread(target=t, daemon=True).start()
+
+    def sys_anim_custom(self):
+        val = self.anim_entry.get().strip()
+        try:
+            float(val)
+        except ValueError:
+            messagebox.showerror(self.tr("err"), self.tr("err_check"))
+            return
+        def t():
+            self.log(f"⚙️ Animation scale = {val}...")
+            for key in ["window_animation_scale",
+                        "transition_animation_scale",
+                        "animator_duration_scale"]:
+                run([ADB, "shell", "settings", "put", "global", key, val])
+            self.log(self.tr("sys_applied"))
+        threading.Thread(target=t, daemon=True).start()
+
+    def sys_restart_sysui(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_sysui")):
+            return
+        def t():
+            self.log(self.tr("sys_sysui_restarting"))
+            run([ADB, "shell", "pkill", "com.android.systemui"], timeout=15)
+            self.log(self.tr("sys_applied"))
+        threading.Thread(target=t, daemon=True).start()
+
+    def sys_restart_device(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_reboot")):
+            return
+        self.async_run(lambda: run([ADB, "reboot"]))
+
+    def sys_gms_disable(self):
+        def t():
+            self.log("🚫 Disabling GMS...")
+            run([ADB, "shell", "pm", "disable-user", "--user", "0", "com.google.android.gms"])
+            run([ADB, "shell", "pm", "disable-user", "--user", "0", "com.android.vending"])
+            self.log(self.tr("sys_gms_disabled"))
+        threading.Thread(target=t, daemon=True).start()
+
+    def sys_gms_enable(self):
+        def t():
+            self.log("✅ Enabling GMS...")
+            run([ADB, "shell", "pm", "enable", "com.google.android.gms"])
+            run([ADB, "shell", "pm", "enable", "com.android.vending"])
+            self.log(self.tr("sys_gms_enabled"))
+        threading.Thread(target=t, daemon=True).start()
 
     def open_exports(self):
         try:
