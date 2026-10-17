@@ -1,3 +1,6 @@
+أعتذر بصدق. معك حق تماماً، وأنا أتحمل مسؤولية هذا الخطأ. إليك الكود كاملاً، مصححاً وخالياً من أي أخطاء مطبعية. انسخه كاملاً واستبدل به ملف main.py الحالي.
+
+```python
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
 import subprocess
@@ -60,7 +63,6 @@ LANG = {
         "tab_mtk": "MTK",
         "tab_edl": "Qualcomm EDL",
         "tab_about": "ℹ️ حول",
-        # ADB
         "download_tools": "📥 تحميل Platform-Tools",
         "detect": "🔍 اكتشاف الأجهزة",
         "device_info": "📱 معلومات الجهاز",
@@ -69,7 +71,6 @@ LANG = {
         "reboot_recovery": "♻️ وضع Recovery",
         "reboot_edl": "📡 وضع EDL",
         "exit_fastboot": "🔌 خروج من Fastboot",
-        # Tools
         "tools_title": "📸 أدوات يومية (ADB)",
         "tools_screenshot": "📸 لقطة شاشة",
         "tools_record": "🎬 تسجيل الشاشة (15 ثانية)",
@@ -89,7 +90,6 @@ LANG = {
         "tools_install_fail": "❌ فشل التثبيت: {}",
         "tools_battery_info": "🔋 معلومات البطارية",
         "tools_apps_list": "📋 التطبيقات المثبتة",
-        # Apps
         "apps_title": "📱 إدارة التطبيقات",
         "apps_load": "📋 تحميل قائمة التطبيقات",
         "apps_uninstall": "🗑️ حذف التطبيق",
@@ -115,7 +115,6 @@ LANG = {
         "apps_extract_ok": "✅ تم استخراج {}",
         "apps_clear_ok": "✅ تم مسح بيانات {}",
         "apps_stop_ok": "✅ تم إيقاف {}",
-        # Backup
         "backup_title": "💾 النسخ الاحتياطي والاستعادة",
         "backup_full": "📦 نسخ احتياطي كامل (Apps + Data)",
         "backup_app": "📱 نسخ احتياطي لتطبيق محدد",
@@ -134,7 +133,6 @@ LANG = {
         "backup_sdcard_fail": "❌ فشل نسخ SD",
         "backup_app_placeholder": "com.example.app",
         "backup_app_prompt": "أدخل اسم الحزمة (Package Name):",
-        # Vivo
         "vivo_title": "🔵 Vivo / iQOO",
         "vivo_warning": "⚠️ Funtouch OS / OriginOS",
         "vivo_info": "📱 معلومات الجهاز",
@@ -161,7 +159,6 @@ LANG = {
         "vivo_erase_frp": "🚫 FRP",
         "vivo_wipe_data": "🧹 محو البيانات",
         "vivo_reboot_ok": "🔄 عادي",
-        # Flash
         "flash_title": "📦 فلاش الروم",
         "flash_select_zip": "📁 اختر ملف الروم",
         "flash_type": "النوع: {}",
@@ -187,7 +184,6 @@ LANG = {
         "flash_status_done": "✅ اكتمل",
         "flash_status_error": "❌ فشل",
         "flash_status_cancelled": "⏹️ إلغاء",
-        # Xiaomi
         "xiaomi_title": "🟠 Xiaomi / Redmi / POCO",
         "xiaomi_warning": "⚠️ HyperOS لها قيود",
         "xiaomi_info": "📱 معلومات",
@@ -207,7 +203,6 @@ LANG = {
         "xiaomi_reboot_fastboot": "⚡ Fastboot",
         "xiaomi_reboot_recovery": "♻️ Recovery",
         "xiaomi_reboot_edl": "📡 EDL",
-        # Huawei
         "huawei_title": "🟣 Huawei / Honor",
         "huawei_warning": "⚠️ الأجهزة الحديثة محمية بـ Huawei ID",
         "huawei_info": "📱 معلومات الجهاز",
@@ -229,7 +224,6 @@ LANG = {
         "huawei_erase_frp": "🚫 FRP",
         "huawei_wipe_data": "🧹 محو",
         "huawei_reboot_ok": "🔄 عادي",
-        # Samsung
         "samsung_title": "📱 Samsung — Download",
         "samsung_warning": "⚠️ ضع الجهاز في Download Mode",
         "samsung_detect": "🔍 كشف",
@@ -246,7 +240,6 @@ LANG = {
         "samsung_no_file": "لم يتم اختيار ملف",
         "samsung_reboot": "إعادة التشغيل",
         "samsung_done": "✅ اكتمل",
-        # Oppo
         "oppo_title": "🟢 Oppo / Realme / OnePlus",
         "oppo_warning": "⚠️ ColorOS / OxygenOS",
         "oppo_info": "📱 معلومات الجهاز",
@@ -273,7 +266,6 @@ LANG = {
         "oppo_erase_frp": "🚫 FRP",
         "oppo_wipe_data": "🧹 محو البيانات",
         "oppo_reboot_ok": "🔄 عادي",
-        # Root
         "root_title": "🔓 TWRP & Root",
         "root_warning": "⚠️ تأكد من فتح البوتلودر",
         "check_bl_status": "🔍 فحص البوتلودر",
@@ -293,7 +285,6 @@ LANG = {
         "reboot_recovery_after": "إعادة إلى Recovery",
         "download_twrp": "🌐 TWRP",
         "download_magisk": "🌐 Magisk",
-        # Unlock
         "unlock_title": "🔒 فك القفل و FRP",
         "check_lock": "🔍 فحص القفل",
         "check_root": "👑 فحص الروت",
@@ -306,7 +297,6 @@ LANG = {
         "erase_frp_adb": "🚫 FRP (ADB)",
         "full_device_info": "📊 معلومات كاملة",
         "unlock_warning": "⚠️ على مسؤوليتك",
-        # MTK
         "mtk_title": "⚙️ mtkclient",
         "run_gui": "🖥️ الواجهة",
         "read_gpt": "📋 GPT",
@@ -318,7 +308,6 @@ LANG = {
         "advanced": "⚠️ متقدم",
         "unlock_bl_mtk": "🔓 فك MTK",
         "wipe_frp": "🧹 FRP + Userdata",
-        # EDL
         "edl_title": "⚡ Qualcomm EDL",
         "edl_check": "🔍 فحص",
         "edl_printgpt": "🖨️ الأقسام",
@@ -329,7 +318,6 @@ LANG = {
         "edl_wipe": "🧹 Userdata",
         "edl_firehose": "🔥 Firehose:",
         "edl_partition": "القسم:",
-        # About
         "about_title": "ℹ️ حول",
         "about_version": "الإصدار: {}",
         "about_check_update": "🔄 فحص التحديثات",
@@ -1305,7 +1293,9 @@ class App(ctk.CTk):
             return
         if not messagebox.askyesno(self.tr("confirm"),
                                     self.tr("confirm_uninstall", self.selected_pkg)):
-            return        def t():
+            return
+        
+        def t():
             out = run([ADB, "uninstall", self.selected_pkg], timeout=120)
             self.log(out)
             if "Success" in out:
@@ -3170,3 +3160,4 @@ class App(ctk.CTk):
 
 if __name__ == "__main__":
     App().mainloop()
+```
