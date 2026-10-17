@@ -37,7 +37,7 @@ EDL_SCRIPT = os.path.join(EDL_DIR, "edl.py")
 HEIMDALL = os.path.join(HEIMDALL_DIR, "heimdall.exe")
 
 PLATFORM_TOOLS_URL = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
-APP_VERSION = "1.7.0"
+APP_VERSION = "1.8.0"
 GITHUB_REPO = "Gissa333/android-tool"
 GITHUB_API = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
@@ -60,6 +60,7 @@ LANG = {
         "tab_unlock": "🔒 فك القفل",
         "tab_mtk": "MTK",
         "tab_edl": "Qualcomm EDL",
+        "tab_adv": "🧰 أدوات متقدمة",
         "tab_about": "ℹ️ حول",
         "download_tools": "📥 تحميل Platform-Tools",
         "detect": "🔍 اكتشاف الأجهزة",
@@ -130,6 +131,46 @@ LANG = {
         "game_res_reset": "🔄 إعادة الدقة الأصلية",
         "game_status": "⏳ جاري التنفيذ...",
         "game_info": "ملاحظة: هذه الأوامر آمنة ولا تحتاج إلى روت.",
+        "adv_title": "🧰 أدوات متقدمة",
+        "adv_adb_terminal": "🖥️ تشغيل أوامر ADB مخصصة",
+        "adv_adb_terminal_desc": "اكتب أمر adb shell ونفذه مباشرة على الهاتف",
+        "adv_install_batch": "📦 تثبيت ملفات APK دفعة واحدة",
+        "adv_install_batch_desc": "اختر مجلداً لتثبيت جميع ملفات APK بداخله",
+        "adv_battery_calib": "🔋 معايرة البطارية",
+        "adv_battery_calib_desc": "مسح ملف batterystats.bin (يتطلب روت)",
+        "adv_network_info": "📡 معلومات الشبكة",
+        "adv_network_info_desc": "عرض IP وحالة الواي فاي والشبكة",
+        "adv_hide_app": "🔐 إخفاء تطبيق",
+        "adv_hide_app_desc": "إخفاء تطبيق من قائمة التطبيقات",
+        "adv_show_app": "👁️ إظهار تطبيق مخفي",
+        "adv_show_app_desc": "إعادة إظهار تطبيق تم إخفاؤه",
+        "adv_fastboot_info": "📊 معلومات Fastboot",
+        "adv_fastboot_info_desc": "عرض متغيرات Fastboot كاملة",
+        "adv_reboot_bootloader": "⚡ إعادة تشغيل إلى Fastboot",
+        "adv_reboot_bootloader_desc": "نقل الهاتف إلى وضع Fastboot",
+        "adv_reboot_recovery": "♻️ إعادة تشغيل إلى Recovery",
+        "adv_reboot_recovery_desc": "نقل الهاتف إلى وضع Recovery",
+        "adv_reboot_download": "📥 إعادة تشغيل إلى Download Mode",
+        "adv_reboot_download_desc": "أجهزة سامسونج - Download Mode",
+        "adv_device_props": "📋 خصائص النظام الكاملة",
+        "adv_device_props_desc": "عرض getprop كامل",
+        "adv_wait": "⏳ جاري التنفيذ...",
+        "adv_done": "✅ تم",
+        "adv_no_input": "⚠️ الرجاء إدخال أمر",
+        "adv_adb_prompt": "أدخل أمر ADB (مثال: shell getprop):",
+        "adv_adb_result": "نتيجة الأمر:",
+        "adv_pick_folder": "📁 اختر مجلد APK",
+        "adv_installing": "⏳ تثبيت: {}",
+        "adv_install_count": "✅ تم تثبيت {} تطبيق",
+        "adv_no_apk": "⚠️ لا توجد ملفات APK في المجلد",
+        "adv_battery_warn": "⚠️ هذه العملية تتطلب روت. متأكد؟",
+        "adv_battery_done": "✅ تم مسح إحصائيات البطارية. أعد تشغيل الهاتف.",
+        "adv_network_loading": "⏳ جاري جلب معلومات الشبكة...",
+        "adv_hide_app_prompt": "أدخل اسم الحزمة (Package Name):",
+        "adv_app_hidden": "✅ تم إخفاء {}",
+        "adv_app_shown": "✅ تم إظهار {}",
+        "adv_fastboot_info_loading": "⏳ جاري جلب معلومات Fastboot...",
+        "adv_device_props_loading": "⏳ جاري جلب الخصائص...",
         "apps_title": "📱 إدارة التطبيقات",
         "apps_load": "📋 تحميل قائمة التطبيقات",
         "apps_uninstall": "🗑️ حذف التطبيق",
@@ -367,7 +408,7 @@ LANG = {
         "about_new_version": "🎉 جديد: {}",
         "about_checking": "⏳ فحص...",
         "about_error": "❌ {}",
-        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• أدوات يومية\n• أدوات النظام\n• تسريع الألعاب\n• إدارة التطبيقات\n• النسخ الاحتياطي\n• فلاش الروم\n• Xiaomi / Huawei / Samsung / Oppo / Vivo\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• أدوات يومية\n• أدوات النظام\n• تسريع الألعاب\n• إدارة التطبيقات\n• النسخ الاحتياطي\n• فلاش الروم\n• Xiaomi / Huawei / Samsung / Oppo / Vivo\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL\n• أدوات متقدمة",
         "log": "📋 السجل:",
         "log_save": "💾 حفظ",
         "log_copy": "📋 نسخ",
@@ -430,6 +471,7 @@ LANG = {
         "tab_unlock": "🔒 Unlock",
         "tab_mtk": "MTK",
         "tab_edl": "Qualcomm EDL",
+        "tab_adv": "🧰 Advanced Tools",
         "tab_about": "ℹ️ About",
         "download_tools": "📥 Download Platform-Tools",
         "detect": "🔍 Detect Devices",
@@ -500,6 +542,46 @@ LANG = {
         "game_res_reset": "🔄 Reset Resolution",
         "game_status": "⏳ Running...",
         "game_info": "Note: These commands are safe and don't require root.",
+        "adv_title": "🧰 Advanced Tools",
+        "adv_adb_terminal": "🖥️ Run Custom ADB Command",
+        "adv_adb_terminal_desc": "Type adb shell command and run on device",
+        "adv_install_batch": "📦 Batch Install APKs",
+        "adv_install_batch_desc": "Pick a folder to install all APKs inside",
+        "adv_battery_calib": "🔋 Battery Calibration",
+        "adv_battery_calib_desc": "Clear batterystats.bin (Requires Root)",
+        "adv_network_info": "📡 Network Info",
+        "adv_network_info_desc": "Show IP, Wi-Fi and network status",
+        "adv_hide_app": "🔐 Hide App",
+        "adv_hide_app_desc": "Hide an app from the app list",
+        "adv_show_app": "👁️ Unhide App",
+        "adv_show_app_desc": "Restore a hidden app",
+        "adv_fastboot_info": "📊 Fastboot Info",
+        "adv_fastboot_info_desc": "Show all fastboot variables",
+        "adv_reboot_bootloader": "⚡ Reboot to Fastboot",
+        "adv_reboot_bootloader_desc": "Send phone to Fastboot mode",
+        "adv_reboot_recovery": "♻️ Reboot to Recovery",
+        "adv_reboot_recovery_desc": "Send phone to Recovery mode",
+        "adv_reboot_download": "📥 Reboot to Download Mode",
+        "adv_reboot_download_desc": "Samsung - Download Mode",
+        "adv_device_props": "📋 Full Device Properties",
+        "adv_device_props_desc": "Show full getprop",
+        "adv_wait": "⏳ Running...",
+        "adv_done": "✅ Done",
+        "adv_no_input": "⚠️ Please enter a command",
+        "adv_adb_prompt": "Enter ADB command (e.g. shell getprop):",
+        "adv_adb_result": "Command result:",
+        "adv_pick_folder": "📁 Select APK Folder",
+        "adv_installing": "⏳ Installing: {}",
+        "adv_install_count": "✅ Installed {} apps",
+        "adv_no_apk": "⚠️ No APK files found in folder",
+        "adv_battery_warn": "⚠️ This requires root. Are you sure?",
+        "adv_battery_done": "✅ Battery stats cleared. Reboot device.",
+        "adv_network_loading": "⏳ Fetching network info...",
+        "adv_hide_app_prompt": "Enter package name:",
+        "adv_app_hidden": "✅ Hidden {}",
+        "adv_app_shown": "✅ Unhidden {}",
+        "adv_fastboot_info_loading": "⏳ Fetching fastboot info...",
+        "adv_device_props_loading": "⏳ Fetching properties...",
         "apps_title": "📱 App Manager",
         "apps_load": "📋 Load Apps List",
         "apps_uninstall": "🗑️ Uninstall App",
@@ -737,7 +819,7 @@ LANG = {
         "about_new_version": "🎉 New: {}",
         "about_checking": "⏳ Checking...",
         "about_error": "❌ {}",
-        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Daily Tools\n• System Tools\n• Gaming Boost\n• App Manager\n• Backup\n• Full ROM Flash\n• Xiaomi / Huawei / Samsung / Oppo / Vivo\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Daily Tools\n• System Tools\n• Gaming Boost\n• App Manager\n• Backup\n• Full ROM Flash\n• Xiaomi / Huawei / Samsung / Oppo / Vivo\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL\n• Advanced Tools",
         "log": "📋 Log:",
         "log_save": "💾 Save",
         "log_copy": "📋 Copy",
@@ -842,7 +924,7 @@ class App(ctk.CTk):
         self.selected_pkg = None
         self.selected_app_info = ""
 
-        self.geometry("1020x920")
+        self.geometry("1020x950")
         self.resizable(True, True)
 
         os.makedirs(LOGS_DIR, exist_ok=True)
@@ -878,7 +960,7 @@ class App(ctk.CTk):
         ctk.CTkButton(top, text=self.tr("lang_btn"), width=110, height=32,
                       command=self.toggle_lang).pack(side="right", padx=5)
 
-        self.tabs = ctk.CTkTabview(self, width=970, height=680)
+        self.tabs = ctk.CTkTabview(self, width=970, height=690)
         self.tabs.pack(padx=15, pady=5, fill="both", expand=True)
 
         self.tab_adb = self.tabs.add(self.tr("tab_adb"))
@@ -897,6 +979,7 @@ class App(ctk.CTk):
         self.tab_unlock = self.tabs.add(self.tr("tab_unlock"))
         self.tab_mtk = self.tabs.add(self.tr("tab_mtk"))
         self.tab_edl = self.tabs.add(self.tr("tab_edl"))
+        self.tab_adv = self.tabs.add(self.tr("tab_adv"))
         self.tab_about = self.tabs.add(self.tr("tab_about"))
 
         self.build_adb_tab()
@@ -915,6 +998,7 @@ class App(ctk.CTk):
         self.build_unlock_tab()
         self.build_mtk_tab()
         self.build_edl_tab()
+        self.build_adv_tab()
         self.build_about_tab()
 
         log_header = ctk.CTkFrame(self)
@@ -3028,6 +3112,148 @@ class App(ctk.CTk):
         ctk.CTkButton(ops, text=self.tr("edl_wipe"), width=180,
                       fg_color="orange", hover_color="darkorange",
                       command=self.edl_wipe).pack(side="left", padx=3)
+
+    def build_adv_tab(self):
+        f = self.tab_adv
+        ctk.CTkLabel(f, text=self.tr("adv_title"),
+                     font=("Arial", 16, "bold")).pack(pady=10)
+
+        ctk.CTkButton(f, text=self.tr("adv_adb_terminal"), width=400, height=50,
+                      fg_color="green", hover_color="darkgreen",
+                      font=("Arial", 14, "bold"),
+                      command=self.adv_adb_terminal).pack(pady=5)
+        ctk.CTkLabel(f, text=self.tr("adv_adb_terminal_desc"),
+                     font=("Arial", 11), text_color="gray").pack()
+
+        ctk.CTkButton(f, text=self.tr("adv_install_batch"), width=400, height=50,
+                      fg_color="green", hover_color="darkgreen",
+                      font=("Arial", 14, "bold"),
+                      command=self.adv_install_batch).pack(pady=5)
+        ctk.CTkLabel(f, text=self.tr("adv_install_batch_desc"),
+                     font=("Arial", 11), text_color="gray").pack()
+
+        ctk.CTkLabel(f, text="—", text_color="gray").pack(pady=10)
+
+        row1 = ctk.CTkFrame(f)
+        row1.pack(pady=5)
+        ctk.CTkButton(row1, text=self.tr("adv_battery_calib"), width=200,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.adv_battery_calib).pack(side="left", padx=5)
+        ctk.CTkButton(row1, text=self.tr("adv_network_info"), width=200,
+                      command=self.adv_network_info).pack(side="left", padx=5)
+
+        row2 = ctk.CTkFrame(f)
+        row2.pack(pady=5)
+        ctk.CTkButton(row2, text=self.tr("adv_hide_app"), width=200,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.adv_hide_app).pack(side="left", padx=5)
+        ctk.CTkButton(row2, text=self.tr("adv_show_app"), width=200,
+                      fg_color="green", hover_color="darkgreen",
+                      command=self.adv_show_app).pack(side="left", padx=5)
+
+        row3 = ctk.CTkFrame(f)
+        row3.pack(pady=5)
+        ctk.CTkButton(row3, text=self.tr("adv_fastboot_info"), width=200,
+                      command=self.adv_fastboot_info).pack(side="left", padx=5)
+        ctk.CTkButton(row3, text=self.tr("adv_device_props"), width=200,
+                      command=self.adv_device_props).pack(side="left", padx=5)
+
+        ctk.CTkLabel(f, text="—", text_color="gray").pack(pady=10)
+
+        row4 = ctk.CTkFrame(f)
+        row4.pack(pady=5)
+        ctk.CTkButton(row4, text=self.tr("adv_reboot_bootloader"), width=200,
+                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "bootloader"]))).pack(side="left", padx=5)
+        ctk.CTkButton(row4, text=self.tr("adv_reboot_recovery"), width=200,
+                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "recovery"]))).pack(side="left", padx=5)
+
+        row5 = ctk.CTkFrame(f)
+        row5.pack(pady=5)
+        ctk.CTkButton(row5, text=self.tr("adv_reboot_download"), width=200,
+                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "download"]))).pack(side="left", padx=5)
+
+    def adv_adb_terminal(self):
+        cmd = ctk.CTkInputDialog(
+            text=self.tr("adv_adb_prompt"),
+            title="ADB Command").get_input()
+        if not cmd:
+            return
+        def t():
+            self.log(f"$ adb {cmd}")
+            self.log(run([ADB] + cmd.split(), timeout=120))
+        threading.Thread(target=t, daemon=True).start()
+
+    def adv_install_batch(self):
+        folder = filedialog.askdirectory(title=self.tr("adv_pick_folder"))
+        if not folder:
+            return
+        def t():
+            apks = [f for f in os.listdir(folder) if f.lower().endswith(".apk")]
+            if not apks:
+                self.log(self.tr("adv_no_apk"))
+                return
+            count = 0
+            for apk in apks:
+                full = os.path.join(folder, apk)
+                self.log(self.tr("adv_installing", apk))
+                out = run([ADB, "install", "-r", full], timeout=300)
+                if "Success" in out:
+                    count += 1
+            self.log(self.tr("adv_install_count", count))
+        threading.Thread(target=t, daemon=True).start()
+
+    def adv_battery_calib(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("adv_battery_warn")):
+            return
+        def t():
+            self.log("🔋 Clearing battery stats...")
+            run([ADB, "shell", "su", "-c", "rm -f /data/system/batterystats.bin"])
+            self.log(self.tr("adv_battery_done"))
+        threading.Thread(target=t, daemon=True).start()
+
+    def adv_network_info(self):
+        def t():
+            self.log(self.tr("adv_network_loading"))
+            self.log("=" * 50)
+            self.log("IP Address:")
+            self.log(run([ADB, "shell", "ip", "addr", "show", "wlan0"]))
+            self.log("Wi-Fi Status:")
+            self.log(run([ADB, "shell", "dumpsys", "wifi"]))
+            self.log("Data Connection:")
+            self.log(run([ADB, "shell", "dumpsys", "telephony.registry"]))
+        threading.Thread(target=t, daemon=True).start()
+
+    def adv_hide_app(self):
+        pkg = ctk.CTkInputDialog(text=self.tr("adv_hide_app_prompt"), title="Hide App").get_input()
+        if not pkg:
+            return
+        def t():
+            run([ADB, "shell", "pm", "hide", pkg])
+            self.log(self.tr("adv_app_hidden", pkg))
+        threading.Thread(target=t, daemon=True).start()
+
+    def adv_show_app(self):
+        pkg = ctk.CTkInputDialog(text=self.tr("adv_hide_app_prompt"), title="Unhide App").get_input()
+        if not pkg:
+            return
+        def t():
+            run([ADB, "shell", "pm", "unhide", pkg])
+            self.log(self.tr("adv_app_shown", pkg))
+        threading.Thread(target=t, daemon=True).start()
+
+    def adv_fastboot_info(self):
+        def t():
+            self.log(self.tr("adv_fastboot_info_loading"))
+            self.log("=" * 50)
+            self.log(run([FASTBOOT, "getvar", "all"], timeout=30))
+        threading.Thread(target=t, daemon=True).start()
+
+    def adv_device_props(self):
+        def t():
+            self.log(self.tr("adv_device_props_loading"))
+            self.log("=" * 50)
+            self.log(run([ADB, "shell", "getprop"], timeout=30))
+        threading.Thread(target=t, daemon=True).start()
 
     def async_run(self, fn):
         def wrap():
