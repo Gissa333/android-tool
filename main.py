@@ -36,7 +36,7 @@ EDL_SCRIPT = os.path.join(EDL_DIR, "edl.py")
 HEIMDALL = os.path.join(HEIMDALL_DIR, "heimdall.exe")
 
 PLATFORM_TOOLS_URL = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
-APP_VERSION = "1.2.0"
+APP_VERSION = "1.3.0"
 GITHUB_REPO = "Gissa333/android-tool"
 GITHUB_API = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
@@ -46,6 +46,7 @@ LANG = {
         "title": "🛠️ أداة الأندرويد",
         "tab_adb": "ADB / Fastboot",
         "tab_tools": "📸 أدوات يومية",
+        "tab_apps": "📱 إدارة التطبيقات",
         "tab_flash": "📦 فلاش الروم",
         "tab_xiaomi": "🟠 Xiaomi",
         "tab_huawei": "🟣 Huawei",
@@ -85,6 +86,32 @@ LANG = {
         "tools_install_fail": "❌ فشل التثبيت: {}",
         "tools_battery_info": "🔋 معلومات البطارية",
         "tools_apps_list": "📋 التطبيقات المثبتة",
+        # Apps
+        "apps_title": "📱 إدارة التطبيقات",
+        "apps_load": "📋 تحميل قائمة التطبيقات",
+        "apps_uninstall": "🗑️ حذف التطبيق",
+        "apps_disable": "🚫 تعطيل",
+        "apps_enable": "✅ تفعيل",
+        "apps_extract": "📤 استخراج APK",
+        "apps_clear": "🧹 مسح البيانات",
+        "apps_force_stop": "⛔ إيقاف",
+        "apps_filter": "فلتر:",
+        "apps_filter_all": "الكل",
+        "apps_filter_user": "المستخدم فقط",
+        "apps_filter_system": "النظام فقط",
+        "apps_count": "📊 {} تطبيق",
+        "apps_select": "اختر تطبيقاً من القائمة:",
+        "apps_loading": "⏳ جاري تحميل قائمة التطبيقات...",
+        "apps_loaded": "✅ تم تحميل {} تطبيق",
+        "apps_no_device": "❌ لا يوجد جهاز متصل",
+        "apps_no_packages": "⚠️ لا توجد تطبيقات",
+        "apps_uninstall_ok": "✅ تم حذف {}",
+        "apps_uninstall_fail": "❌ فشل حذف {}",
+        "apps_disable_ok": "✅ تم تعطيل {}",
+        "apps_enable_ok": "✅ تم تفعيل {}",
+        "apps_extract_ok": "✅ تم استخراج {}",
+        "apps_clear_ok": "✅ تم مسح بيانات {}",
+        "apps_stop_ok": "✅ تم إيقاف {}",
         # Flash
         "flash_title": "📦 فلاش الروم",
         "flash_select_zip": "📁 اختر ملف الروم",
@@ -263,7 +290,7 @@ LANG = {
         "about_new_version": "🎉 جديد: {}",
         "about_checking": "⏳ فحص...",
         "about_error": "❌ {}",
-        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• أدوات يومية (لقطات، تسجيل)\n• فلاش الروم\n• Xiaomi / Huawei / Samsung / Oppo\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• أدوات يومية (لقطات، تسجيل)\n• إدارة التطبيقات\n• فلاش الروم\n• Xiaomi / Huawei / Samsung / Oppo\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 السجل:",
         "log_save": "💾 حفظ",
         "log_copy": "📋 نسخ",
@@ -297,6 +324,9 @@ LANG = {
         "confirm_wipe": "مسح!",
         "confirm_format": "محو الكل؟",
         "confirm_flash_samsung": "فلاش {}؟",
+        "confirm_uninstall": "حذف {}؟",
+        "confirm_disable": "تعطيل {}؟",
+        "confirm_clear": "مسح بيانات {}؟",
         "err_check": "تحقق",
         "err": "خطأ",
         "confirm": "تأكيد",
@@ -306,6 +336,7 @@ LANG = {
         "title": "🛠️ Android Tool",
         "tab_adb": "ADB / Fastboot",
         "tab_tools": "📸 Daily Tools",
+        "tab_apps": "📱 App Manager",
         "tab_flash": "📦 Flash ROM",
         "tab_xiaomi": "🟠 Xiaomi",
         "tab_huawei": "🟣 Huawei",
@@ -343,6 +374,31 @@ LANG = {
         "tools_install_fail": "❌ Install failed: {}",
         "tools_battery_info": "🔋 Battery Info",
         "tools_apps_list": "📋 Installed apps",
+        "apps_title": "📱 App Manager",
+        "apps_load": "📋 Load Apps List",
+        "apps_uninstall": "🗑️ Uninstall App",
+        "apps_disable": "🚫 Disable",
+        "apps_enable": "✅ Enable",
+        "apps_extract": "📤 Extract APK",
+        "apps_clear": "🧹 Clear Data",
+        "apps_force_stop": "⛔ Force Stop",
+        "apps_filter": "Filter:",
+        "apps_filter_all": "All",
+        "apps_filter_user": "User only",
+        "apps_filter_system": "System only",
+        "apps_count": "📊 {} apps",
+        "apps_select": "Select an app from list:",
+        "apps_loading": "⏳ Loading apps list...",
+        "apps_loaded": "✅ Loaded {} apps",
+        "apps_no_device": "❌ No device connected",
+        "apps_no_packages": "⚠️ No apps",
+        "apps_uninstall_ok": "✅ Uninstalled {}",
+        "apps_uninstall_fail": "❌ Failed {}",
+        "apps_disable_ok": "✅ Disabled {}",
+        "apps_enable_ok": "✅ Enabled {}",
+        "apps_extract_ok": "✅ Extracted {}",
+        "apps_clear_ok": "✅ Cleared data for {}",
+        "apps_stop_ok": "✅ Stopped {}",
         "flash_title": "📦 Flash ROM",
         "flash_select_zip": "📁 Select ROM",
         "flash_type": "Type: {}",
@@ -511,7 +567,7 @@ LANG = {
         "about_new_version": "🎉 New: {}",
         "about_checking": "⏳ Checking...",
         "about_error": "❌ {}",
-        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Daily Tools (Screenshots, Recording)\n• Full ROM Flash\n• Xiaomi / Huawei / Samsung / Oppo\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Daily Tools (Screenshots, Recording)\n• App Manager\n• Full ROM Flash\n• Xiaomi / Huawei / Samsung / Oppo\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 Log:",
         "log_save": "💾 Save",
         "log_copy": "📋 Copy",
@@ -545,6 +601,9 @@ LANG = {
         "confirm_wipe": "Wipe!",
         "confirm_format": "Format all?",
         "confirm_flash_samsung": "Flash {}?",
+        "confirm_uninstall": "Uninstall {}?",
+        "confirm_disable": "Disable {}?",
+        "confirm_clear": "Clear {} data?",
         "err_check": "Check",
         "err": "Error",
         "confirm": "Confirm",
@@ -607,6 +666,11 @@ class App(ctk.CTk):
         self.oppo_rom = ""
         self.recording = False
 
+        self.apps_list = []  # [(package, name, is_system, size)]
+        self.apps_filtered = []
+        self.selected_pkg = None
+        self.selected_app_info = ""
+
         self.geometry("1020x920")
         self.resizable(True, True)
 
@@ -647,6 +711,7 @@ class App(ctk.CTk):
 
         self.tab_adb = self.tabs.add(self.tr("tab_adb"))
         self.tab_tools = self.tabs.add(self.tr("tab_tools"))
+        self.tab_apps = self.tabs.add(self.tr("tab_apps"))
         self.tab_flash = self.tabs.add(self.tr("tab_flash"))
         self.tab_xiaomi = self.tabs.add(self.tr("tab_xiaomi"))
         self.tab_huawei = self.tabs.add(self.tr("tab_huawei"))
@@ -660,6 +725,7 @@ class App(ctk.CTk):
 
         self.build_adb_tab()
         self.build_tools_tab()
+        self.build_apps_tab()
         self.build_flash_tab()
         self.build_xiaomi_tab()
         self.build_huawei_tab()
@@ -833,13 +899,11 @@ class App(ctk.CTk):
         ctk.CTkLabel(f, text=self.tr("tools_title"),
                      font=("Arial", 16, "bold")).pack(pady=10)
 
-        # Screenshot
         ctk.CTkButton(f, text=self.tr("tools_screenshot"), width=350, height=50,
                       fg_color="green", hover_color="darkgreen",
                       font=("Arial", 14, "bold"),
                       command=self.tool_screenshot).pack(pady=5)
 
-        # Recording
         rec_frame = ctk.CTkFrame(f)
         rec_frame.pack(pady=5)
         ctk.CTkButton(rec_frame, text=self.tr("tools_record"), width=250, height=45,
@@ -849,13 +913,11 @@ class App(ctk.CTk):
                       fg_color="red", hover_color="darkred",
                       command=self.tool_record_stop).pack(side="left", padx=5)
 
-        # APK
         ctk.CTkButton(f, text=self.tr("tools_install_apk"), width=350, height=50,
                       fg_color="green", hover_color="darkgreen",
                       font=("Arial", 14, "bold"),
                       command=self.tool_install_apk).pack(pady=5)
 
-        # Push/Pull
         pf = ctk.CTkFrame(f)
         pf.pack(pady=5)
         ctk.CTkButton(pf, text=self.tr("tools_push"), width=170, height=45,
@@ -863,7 +925,6 @@ class App(ctk.CTk):
         ctk.CTkButton(pf, text=self.tr("tools_pull"), width=170, height=45,
                       command=self.tool_pull).pack(side="left", padx=5)
 
-        # Info
         info_frame = ctk.CTkFrame(f)
         info_frame.pack(pady=5)
         ctk.CTkButton(info_frame, text=self.tr("tools_battery"), width=170, height=45,
@@ -871,7 +932,6 @@ class App(ctk.CTk):
         ctk.CTkButton(info_frame, text=self.tr("tools_list_packages"), width=170, height=45,
                       command=self.tool_list_packages).pack(side="left", padx=5)
 
-        # Exports folder
         ctk.CTkButton(f, text=self.tr("tools_export_dir"), width=350, height=45,
                       fg_color="gray",
                       command=self.open_exports).pack(pady=15)
@@ -890,12 +950,6 @@ class App(ctk.CTk):
             ts = datetime.now().strftime("%Y%m%d_%H%M%S")
             path = os.path.join(EXPORTS_DIR, f"screenshot_{ts}.png")
             self.log("📸 Taking screenshot...")
-            out = run([ADB, "exec-out", "screencap", "-p"], timeout=30)
-            if not out or len(out) < 100:
-                self.log(self.tr("tools_no_device"))
-                return
-            # ملاحظة: run() يحول الإخراج إلى str، قد يفسد PNG
-            # نستخدم طريقة أخرى:
             try:
                 with open(path, "wb") as f_:
                     r = subprocess.run([ADB, "exec-out", "screencap", "-p"],
@@ -917,13 +971,11 @@ class App(ctk.CTk):
             remote = f"/sdcard/rec_{ts}.mp4"
             self.log(self.tr("tools_recording"))
             try:
-                # بدء التسجيل في الخلفية
                 proc = subprocess.Popen(
                     [ADB, "shell", "screenrecord", "--time-limit", "15", remote],
                     creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
                 proc.wait(timeout=25)
                 self.recording = False
-                # سحب الملف
                 local = os.path.join(EXPORTS_DIR, f"rec_{ts}.mp4")
                 self.log("📥 Pulling recording...")
                 run([ADB, "pull", remote, local], timeout=120)
@@ -998,6 +1050,247 @@ class App(ctk.CTk):
             self.log(f"📱 {len(lines)} user apps installed")
             for line in lines[:50]:
                 self.log("  " + line)
+        threading.Thread(target=t, daemon=True).start()
+
+    # ============ App Manager ============
+    def build_apps_tab(self):
+        f = self.tab_apps
+        ctk.CTkLabel(f, text=self.tr("apps_title"),
+                     font=("Arial", 16, "bold")).pack(pady=8)
+
+        # شريط التحكم العلوي
+        top = ctk.CTkFrame(f)
+        top.pack(fill="x", padx=20, pady=5)
+        ctk.CTkButton(top, text=self.tr("apps_load"), width=200, height=38,
+                      fg_color="green", hover_color="darkgreen",
+                      command=self.apps_load).pack(side="left", padx=5)
+
+        ctk.CTkLabel(top, text=self.tr("apps_filter")).pack(side="left", padx=(20, 5))
+        self.apps_filter_var = ctk.StringVar(value=self.tr("apps_filter_all"))
+        self.apps_filter_menu = ctk.CTkOptionMenu(
+            top, width=150, variable=self.apps_filter_var,
+            values=[self.tr("apps_filter_all"),
+                    self.tr("apps_filter_user"),
+                    self.tr("apps_filter_system")],
+            command=lambda _: self.apps_apply_filter())
+        self.apps_filter_menu.pack(side="left", padx=5)
+
+        self.apps_count_label = ctk.CTkLabel(top, text="", font=("Arial", 11),
+                                              text_color="lightblue")
+        self.apps_count_label.pack(side="left", padx=15)
+
+        # قائمة التطبيقات (scrollable)
+        list_frame = ctk.CTkScrollableFrame(f, height=280)
+        list_frame.pack(fill="both", expand=True, padx=20, pady=5)
+        self.apps_list_frame = list_frame
+
+        # تفاصيل التطبيق المختار
+        detail_frame = ctk.CTkFrame(f)
+        detail_frame.pack(fill="x", padx=20, pady=5)
+        self.apps_detail_label = ctk.CTkLabel(
+            detail_frame, text=self.tr("apps_select"),
+            font=("Arial", 12), text_color="gray", anchor="w")
+        self.apps_detail_label.pack(fill="x", padx=10, pady=5)
+
+        # أزرار العمليات
+        ops = ctk.CTkFrame(f)
+        ops.pack(pady=8)
+        ctk.CTkButton(ops, text=self.tr("apps_uninstall"), width=170, height=42,
+                      fg_color="red", hover_color="darkred",
+                      command=self.app_uninstall).pack(side="left", padx=4)
+        ctk.CTkButton(ops, text=self.tr("apps_disable"), width=170, height=42,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.app_disable).pack(side="left", padx=4)
+        ctk.CTkButton(ops, text=self.tr("apps_enable"), width=170, height=42,
+                      fg_color="green", hover_color="darkgreen",
+                      command=self.app_enable).pack(side="left", padx=4)
+        ctk.CTkButton(ops, text=self.tr("apps_extract"), width=170, height=42,
+                      command=self.app_extract).pack(side="left", padx=4)
+
+        ops2 = ctk.CTkFrame(f)
+        ops2.pack(pady=4)
+        ctk.CTkButton(ops2, text=self.tr("apps_clear"), width=170, height=40,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.app_clear).pack(side="left", padx=4)
+        ctk.CTkButton(ops2, text=self.tr("apps_force_stop"), width=170, height=40,
+                      fg_color="red", hover_color="darkred",
+                      command=self.app_force_stop).pack(side="left", padx=4)
+
+    def apps_load(self):
+        def t():
+            self.log(self.tr("apps_loading"))
+            out = run([ADB, "shell", "pm", "list", "packages", "-f"], timeout=60)
+            if not out.strip() or "error" in out.lower():
+                self.log(self.tr("apps_no_device"))
+                return
+            apps = []
+            for line in out.strip().splitlines():
+                line = line.strip()
+                if not line.startswith("package:"):
+                    continue
+                parts = line[len("package:"):].split("=")
+                if len(parts) != 2:
+                    continue
+                apk_path, pkg = parts
+                is_system = apk_path.startswith("/system") or apk_path.startswith("/product")
+                # حجم APK
+                try:
+                    size_str = run([ADB, "shell", "du", "-b", apk_path], timeout=5)
+                    size_bytes = 0
+                    for tok in size_str.split():
+                        if tok.isdigit():
+                            size_bytes = int(tok)
+                            break
+                except Exception:
+                    size_bytes = 0
+                apps.append({
+                    "package": pkg.strip(),
+                    "path": apk_path,
+                    "is_system": is_system,
+                    "size": size_bytes,
+                })
+            self.apps_list = apps
+            self.log(self.tr("apps_loaded", len(apps)))
+            self.apps_apply_filter()
+        threading.Thread(target=t, daemon=True).start()
+
+    def apps_apply_filter(self):
+        # مسح القائمة القديمة
+        for w in self.apps_list_frame.winfo_children():
+            w.destroy()
+
+        filter_val = self.apps_filter_var.get()
+        all_val = self.tr("apps_filter_all")
+        user_val = self.tr("apps_filter_user")
+        sys_val = self.tr("apps_filter_system")
+
+        if filter_val == all_val:
+            filtered = self.apps_list
+        elif filter_val == user_val:
+            filtered = [a for a in self.apps_list if not a["is_system"]]
+        else:
+            filtered = [a for a in self.apps_list if a["is_system"]]
+
+        self.apps_filtered = filtered
+        self.apps_count_label.configure(text=self.tr("apps_count", len(filtered)))
+
+        for app in filtered:
+            self._add_app_row(app)
+
+    def _add_app_row(self, app):
+        pkg = app["package"]
+        icon_text = "⚙️" if app["is_system"] else "📱"
+        size_mb = app["size"] / (1024 * 1024) if app["size"] else 0
+        label = f"{icon_text}  {pkg}   ({size_mb:.1f} MB)"
+
+        btn = ctk.CTkButton(
+            self.apps_list_frame, text=label, anchor="w",
+            height=32, fg_color="#2b2b3d", hover_color="#3b3b4d",
+            command=lambda p=pkg, a=app: self._select_app(p, a))
+        btn.pack(fill="x", pady=2, padx=2)
+
+    def _select_app(self, pkg, app):
+        self.selected_pkg = pkg
+        self.selected_app_info = app
+        kind = "System" if app["is_system"] else "User"
+        size_mb = app["size"] / (1024 * 1024) if app["size"] else 0
+        self.apps_detail_label.configure(
+            text=f"🎯 {pkg}  |  {kind}  |  {size_mb:.1f} MB",
+            text_color="lightgreen")
+
+    def _app_cmd(self, args, timeout=60, action_ok_key=None):
+        if not self.selected_pkg:
+            messagebox.showerror(self.tr("err"), self.tr("apps_select"))
+            return None
+        return run([ADB, "shell"] + args, timeout=timeout)
+
+    def app_uninstall(self):
+        if not self.selected_pkg:
+            messagebox.showerror(self.tr("err"), self.tr("apps_select"))
+            return
+        if not messagebox.askyesno(self.tr("confirm"),
+                                    self.tr("confirm_uninstall", self.selected_pkg)):
+            return
+        def t():
+            out = run([ADB, "uninstall", self.selected_pkg], timeout=120)
+            self.log(out)
+            if "Success" in out:
+                self.log(self.tr("apps_uninstall_ok", self.selected_pkg))
+                self.apps_load()
+            else:
+                self.log(self.tr("apps_uninstall_fail", self.selected_pkg))
+        threading.Thread(target=t, daemon=True).start()
+
+    def app_disable(self):
+        if not self.selected_pkg:
+            messagebox.showerror(self.tr("err"), self.tr("apps_select"))
+            return
+        if not messagebox.askyesno(self.tr("warn"),
+                                    self.tr("confirm_disable", self.selected_pkg)):
+            return
+        def t():
+            out = run([ADB, "shell", "pm", "disable-user",
+                       "--user", "0", self.selected_pkg], timeout=60)
+            self.log(out)
+            self.log(self.tr("apps_disable_ok", self.selected_pkg))
+        threading.Thread(target=t, daemon=True).start()
+
+    def app_enable(self):
+        if not self.selected_pkg:
+            messagebox.showerror(self.tr("err"), self.tr("apps_select"))
+            return
+        def t():
+            out = run([ADB, "shell", "pm", "enable",
+                       self.selected_pkg], timeout=60)
+            self.log(out)
+            self.log(self.tr("apps_enable_ok", self.selected_pkg))
+        threading.Thread(target=t, daemon=True).start()
+
+    def app_extract(self):
+        if not self.selected_pkg:
+            messagebox.showerror(self.tr("err"), self.tr("apps_select"))
+            return
+        if not self.selected_apk_path():
+            messagebox.showerror(self.tr("err"), "APK path unknown")
+            return
+        def t():
+            apk_path = self.selected_apk_path()
+            local = os.path.join(EXPORTS_DIR, f"{self.selected_pkg}.apk")
+            self.log(f"📤 Pulling {apk_path}...")
+            self.log(run([ADB, "pull", apk_path, local], timeout=300))
+            if os.path.exists(local):
+                self.log(self.tr("apps_extract_ok", local))
+            else:
+                self.log("❌ Extract failed")
+        threading.Thread(target=t, daemon=True).start()
+
+    def selected_apk_path(self):
+        if not self.selected_app_info:
+            return None
+        return self.selected_app_info.get("path")
+
+    def app_clear(self):
+        if not self.selected_pkg:
+            messagebox.showerror(self.tr("err"), self.tr("apps_select"))
+            return
+        if not messagebox.askyesno(self.tr("warn"),
+                                    self.tr("confirm_clear", self.selected_pkg)):
+            return
+        def t():
+            out = run([ADB, "shell", "pm", "clear", self.selected_pkg], timeout=60)
+            self.log(out)
+            self.log(self.tr("apps_clear_ok", self.selected_pkg))
+        threading.Thread(target=t, daemon=True).start()
+
+    def app_force_stop(self):
+        if not self.selected_pkg:
+            messagebox.showerror(self.tr("err"), self.tr("apps_select"))
+            return
+        def t():
+            out = run([ADB, "shell", "am", "force-stop",
+                       self.selected_pkg], timeout=30)
+            self.log(out)
+            self.log(self.tr("apps_stop_ok", self.selected_pkg))
         threading.Thread(target=t, daemon=True).start()
 
     # ============ Flash ============
