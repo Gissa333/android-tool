@@ -29,6 +29,7 @@ TEMP_FLASH = os.path.join(BASE_DIR, "flash_temp")
 LOGS_DIR = os.path.join(BASE_DIR, "logs")
 EXPORTS_DIR = os.path.join(BASE_DIR, "exports")
 BACKUP_DIR = os.path.join(BASE_DIR, "backups")
+CONFIG_FILE = os.path.join(BASE_DIR, "config.json")
 EMBED_PY = os.path.join(BASE_DIR, "python-embed", "python.exe")
 ADB = os.path.join(TOOLS_DIR, "adb.exe")
 FASTBOOT = os.path.join(TOOLS_DIR, "fastboot.exe")
@@ -37,9 +38,11 @@ EDL_SCRIPT = os.path.join(EDL_DIR, "edl.py")
 HEIMDALL = os.path.join(HEIMDALL_DIR, "heimdall.exe")
 
 PLATFORM_TOOLS_URL = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
-APP_VERSION = "1.8.0"
+APP_VERSION = "1.9.0"
 GITHUB_REPO = "Gissa333/android-tool"
 GITHUB_API = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
+
+SECRET_LICENSE_KEY = "PRO-2026-ANDROID-TOOL"
 
 LANG = {
     "ar": {
@@ -452,6 +455,13 @@ LANG = {
         "err": "خطأ",
         "confirm": "تأكيد",
         "warn": "تحذير",
+        "lic_title": "🔑 تنشيط البرنامج",
+        "lic_desc": "أدخل كود التفعيل الخاص بك لبدء استخدام البرنامج",
+        "lic_placeholder": "أدخل الكود هنا...",
+        "lic_activate": "✅ تفعيل",
+        "lic_error": "❌ كود غير صحيح",
+        "lic_success": "✅ تم التفعيل بنجاح",
+        "lic_no_key": "⚠️ الرجاء إدخال الكود",
     },
     "en": {
         "title": "🛠️ Android Tool",
@@ -863,6 +873,13 @@ LANG = {
         "err": "Error",
         "confirm": "Confirm",
         "warn": "Warning",
+        "lic_title": "🔑 Activate Software",
+        "lic_desc": "Enter your license key to start using the tool",
+        "lic_placeholder": "Enter your key here...",
+        "lic_activate": "✅ Activate",
+        "lic_error": "❌ Invalid License Key",
+        "lic_success": "✅ Activation Successful",
+        "lic_no_key": "⚠️ Please enter the key",
     },
 }
 
@@ -896,6 +913,93 @@ def detect_rom_type(path):
     if ext in [".tgz", ".tar.gz"]:
         return "tgz"
     return "unknown"
+
+def load_config():
+    if os.path.exists(CONFIG_FILE):
+        try:
+            with open(CONFIG_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {}
+
+def save_config(cfg):
+    try:
+        with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+            json.dump(cfg, f)
+    except Exception:
+        pass
+
+def is_activated():
+    cfg = load_config()
+    return cfg.get("license") == SECRET_LICENSE_KEY
+
+def activate_license(key):
+    if key.strip() == SECRET_LICENSE_KEY:
+        cfg = load_config()
+        cfg["license"] = SECRET_LICENSE_KEY
+        save_config(cfg)
+        return True
+    return False
+
+class LicenseWindow(ctk.CTk):
+    def __init__(self, on_success):
+        super().__init__()
+        self.on_success = on_success
+        self.title("License Activation")
+        self.geometry("500x350")
+        self.resizable(False, False)
+
+        self.lang = "ar"
+        self.t = LANG[self.lang]
+
+        self.build_ui()
+
+    def tr(self, key):
+        return self.t.get(key, key)
+
+    def build_ui(self):
+        for w in self.winfo_children():
+            w.destroy()
+
+        ctk.CTkLabel(self, text="🔑", font=("Arial", 50)).pack(pady=10)
+        ctk.CTkLabel(self, text=self.tr("lic_title"),
+                     font=("Arial", 20, "bold")).pack(pady=5)
+        ctk.CTkLabel(self, text=self.tr("lic_desc"),
+                     font=("Arial", 12), text_color="gray").pack(pady=5)
+
+        self.entry = ctk.CTkEntry(self, width=350, height=45,
+                                   placeholder_text=self.tr("lic_placeholder"))
+        self.entry.pack(pady=15)
+
+        ctk.CTkButton(self, text=self.tr("lic_activate"), width=350, height=45,
+                      fg_color="green", hover_color="darkgreen",
+                      font=("Arial", 14, "bold"),
+                      command=self.do_activate).pack(pady=10)
+
+        self.status = ctk.CTkLabel(self, text="", font=("Arial", 12))
+        self.status.pack(pady=5)
+
+        ctk.CTkButton(self, text="🌐 English / العربية", width=150, height=30,
+                      fg_color="gray",
+                      command=self.toggle_lang).pack(pady=5)
+
+    def toggle_lang(self):
+        self.lang = "en" if self.lang == "ar" else "ar"
+        self.t = LANG[self.lang]
+        self.build_ui()
+
+    def do_activate(self):
+        key = self.entry.get().strip()
+        if not key:
+            self.status.configure(text=self.tr("lic_no_key"), text_color="orange")
+            return
+        if activate_license(key):
+            self.status.configure(text=self.tr("lic_success"), text_color="lightgreen")
+            self.after(800, self.destroy)
+            self.after(900, self.on_success)
+        else:
+            self.status.configure(text=self.tr("lic_error"), text_color="red")
 
 class App(ctk.CTk):
     def __init__(self):
@@ -3599,5 +3703,60 @@ class App(ctk.CTk):
         if messagebox.askyesno(self.tr("warn"), self.tr("confirm_wipe")):
             self.edl_run(["e", "userdata"])
 
+def show_splash():
+    splash = ctk.CTk()
+    splash.title("Android Tool")
+    splash.geometry("500x300")
+    splash.resizable(False, False)
+
+    sw = splash.winfo_screenwidth()
+    sh = splash.winfo_screenheight()
+    x = (sw - 500) // 2
+    y = (sh - 300) // 2
+    splash.geometry(f"500x300+{x}+{y}")
+
+    frame = ctk.CTkFrame(splash, fg_color="#1a1a2e", corner_radius=0)
+    frame.pack(fill="both", expand=True)
+
+    ctk.CTkLabel(frame, text="🛠️", font=("Arial", 60)).pack(pady=(30, 5))
+    ctk.CTkLabel(frame, text="Android Tool",
+                 font=("Arial", 28, "bold"),
+                 text_color="#4ade80").pack()
+    ctk.CTkLabel(frame, text=f"Version {APP_VERSION}",
+                 font=("Arial", 12),
+                 text_color="gray").pack(pady=5)
+    ctk.CTkLabel(frame, text="Loading...",
+                 font=("Arial", 12),
+                 text_color="lightblue").pack(pady=20)
+
+    bar = ctk.CTkProgressBar(frame, width=350, height=15,
+                               progress_color="#4ade80")
+    bar.pack(pady=5)
+    bar.set(0)
+
+    splash.update()
+
+    def animate():
+        for i in range(101):
+            bar.set(i / 100)
+            splash.update()
+            time.sleep(0.02)
+        splash.destroy()
+
+    animate()
+
+def main():
+    if not is_activated():
+        def start_main():
+            app = App()
+            app.mainloop()
+
+        lic = LicenseWindow(on_success=start_main)
+        lic.mainloop()
+    else:
+        app = App()
+        app.mainloop()
+
 if __name__ == "__main__":
-    App().mainloop()
+    show_splash()
+    main()
