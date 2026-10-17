@@ -28,6 +28,7 @@ HEIMDALL_DIR = os.path.join(BASE_DIR, "heimdall")
 TEMP_FLASH = os.path.join(BASE_DIR, "flash_temp")
 LOGS_DIR = os.path.join(BASE_DIR, "logs")
 EXPORTS_DIR = os.path.join(BASE_DIR, "exports")
+BACKUP_DIR = os.path.join(BASE_DIR, "backups")
 EMBED_PY = os.path.join(BASE_DIR, "python-embed", "python.exe")
 ADB = os.path.join(TOOLS_DIR, "adb.exe")
 FASTBOOT = os.path.join(TOOLS_DIR, "fastboot.exe")
@@ -36,7 +37,7 @@ EDL_SCRIPT = os.path.join(EDL_DIR, "edl.py")
 HEIMDALL = os.path.join(HEIMDALL_DIR, "heimdall.exe")
 
 PLATFORM_TOOLS_URL = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
-APP_VERSION = "1.3.0"
+APP_VERSION = "1.4.0"
 GITHUB_REPO = "Gissa333/android-tool"
 GITHUB_API = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
@@ -47,6 +48,7 @@ LANG = {
         "tab_adb": "ADB / Fastboot",
         "tab_tools": "📸 أدوات يومية",
         "tab_apps": "📱 إدارة التطبيقات",
+        "tab_backup": "💾 نسخ احتياطي",
         "tab_flash": "📦 فلاش الروم",
         "tab_xiaomi": "🟠 Xiaomi",
         "tab_huawei": "🟣 Huawei",
@@ -112,6 +114,25 @@ LANG = {
         "apps_extract_ok": "✅ تم استخراج {}",
         "apps_clear_ok": "✅ تم مسح بيانات {}",
         "apps_stop_ok": "✅ تم إيقاف {}",
+        # Backup
+        "backup_title": "💾 النسخ الاحتياطي والاستعادة",
+        "backup_full": "📦 نسخ احتياطي كامل (Apps + Data)",
+        "backup_app": "📱 نسخ احتياطي لتطبيق محدد",
+        "backup_sdcard": "📂 نسخ بطاقة SD كاملة",
+        "backup_restore": "♻️ استعادة نسخة احتياطية",
+        "backup_open": "📂 فتح مجلد النسخ الاحتياطي",
+        "backup_warning": "⚠️ النسخ الاحتياطي الكامل يتطلب تأكيد من شاشة الهاتف",
+        "backup_no_device": "❌ لا يوجد جهاز متصل",
+        "backup_starting": "⏳ بدء النسخ الاحتياطي...",
+        "backup_confirm_phone": "⚠️ اضغط 'Back up my data' على شاشة الهاتف",
+        "backup_done": "✅ اكتمل النسخ الاحتياطي: {}",
+        "backup_fail": "❌ فشل النسخ الاحتياطي",
+        "backup_select_file": "اختر ملف .ab للاستعادة",
+        "backup_restore_done": "✅ تم بدء الاستعادة - اضغط Restore على الهاتف",
+        "backup_sdcard_done": "✅ تم نسخ SD: {}",
+        "backup_sdcard_fail": "❌ فشل نسخ SD",
+        "backup_app_placeholder": "com.example.app",
+        "backup_app_prompt": "أدخل اسم الحزمة (Package Name):",
         # Flash
         "flash_title": "📦 فلاش الروم",
         "flash_select_zip": "📁 اختر ملف الروم",
@@ -290,7 +311,7 @@ LANG = {
         "about_new_version": "🎉 جديد: {}",
         "about_checking": "⏳ فحص...",
         "about_error": "❌ {}",
-        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• أدوات يومية (لقطات، تسجيل)\n• إدارة التطبيقات\n• فلاش الروم\n• Xiaomi / Huawei / Samsung / Oppo\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• أدوات يومية (لقطات، تسجيل)\n• إدارة التطبيقات\n• النسخ الاحتياطي\n• فلاش الروم\n• Xiaomi / Huawei / Samsung / Oppo\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 السجل:",
         "log_save": "💾 حفظ",
         "log_copy": "📋 نسخ",
@@ -337,6 +358,7 @@ LANG = {
         "tab_adb": "ADB / Fastboot",
         "tab_tools": "📸 Daily Tools",
         "tab_apps": "📱 App Manager",
+        "tab_backup": "💾 Backup",
         "tab_flash": "📦 Flash ROM",
         "tab_xiaomi": "🟠 Xiaomi",
         "tab_huawei": "🟣 Huawei",
@@ -399,6 +421,24 @@ LANG = {
         "apps_extract_ok": "✅ Extracted {}",
         "apps_clear_ok": "✅ Cleared data for {}",
         "apps_stop_ok": "✅ Stopped {}",
+        "backup_title": "💾 Backup & Restore",
+        "backup_full": "📦 Full Backup (Apps + Data)",
+        "backup_app": "📱 Backup Specific App",
+        "backup_sdcard": "📂 Backup Full SD Card",
+        "backup_restore": "♻️ Restore Backup",
+        "backup_open": "📂 Open Backups Folder",
+        "backup_warning": "⚠️ Full backup requires confirmation on phone screen",
+        "backup_no_device": "❌ No device connected",
+        "backup_starting": "⏳ Starting backup...",
+        "backup_confirm_phone": "⚠️ Tap 'Back up my data' on phone screen",
+        "backup_done": "✅ Backup completed: {}",
+        "backup_fail": "❌ Backup failed",
+        "backup_select_file": "Select .ab file to restore",
+        "backup_restore_done": "✅ Restore started - tap Restore on phone",
+        "backup_sdcard_done": "✅ SD card copied: {}",
+        "backup_sdcard_fail": "❌ SD card copy failed",
+        "backup_app_placeholder": "com.example.app",
+        "backup_app_prompt": "Enter package name:",
         "flash_title": "📦 Flash ROM",
         "flash_select_zip": "📁 Select ROM",
         "flash_type": "Type: {}",
@@ -567,7 +607,7 @@ LANG = {
         "about_new_version": "🎉 New: {}",
         "about_checking": "⏳ Checking...",
         "about_error": "❌ {}",
-        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Daily Tools (Screenshots, Recording)\n• App Manager\n• Full ROM Flash\n• Xiaomi / Huawei / Samsung / Oppo\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Daily Tools (Screenshots, Recording)\n• App Manager\n• Backup & Restore\n• Full ROM Flash\n• Xiaomi / Huawei / Samsung / Oppo\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 Log:",
         "log_save": "💾 Save",
         "log_copy": "📋 Copy",
@@ -666,7 +706,7 @@ class App(ctk.CTk):
         self.oppo_rom = ""
         self.recording = False
 
-        self.apps_list = []  # [(package, name, is_system, size)]
+        self.apps_list = []
         self.apps_filtered = []
         self.selected_pkg = None
         self.selected_app_info = ""
@@ -676,6 +716,7 @@ class App(ctk.CTk):
 
         os.makedirs(LOGS_DIR, exist_ok=True)
         os.makedirs(EXPORTS_DIR, exist_ok=True)
+        os.makedirs(BACKUP_DIR, exist_ok=True)
 
         self.build_ui()
         self.check_tools()
@@ -712,6 +753,7 @@ class App(ctk.CTk):
         self.tab_adb = self.tabs.add(self.tr("tab_adb"))
         self.tab_tools = self.tabs.add(self.tr("tab_tools"))
         self.tab_apps = self.tabs.add(self.tr("tab_apps"))
+        self.tab_backup = self.tabs.add(self.tr("tab_backup"))
         self.tab_flash = self.tabs.add(self.tr("tab_flash"))
         self.tab_xiaomi = self.tabs.add(self.tr("tab_xiaomi"))
         self.tab_huawei = self.tabs.add(self.tr("tab_huawei"))
@@ -726,6 +768,7 @@ class App(ctk.CTk):
         self.build_adb_tab()
         self.build_tools_tab()
         self.build_apps_tab()
+        self.build_backup_tab()
         self.build_flash_tab()
         self.build_xiaomi_tab()
         self.build_huawei_tab()
@@ -1058,7 +1101,6 @@ class App(ctk.CTk):
         ctk.CTkLabel(f, text=self.tr("apps_title"),
                      font=("Arial", 16, "bold")).pack(pady=8)
 
-        # شريط التحكم العلوي
         top = ctk.CTkFrame(f)
         top.pack(fill="x", padx=20, pady=5)
         ctk.CTkButton(top, text=self.tr("apps_load"), width=200, height=38,
@@ -1079,12 +1121,10 @@ class App(ctk.CTk):
                                               text_color="lightblue")
         self.apps_count_label.pack(side="left", padx=15)
 
-        # قائمة التطبيقات (scrollable)
         list_frame = ctk.CTkScrollableFrame(f, height=280)
         list_frame.pack(fill="both", expand=True, padx=20, pady=5)
         self.apps_list_frame = list_frame
 
-        # تفاصيل التطبيق المختار
         detail_frame = ctk.CTkFrame(f)
         detail_frame.pack(fill="x", padx=20, pady=5)
         self.apps_detail_label = ctk.CTkLabel(
@@ -1092,7 +1132,6 @@ class App(ctk.CTk):
             font=("Arial", 12), text_color="gray", anchor="w")
         self.apps_detail_label.pack(fill="x", padx=10, pady=5)
 
-        # أزرار العمليات
         ops = ctk.CTkFrame(f)
         ops.pack(pady=8)
         ctk.CTkButton(ops, text=self.tr("apps_uninstall"), width=170, height=42,
@@ -1133,7 +1172,6 @@ class App(ctk.CTk):
                     continue
                 apk_path, pkg = parts
                 is_system = apk_path.startswith("/system") or apk_path.startswith("/product")
-                # حجم APK
                 try:
                     size_str = run([ADB, "shell", "du", "-b", apk_path], timeout=5)
                     size_bytes = 0
@@ -1155,7 +1193,6 @@ class App(ctk.CTk):
         threading.Thread(target=t, daemon=True).start()
 
     def apps_apply_filter(self):
-        # مسح القائمة القديمة
         for w in self.apps_list_frame.winfo_children():
             w.destroy()
 
@@ -1198,7 +1235,7 @@ class App(ctk.CTk):
             text=f"🎯 {pkg}  |  {kind}  |  {size_mb:.1f} MB",
             text_color="lightgreen")
 
-    def _app_cmd(self, args, timeout=60, action_ok_key=None):
+    def _app_cmd(self, args, timeout=60):
         if not self.selected_pkg:
             messagebox.showerror(self.tr("err"), self.tr("apps_select"))
             return None
@@ -1291,6 +1328,130 @@ class App(ctk.CTk):
                        self.selected_pkg], timeout=30)
             self.log(out)
             self.log(self.tr("apps_stop_ok", self.selected_pkg))
+        threading.Thread(target=t, daemon=True).start()
+
+    # ============ Backup & Restore ============
+    def build_backup_tab(self):
+        f = self.tab_backup
+        ctk.CTkLabel(f, text=self.tr("backup_title"),
+                     font=("Arial", 16, "bold")).pack(pady=10)
+        ctk.CTkLabel(f, text=self.tr("backup_warning"),
+                     font=("Arial", 11), text_color="orange").pack(pady=4)
+
+        bf = ctk.CTkFrame(f)
+        bf.pack(pady=10)
+        ctk.CTkButton(bf, text=self.tr("backup_full"), width=400, height=50,
+                      fg_color="green", hover_color="darkgreen",
+                      font=("Arial", 14, "bold"),
+                      command=self.backup_full).pack(pady=5)
+        ctk.CTkButton(bf, text=self.tr("backup_app"), width=400, height=45,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.backup_app).pack(pady=5)
+        ctk.CTkButton(bf, text=self.tr("backup_sdcard"), width=400, height=45,
+                      fg_color="blue", hover_color="darkblue",
+                      command=self.backup_sdcard).pack(pady=5)
+
+        ctk.CTkLabel(f, text="—", text_color="gray").pack(pady=10)
+
+        bf2 = ctk.CTkFrame(f)
+        bf2.pack(pady=10)
+        ctk.CTkButton(bf2, text=self.tr("backup_restore"), width=400, height=50,
+                      fg_color="orange", hover_color="darkorange",
+                      font=("Arial", 14, "bold"),
+                      command=self.backup_restore).pack(pady=5)
+        ctk.CTkButton(bf2, text=self.tr("backup_open"), width=400, height=45,
+                      fg_color="gray",
+                      command=self.open_backups).pack(pady=5)
+
+    def open_backups(self):
+        try:
+            if os.name == "nt":
+                os.startfile(BACKUP_DIR)
+            else:
+                subprocess.Popen(["xdg-open", BACKUP_DIR])
+        except Exception as e:
+            self.log(self.tr("msg_error", e))
+
+    def backup_full(self):
+        def t():
+            self.log(self.tr("backup_starting"))
+            self.log(self.tr("backup_confirm_phone"))
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            path = os.path.join(BACKUP_DIR, f"full_backup_{ts}.ab")
+            try:
+                # adb backup -apk -shared -all -system -f path
+                r = subprocess.run(
+                    [ADB, "backup", "-apk", "-shared", "-all", "-f", path],
+                    capture_output=True, timeout=3600,
+                    creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
+                if os.path.exists(path) and os.path.getsize(path) > 100:
+                    self.log(self.tr("backup_done", path))
+                else:
+                    self.log(self.tr("backup_fail"))
+            except Exception as e:
+                self.log(f"❌ {e}")
+        threading.Thread(target=t, daemon=True).start()
+
+    def backup_app(self):
+        pkg = ctk.CTkInputDialog(
+            text=self.tr("backup_app_prompt"),
+            title="Backup App").get_input()
+        if not pkg:
+            return
+        def t():
+            self.log(f"⏳ Backing up {pkg}...")
+            self.log(self.tr("backup_confirm_phone"))
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            safe = pkg.replace(".", "_")
+            path = os.path.join(BACKUP_DIR, f"app_{safe}_{ts}.ab")
+            try:
+                r = subprocess.run(
+                    [ADB, "backup", "-apk", "-f", path, pkg],
+                    capture_output=True, timeout=1800,
+                    creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
+                if os.path.exists(path) and os.path.getsize(path) > 100:
+                    self.log(self.tr("backup_done", path))
+                else:
+                    self.log(self.tr("backup_fail"))
+            except Exception as e:
+                self.log(f"❌ {e}")
+        threading.Thread(target=t, daemon=True).start()
+
+    def backup_sdcard(self):
+        def t():
+            self.log("📂 Copying /sdcard/ ...")
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            dest = os.path.join(BACKUP_DIR, f"sdcard_{ts}")
+            try:
+                os.makedirs(dest, exist_ok=True)
+                out = run([ADB, "pull", "/sdcard/", dest], timeout=7200)
+                self.log(out[-500:])
+                if os.path.exists(dest) and os.listdir(dest):
+                    self.log(self.tr("backup_sdcard_done", dest))
+                else:
+                    self.log(self.tr("backup_sdcard_fail"))
+            except Exception as e:
+                self.log(f"❌ {e}")
+        threading.Thread(target=t, daemon=True).start()
+
+    def backup_restore(self):
+        p = filedialog.askopenfilename(
+            filetypes=[("ADB Backup", "*.ab"), ("All", "*.*")],
+            initialdir=BACKUP_DIR)
+        if not p:
+            return
+        def t():
+            self.log(f"♻️ Restoring {os.path.basename(p)}...")
+            self.log(self.tr("backup_restore_done"))
+            try:
+                r = subprocess.run(
+                    [ADB, "restore", p],
+                    capture_output=True, timeout=3600,
+                    creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
+                self.log((r.stdout or b"").decode("utf-8", "ignore")[-500:])
+                self.log("✅ Restore done")
+            except Exception as e:
+                self.log(f"❌ {e}")
         threading.Thread(target=t, daemon=True).start()
 
     # ============ Flash ============
