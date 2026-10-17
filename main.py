@@ -10,6 +10,7 @@ import tarfile
 import shutil
 import json
 import webbrowser
+import time
 from datetime import datetime
 
 ctk.set_appearance_mode("dark")
@@ -26,6 +27,7 @@ EDL_DIR = os.path.join(BASE_DIR, "edl")
 HEIMDALL_DIR = os.path.join(BASE_DIR, "heimdall")
 TEMP_FLASH = os.path.join(BASE_DIR, "flash_temp")
 LOGS_DIR = os.path.join(BASE_DIR, "logs")
+EXPORTS_DIR = os.path.join(BASE_DIR, "exports")
 EMBED_PY = os.path.join(BASE_DIR, "python-embed", "python.exe")
 ADB = os.path.join(TOOLS_DIR, "adb.exe")
 FASTBOOT = os.path.join(TOOLS_DIR, "fastboot.exe")
@@ -34,7 +36,7 @@ EDL_SCRIPT = os.path.join(EDL_DIR, "edl.py")
 HEIMDALL = os.path.join(HEIMDALL_DIR, "heimdall.exe")
 
 PLATFORM_TOOLS_URL = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
-APP_VERSION = "1.1.0"
+APP_VERSION = "1.2.0"
 GITHUB_REPO = "Gissa333/android-tool"
 GITHUB_API = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
@@ -43,6 +45,7 @@ LANG = {
     "ar": {
         "title": "🛠️ أداة الأندرويد",
         "tab_adb": "ADB / Fastboot",
+        "tab_tools": "📸 أدوات يومية",
         "tab_flash": "📦 فلاش الروم",
         "tab_xiaomi": "🟠 Xiaomi",
         "tab_huawei": "🟣 Huawei",
@@ -53,6 +56,7 @@ LANG = {
         "tab_mtk": "MTK",
         "tab_edl": "Qualcomm EDL",
         "tab_about": "ℹ️ حول",
+        # ADB
         "download_tools": "📥 تحميل Platform-Tools",
         "detect": "🔍 اكتشاف الأجهزة",
         "device_info": "📱 معلومات الجهاز",
@@ -61,33 +65,26 @@ LANG = {
         "reboot_recovery": "♻️ وضع Recovery",
         "reboot_edl": "📡 وضع EDL",
         "exit_fastboot": "🔌 خروج من Fastboot",
-        # Oppo
-        "oppo_title": "🟢 Oppo / Realme / OnePlus / Vivo",
-        "oppo_warning": "⚠️ ColorOS / OxygenOS / Funtouch — بعضها يحتاج كود فتح",
-        "oppo_info": "📱 معلومات الجهاز",
-        "oppo_check_bl": "🔍 فحص البوتلودر",
-        "oppo_fastboot": "⚡ Fastboot",
-        "oppo_recovery": "♻️ Recovery",
-        "oppo_edl": "📡 EDL",
-        "oppo_flash_boot": "📦 boot.img",
-        "oppo_flash_recovery": "📦 recovery.img",
-        "oppo_flash_vbmeta": "📦 vbmeta.img",
-        "oppo_flash_dtbo": "📦 dtbo.img",
-        "oppo_flash_super": "📦 super.img",
-        "oppo_flash_custom": "⚙️ قسم مخصص",
-        "oppo_partition": "القسم:",
-        "oppo_image": "الصورة:",
-        "oppo_unlock_help": "🔓 مساعدة فتح DeepTesting",
-        "oppo_download_help": "🌐 دليل الفتح الرسمي",
-        "oppo_unlock_cmd": "🔓 محاولة فتح",
-        "oppo_lock_cmd": "🔒 قفل",
-        "oppo_flash_rom": "📦 فلاش ROM كامل",
-        "oppo_select_rom": "اختر ROM (ZIP)",
-        "oppo_flash_wipe": "🚀 فلاش + Wipe",
-        "oppo_flash_keep": "🚀 فلاش (بدون Wipe)",
-        "oppo_erase_frp": "🚫 مسح FRP",
-        "oppo_wipe_data": "🧹 محو البيانات",
-        "oppo_reboot_ok": "🔄 عادي",
+        # Tools
+        "tools_title": "📸 أدوات يومية (ADB)",
+        "tools_screenshot": "📸 لقطة شاشة",
+        "tools_record": "🎬 تسجيل الشاشة (15 ثانية)",
+        "tools_record_stop": "⏹️ إيقاف التسجيل",
+        "tools_install_apk": "📦 تثبيت APK",
+        "tools_push": "📤 إرسال ملف للهاتف",
+        "tools_pull": "📥 سحب ملف من الهاتف",
+        "tools_list_packages": "📋 قائمة التطبيقات",
+        "tools_battery": "🔋 معلومات البطارية",
+        "tools_export_dir": "📂 فتح مجلد التصدير",
+        "tools_wait": "⏳ جاري...",
+        "tools_recording": "🎬 جاري التسجيل... انتظر 15 ثانية",
+        "tools_recorded": "✅ تم حفظ التسجيل: {}",
+        "tools_screenshot_saved": "✅ تم حفظ اللقطة: {}",
+        "tools_no_device": "❌ لا يوجد جهاز متصل",
+        "tools_install_success": "✅ تم تثبيت: {}",
+        "tools_install_fail": "❌ فشل التثبيت: {}",
+        "tools_battery_info": "🔋 معلومات البطارية",
+        "tools_apps_list": "📋 التطبيقات المثبتة",
         # Flash
         "flash_title": "📦 فلاش الروم",
         "flash_select_zip": "📁 اختر ملف الروم",
@@ -173,6 +170,33 @@ LANG = {
         "samsung_no_file": "لم يتم اختيار ملف",
         "samsung_reboot": "إعادة التشغيل",
         "samsung_done": "✅ اكتمل",
+        # Oppo
+        "oppo_title": "🟢 Oppo / Realme / OnePlus / Vivo",
+        "oppo_warning": "⚠️ ColorOS / OxygenOS / Funtouch",
+        "oppo_info": "📱 معلومات الجهاز",
+        "oppo_check_bl": "🔍 فحص البوتلودر",
+        "oppo_fastboot": "⚡ Fastboot",
+        "oppo_recovery": "♻️ Recovery",
+        "oppo_edl": "📡 EDL",
+        "oppo_flash_boot": "📦 boot.img",
+        "oppo_flash_recovery": "📦 recovery.img",
+        "oppo_flash_vbmeta": "📦 vbmeta.img",
+        "oppo_flash_dtbo": "📦 dtbo.img",
+        "oppo_flash_super": "📦 super.img",
+        "oppo_flash_custom": "⚙️ قسم مخصص",
+        "oppo_partition": "القسم:",
+        "oppo_image": "الصورة:",
+        "oppo_unlock_help": "🔓 مساعدة الفتح",
+        "oppo_download_help": "🌐 دليل الفتح",
+        "oppo_unlock_cmd": "🔓 محاولة فتح",
+        "oppo_lock_cmd": "🔒 قفل",
+        "oppo_flash_rom": "📦 فلاش ROM",
+        "oppo_select_rom": "اختر ROM",
+        "oppo_flash_wipe": "🚀 فلاش + Wipe",
+        "oppo_flash_keep": "🚀 فلاش (Keep)",
+        "oppo_erase_frp": "🚫 FRP",
+        "oppo_wipe_data": "🧹 محو البيانات",
+        "oppo_reboot_ok": "🔄 عادي",
         # Root
         "root_title": "🔓 TWRP & Root",
         "root_warning": "⚠️ تأكد من فتح البوتلودر",
@@ -239,7 +263,7 @@ LANG = {
         "about_new_version": "🎉 جديد: {}",
         "about_checking": "⏳ فحص...",
         "about_error": "❌ {}",
-        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• فلاش الروم\n• Xiaomi / Huawei / Samsung / Oppo\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• أدوات يومية (لقطات، تسجيل)\n• فلاش الروم\n• Xiaomi / Huawei / Samsung / Oppo\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 السجل:",
         "log_save": "💾 حفظ",
         "log_copy": "📋 نسخ",
@@ -281,6 +305,7 @@ LANG = {
     "en": {
         "title": "🛠️ Android Tool",
         "tab_adb": "ADB / Fastboot",
+        "tab_tools": "📸 Daily Tools",
         "tab_flash": "📦 Flash ROM",
         "tab_xiaomi": "🟠 Xiaomi",
         "tab_huawei": "🟣 Huawei",
@@ -299,32 +324,25 @@ LANG = {
         "reboot_recovery": "♻️ Recovery",
         "reboot_edl": "📡 EDL",
         "exit_fastboot": "🔌 Exit Fastboot",
-        "oppo_title": "🟢 Oppo / Realme / OnePlus / Vivo",
-        "oppo_warning": "⚠️ ColorOS / OxygenOS / Funtouch — some need unlock code",
-        "oppo_info": "📱 Device Info",
-        "oppo_check_bl": "🔍 Check BL",
-        "oppo_fastboot": "⚡ Fastboot",
-        "oppo_recovery": "♻️ Recovery",
-        "oppo_edl": "📡 EDL",
-        "oppo_flash_boot": "📦 boot.img",
-        "oppo_flash_recovery": "📦 recovery.img",
-        "oppo_flash_vbmeta": "📦 vbmeta.img",
-        "oppo_flash_dtbo": "📦 dtbo.img",
-        "oppo_flash_super": "📦 super.img",
-        "oppo_flash_custom": "⚙️ Custom Partition",
-        "oppo_partition": "Partition:",
-        "oppo_image": "Image:",
-        "oppo_unlock_help": "🔓 DeepTesting Help",
-        "oppo_download_help": "🌐 Official Unlock Guide",
-        "oppo_unlock_cmd": "🔓 Try Unlock",
-        "oppo_lock_cmd": "🔒 Lock",
-        "oppo_flash_rom": "📦 Flash Full ROM",
-        "oppo_select_rom": "Select ROM (ZIP)",
-        "oppo_flash_wipe": "🚀 Flash + Wipe",
-        "oppo_flash_keep": "🚀 Flash (Keep Data)",
-        "oppo_erase_frp": "🚫 Erase FRP",
-        "oppo_wipe_data": "🧹 Wipe Data",
-        "oppo_reboot_ok": "🔄 Normal",
+        "tools_title": "📸 Daily Tools (ADB)",
+        "tools_screenshot": "📸 Screenshot",
+        "tools_record": "🎬 Screen Record (15s)",
+        "tools_record_stop": "⏹️ Stop Recording",
+        "tools_install_apk": "📦 Install APK",
+        "tools_push": "📤 Push file to device",
+        "tools_pull": "📥 Pull file from device",
+        "tools_list_packages": "📋 List apps",
+        "tools_battery": "🔋 Battery Info",
+        "tools_export_dir": "📂 Open Exports Folder",
+        "tools_wait": "⏳ ...",
+        "tools_recording": "🎬 Recording... wait 15 seconds",
+        "tools_recorded": "✅ Recording saved: {}",
+        "tools_screenshot_saved": "✅ Screenshot saved: {}",
+        "tools_no_device": "❌ No device connected",
+        "tools_install_success": "✅ Installed: {}",
+        "tools_install_fail": "❌ Install failed: {}",
+        "tools_battery_info": "🔋 Battery Info",
+        "tools_apps_list": "📋 Installed apps",
         "flash_title": "📦 Flash ROM",
         "flash_select_zip": "📁 Select ROM",
         "flash_type": "Type: {}",
@@ -406,6 +424,32 @@ LANG = {
         "samsung_no_file": "No file",
         "samsung_reboot": "Reboot",
         "samsung_done": "✅ Done",
+        "oppo_title": "🟢 Oppo / Realme / OnePlus / Vivo",
+        "oppo_warning": "⚠️ ColorOS / OxygenOS / Funtouch",
+        "oppo_info": "📱 Device Info",
+        "oppo_check_bl": "🔍 Check BL",
+        "oppo_fastboot": "⚡ Fastboot",
+        "oppo_recovery": "♻️ Recovery",
+        "oppo_edl": "📡 EDL",
+        "oppo_flash_boot": "📦 boot.img",
+        "oppo_flash_recovery": "📦 recovery.img",
+        "oppo_flash_vbmeta": "📦 vbmeta.img",
+        "oppo_flash_dtbo": "📦 dtbo.img",
+        "oppo_flash_super": "📦 super.img",
+        "oppo_flash_custom": "⚙️ Custom",
+        "oppo_partition": "Partition:",
+        "oppo_image": "Image:",
+        "oppo_unlock_help": "🔓 Unlock Help",
+        "oppo_download_help": "🌐 Unlock Guide",
+        "oppo_unlock_cmd": "🔓 Try Unlock",
+        "oppo_lock_cmd": "🔒 Lock",
+        "oppo_flash_rom": "📦 Flash ROM",
+        "oppo_select_rom": "Select ROM",
+        "oppo_flash_wipe": "🚀 Flash + Wipe",
+        "oppo_flash_keep": "🚀 Flash (Keep)",
+        "oppo_erase_frp": "🚫 FRP",
+        "oppo_wipe_data": "🧹 Wipe Data",
+        "oppo_reboot_ok": "🔄 Normal",
         "root_title": "🔓 TWRP & Root",
         "root_warning": "⚠️ Make sure bootloader unlocked",
         "check_bl_status": "🔍 Check BL",
@@ -467,7 +511,7 @@ LANG = {
         "about_new_version": "🎉 New: {}",
         "about_checking": "⏳ Checking...",
         "about_error": "❌ {}",
-        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Full ROM Flash\n• Xiaomi / Huawei / Samsung / Oppo\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Daily Tools (Screenshots, Recording)\n• Full ROM Flash\n• Xiaomi / Huawei / Samsung / Oppo\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 Log:",
         "log_save": "💾 Save",
         "log_copy": "📋 Copy",
@@ -561,11 +605,13 @@ class App(ctk.CTk):
         self.boot_img = ""
         self.xiaomi_rom = ""
         self.oppo_rom = ""
+        self.recording = False
 
         self.geometry("1020x920")
         self.resizable(True, True)
 
         os.makedirs(LOGS_DIR, exist_ok=True)
+        os.makedirs(EXPORTS_DIR, exist_ok=True)
 
         self.build_ui()
         self.check_tools()
@@ -600,6 +646,7 @@ class App(ctk.CTk):
         self.tabs.pack(padx=15, pady=5, fill="both", expand=True)
 
         self.tab_adb = self.tabs.add(self.tr("tab_adb"))
+        self.tab_tools = self.tabs.add(self.tr("tab_tools"))
         self.tab_flash = self.tabs.add(self.tr("tab_flash"))
         self.tab_xiaomi = self.tabs.add(self.tr("tab_xiaomi"))
         self.tab_huawei = self.tabs.add(self.tr("tab_huawei"))
@@ -612,6 +659,7 @@ class App(ctk.CTk):
         self.tab_about = self.tabs.add(self.tr("tab_about"))
 
         self.build_adb_tab()
+        self.build_tools_tab()
         self.build_flash_tab()
         self.build_xiaomi_tab()
         self.build_huawei_tab()
@@ -779,462 +827,239 @@ class App(ctk.CTk):
             ctk.CTkButton(f, text=t, width=210, height=36,
                           command=fn).grid(row=i // 3, column=i % 3, padx=8, pady=8)
 
-    # ============ Oppo / Realme / OnePlus / Vivo ============
-    def build_oppo_tab(self):
-        f = self.tab_oppo
-        ctk.CTkLabel(f, text=self.tr("oppo_title"),
-                     font=("Arial", 16, "bold")).pack(pady=6)
-        ctk.CTkLabel(f, text=self.tr("oppo_warning"),
-                     font=("Arial", 11), text_color="orange").pack(pady=4)
+    # ============ Daily Tools ============
+    def build_tools_tab(self):
+        f = self.tab_tools
+        ctk.CTkLabel(f, text=self.tr("tools_title"),
+                     font=("Arial", 16, "bold")).pack(pady=10)
 
-        # معلومات + إعادة تشغيل
-        row = ctk.CTkFrame(f)
-        row.pack(pady=6)
-        ctk.CTkButton(row, text=self.tr("oppo_info"), width=170,
-                      command=self.oppo_info).pack(side="left", padx=4)
-        ctk.CTkButton(row, text=self.tr("oppo_check_bl"), width=170,
-                      command=self.oppo_check_bl).pack(side="left", padx=4)
-        ctk.CTkButton(row, text=self.tr("oppo_fastboot"), width=170,
-                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "bootloader"]))).pack(side="left", padx=4)
-
-        # أدوات الفتح
-        ctk.CTkLabel(f, text="— Unlock Tools —",
-                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
-        uf = ctk.CTkFrame(f)
-        uf.pack(pady=4)
-        ctk.CTkButton(uf, text=self.tr("oppo_unlock_help"), width=220,
-                      fg_color="gray",
-                      command=lambda: webbrowser.open(
-                          "https://www.oppo.com/en/support/")).pack(side="left", padx=3)
-        ctk.CTkButton(uf, text=self.tr("oppo_download_help"), width=220,
-                      fg_color="gray",
-                      command=lambda: webbrowser.open(
-                          "https://www.realme.com/global/support/")).pack(side="left", padx=3)
-        ctk.CTkButton(uf, text=self.tr("oppo_flash_recovery"), width=220,
-                      command=lambda: self.oppo_flash_single("recovery")).pack(side="left", padx=3)
-
-        # فتح / قفل
-        uf2 = ctk.CTkFrame(f)
-        uf2.pack(pady=4)
-        ctk.CTkButton(uf2, text=self.tr("oppo_unlock_cmd"), width=250,
-                      fg_color="orange", hover_color="darkorange",
-                      command=self.oppo_unlock).pack(side="left", padx=4)
-        ctk.CTkButton(uf2, text=self.tr("oppo_lock_cmd"), width=250,
-                      fg_color="red", hover_color="darkred",
-                      command=self.oppo_lock).pack(side="left", padx=4)
-
-        # Fastboot ROM
-        ctk.CTkLabel(f, text="— Fastboot ROM —",
-                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
-        rf = ctk.CTkFrame(f)
-        rf.pack(pady=4)
-        ctk.CTkButton(rf, text=self.tr("oppo_select_rom"), width=250,
-                      command=self.oppo_select_rom).pack(side="left", padx=5)
-        self.oppo_rom_label = ctk.CTkLabel(rf, text=self.tr("samsung_no_file"),
-                                            font=("Arial", 10), text_color="gray")
-        self.oppo_rom_label.pack(side="left", padx=5)
-
-        fl = ctk.CTkFrame(f)
-        fl.pack(pady=6)
-        ctk.CTkButton(fl, text=self.tr("oppo_flash_wipe"), width=200, height=42,
+        # Screenshot
+        ctk.CTkButton(f, text=self.tr("tools_screenshot"), width=350, height=50,
                       fg_color="green", hover_color="darkgreen",
-                      command=lambda: self.oppo_flash_rom(wipe=True)).pack(side="left", padx=4)
-        ctk.CTkButton(fl, text=self.tr("oppo_flash_keep"), width=200, height=42,
+                      font=("Arial", 14, "bold"),
+                      command=self.tool_screenshot).pack(pady=5)
+
+        # Recording
+        rec_frame = ctk.CTkFrame(f)
+        rec_frame.pack(pady=5)
+        ctk.CTkButton(rec_frame, text=self.tr("tools_record"), width=250, height=45,
                       fg_color="orange", hover_color="darkorange",
-                      command=lambda: self.oppo_flash_rom(wipe=False)).pack(side="left", padx=4)
+                      command=self.tool_record).pack(side="left", padx=5)
+        ctk.CTkButton(rec_frame, text=self.tr("tools_record_stop"), width=200, height=45,
+                      fg_color="red", hover_color="darkred",
+                      command=self.tool_record_stop).pack(side="left", padx=5)
 
-        # فلاش أقسام فردية
-        ctk.CTkLabel(f, text="— Partitions —",
-                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+        # APK
+        ctk.CTkButton(f, text=self.tr("tools_install_apk"), width=350, height=50,
+                      fg_color="green", hover_color="darkgreen",
+                      font=("Arial", 14, "bold"),
+                      command=self.tool_install_apk).pack(pady=5)
+
+        # Push/Pull
         pf = ctk.CTkFrame(f)
-        pf.pack(pady=4)
-        ctk.CTkButton(pf, text=self.tr("oppo_flash_boot"), width=170,
-                      command=lambda: self.oppo_flash_single("boot")).pack(side="left", padx=3)
-        ctk.CTkButton(pf, text=self.tr("oppo_flash_vbmeta"), width=170,
-                      command=lambda: self.oppo_flash_single("vbmeta")).pack(side="left", padx=3)
-        ctk.CTkButton(pf, text=self.tr("oppo_flash_dtbo"), width=170,
-                      command=lambda: self.oppo_flash_single("dtbo")).pack(side="left", padx=3)
-        ctk.CTkButton(pf, text=self.tr("oppo_flash_super"), width=170,
-                      command=lambda: self.oppo_flash_single("super")).pack(side="left", padx=3)
+        pf.pack(pady=5)
+        ctk.CTkButton(pf, text=self.tr("tools_push"), width=170, height=45,
+                      command=self.tool_push).pack(side="left", padx=5)
+        ctk.CTkButton(pf, text=self.tr("tools_pull"), width=170, height=45,
+                      command=self.tool_pull).pack(side="left", padx=5)
 
-        # قسم مخصص
-        cf = ctk.CTkFrame(f)
-        cf.pack(pady=6)
-        ctk.CTkLabel(cf, text=self.tr("oppo_partition")).pack(side="left", padx=4)
-        self.oppo_part_name = ctk.CTkEntry(cf, width=140)
-        self.oppo_part_name.pack(side="left", padx=4)
-        self.oppo_part_name.insert(0, "boot")
-        ctk.CTkLabel(cf, text=self.tr("oppo_image")).pack(side="left", padx=4)
-        self.oppo_img_file = ctk.CTkEntry(cf, width=220)
-        self.oppo_img_file.pack(side="left", padx=4)
-        ctk.CTkButton(cf, text=self.tr("pick"), width=60,
-                      command=self.oppo_pick_img).pack(side="left", padx=4)
-        ctk.CTkButton(cf, text=self.tr("write_btn"), width=90, fg_color="red",
-                      hover_color="darkred",
-                      command=self.oppo_flash_custom).pack(side="left", padx=4)
+        # Info
+        info_frame = ctk.CTkFrame(f)
+        info_frame.pack(pady=5)
+        ctk.CTkButton(info_frame, text=self.tr("tools_battery"), width=170, height=45,
+                      command=self.tool_battery).pack(side="left", padx=5)
+        ctk.CTkButton(info_frame, text=self.tr("tools_list_packages"), width=170, height=45,
+                      command=self.tool_list_packages).pack(side="left", padx=5)
 
-        # عمليات
-        ctk.CTkLabel(f, text=self.tr("advanced"), font=("Arial", 12, "bold"),
-                     text_color="orange").pack(pady=(15, 3))
-        af = ctk.CTkFrame(f)
-        af.pack(pady=4)
-        ctk.CTkButton(af, text=self.tr("oppo_erase_frp"), width=200,
-                      fg_color="red", hover_color="darkred",
-                      command=self.oppo_erase_frp).pack(side="left", padx=3)
-        ctk.CTkButton(af, text=self.tr("oppo_wipe_data"), width=200,
-                      fg_color="red", hover_color="darkred",
-                      command=self.oppo_wipe_data).pack(side="left", padx=3)
-        ctk.CTkButton(af, text=self.tr("oppo_edl"), width=200,
-                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "edl"]))).pack(side="left", padx=3)
+        # Exports folder
+        ctk.CTkButton(f, text=self.tr("tools_export_dir"), width=350, height=45,
+                      fg_color="gray",
+                      command=self.open_exports).pack(pady=15)
 
-    def oppo_info(self):
+    def open_exports(self):
+        try:
+            if os.name == "nt":
+                os.startfile(EXPORTS_DIR)
+            else:
+                subprocess.Popen(["xdg-open", EXPORTS_DIR])
+        except Exception as e:
+            self.log(self.tr("msg_error", e))
+
+    def tool_screenshot(self):
         def t():
-            self.log("=" * 50)
-            props = [
-                "ro.product.model", "ro.product.brand",
-                "ro.build.version.oplusrom", "ro.build.version.opporom",
-                "ro.build.version.realme", "ro.build.version.oxygen",
-                "ro.build.display.id", "ro.build.version.release",
-                "ro.build.version.sdk", "ro.product.cpu.abi",
-                "ro.serialno", "ro.boot.verifiedbootstate",
-                "ro.boot.flash.locked",
-            ]
-            for p in props:
-                self.log(f"{p}: {run([ADB, 'shell', 'getprop', p]).strip()}")
-        threading.Thread(target=t, daemon=True).start()
-
-    def oppo_check_bl(self):
-        def t():
-            self.log("=" * 50)
-            out1 = run([FASTBOOT, "oem", "device-info"], timeout=30)
-            self.log(out1)
-            out2 = run([FASTBOOT, "getvar", "unlocked"], timeout=15)
-            self.log(out2)
-            out3 = run([ADB, "shell", "getprop", "ro.boot.flash.locked"]).strip()
-            self.log(f"ro.boot.flash.locked: {out3}")
-            out4 = run([ADB, "shell", "getprop", "ro.secureboot.lockstate"]).strip()
-            self.log(f"secureboot.lockstate: {out4}")
-        threading.Thread(target=t, daemon=True).start()
-
-    def oppo_unlock(self):
-        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_unlock")):
-            return
-        def t():
-            self.log("🔓 Trying unlock...")
-            self.log(run([FASTBOOT, "flashing", "unlock"], timeout=120))
-            self.log(run([FASTBOOT, "oem", "unlock"], timeout=60))
-        threading.Thread(target=t, daemon=True).start()
-
-    def oppo_lock(self):
-        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_unlock")):
-            return
-        self.async_run(lambda: run([FASTBOOT, "flashing", "lock"], timeout=120))
-
-    def oppo_flash_single(self, partition):
-        p = filedialog.askopenfilename(
-            filetypes=[("Image", "*.img"), ("All", "*.*")])
-        if not p:
-            return
-        def t():
-            self.log(f"🚀 flash {partition}: {os.path.basename(p)}")
-            out = run([FASTBOOT, "flash", partition, p], timeout=900)
-            self.log(out[-1000:])
-        threading.Thread(target=t, daemon=True).start()
-
-    def oppo_pick_img(self):
-        p = filedialog.askopenfilename(filetypes=[("Image", "*.img")])
-        if p:
-            self.oppo_img_file.delete(0, "end")
-            self.oppo_img_file.insert(0, p)
-
-    def oppo_flash_custom(self):
-        part = self.oppo_part_name.get().strip()
-        f = self.oppo_img_file.get().strip()
-        if not part or not os.path.exists(f):
-            messagebox.showerror(self.tr("err"), self.tr("err_check"))
-            return
-        def t():
-            out = run([FASTBOOT, "flash", part, f], timeout=900)
-            self.log(out[-1000:])
-        threading.Thread(target=t, daemon=True).start()
-
-    def oppo_erase_frp(self):
-        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_wipe")):
-            return
-        self.async_run(lambda: run([FASTBOOT, "erase", "frp"], timeout=120))
-
-    def oppo_wipe_data(self):
-        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_format")):
-            return
-        self.async_run(lambda: run([FASTBOOT, "erase", "userdata"], timeout=300))
-
-    def oppo_select_rom(self):
-        p = filedialog.askopenfilename(
-            filetypes=[("ROM", "*.zip *.tar *.tgz *.img"), ("All", "*.*")])
-        if p:
-            self.oppo_rom = p
-            self.oppo_rom_label.configure(text=os.path.basename(p),
-                                           text_color="lightgreen")
-            self.log(f"🟢 ROM: {os.path.basename(p)}")
-
-    def oppo_flash_rom(self, wipe=False):
-        if not self.oppo_rom or not os.path.exists(self.oppo_rom):
-            messagebox.showerror(self.tr("err"), self.tr("samsung_no_file"))
-            return
-        if not messagebox.askyesno(self.tr("confirm"),
-                                    self.tr("confirm_flash_samsung",
-                                            os.path.basename(self.oppo_rom))):
-            return
-
-        def t():
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            path = os.path.join(EXPORTS_DIR, f"screenshot_{ts}.png")
+            self.log("📸 Taking screenshot...")
+            out = run([ADB, "exec-out", "screencap", "-p"], timeout=30)
+            if not out or len(out) < 100:
+                self.log(self.tr("tools_no_device"))
+                return
+            # ملاحظة: run() يحول الإخراج إلى str، قد يفسد PNG
+            # نستخدم طريقة أخرى:
             try:
-                if os.path.exists(TEMP_FLASH):
-                    shutil.rmtree(TEMP_FLASH, ignore_errors=True)
-                os.makedirs(TEMP_FLASH, exist_ok=True)
-                name = os.path.basename(self.oppo_rom).lower()
-                self.log("📦 Extracting Oppo/Realme ROM...")
-                if name.endswith(".zip"):
-                    with zipfile.ZipFile(self.oppo_rom) as z:
-                        z.extractall(TEMP_FLASH)
-                elif name.endswith((".tgz", ".tar.gz", ".tar")):
-                    try:
-                        with tarfile.open(self.oppo_rom, "r:gz") as tar:
-                            tar.extractall(TEMP_FLASH)
-                    except tarfile.ReadError:
-                        with tarfile.open(self.oppo_rom, "r:") as tar:
-                            tar.extractall(TEMP_FLASH)
-
-                # البحث عن payload.bin
-                payloads = []
-                for root, dirs, files in os.walk(TEMP_FLASH):
-                    for f in files:
-                        if f == "payload.bin":
-                            payloads.append(os.path.join(root, f))
-
-                if payloads:
-                    self.log("⚠️ payload.bin detected")
-                    try:
-                        p_url = "https://github.com/ssut/payload-dumper-go/releases/download/1.2.2/payload-dumper-go_1.2.2_windows_amd64.tar.gz"
-                        tgz = os.path.join(BASE_DIR, "pdg.tgz")
-                        urllib.request.urlretrieve(p_url, tgz)
-                        with tarfile.open(tgz, "r:gz") as t_:
-                            t_.extractall(BASE_DIR)
-                        os.remove(tgz)
-                        exe = os.path.join(BASE_DIR, "payload-dumper-go.exe")
-                        if os.path.exists(exe):
-                            out_dir = os.path.join(TEMP_FLASH, "extracted")
-                            os.makedirs(out_dir, exist_ok=True)
-                            for pl in payloads:
-                                self.log(f"🔧 {os.path.basename(pl)}...")
-                                self.log(run([exe, "-o", out_dir, pl], timeout=1800))
-                    except Exception as e:
-                        self.log(f"⚠️ {e}")
-
-                images = {}
-                for root, dirs, files in os.walk(TEMP_FLASH):
-                    for f in files:
-                        if f.endswith(".img"):
-                            n = os.path.splitext(f)[0]
-                            images[n] = os.path.join(root, f)
-
-                if not images:
-                    self.log("❌ No images")
-                    return
-
-                order = ["gpt", "tz", "xbl", "abl", "aop", "bluetooth",
-                          "keymaster", "devcfg", "dsp", "featenabler",
-                          "hyp", "imagefv", "qupfw", "shrm", "uefisecapp",
-                          "vbmeta_system", "vbmeta_vendor", "vbmeta", "modem",
-                          "boot", "dtbo", "recovery", "super",
-                          "my_bigball", "my_carrier", "my_company",
-                          "my_engineering", "my_heytap", "my_manifest",
-                          "my_product", "my_region", "my_stock",
-                          "odm", "product", "system", "system_ext",
-                          "vendor", "persist", "metadata", "userdata"]
-
-                for part in order:
-                    if part not in images:
-                        continue
-                    if wipe and part == "userdata":
-                        continue
-                    self.log(f"🚀 flash {part}")
-                    out = run([FASTBOOT, "flash", part, images[part]], timeout=1800)
-                    self.log(out[-300:])
-
-                for part, path in images.items():
-                    if part in order:
-                        continue
-                    if wipe and part == "userdata":
-                        continue
-                    self.log(f"🚀 flash {part} (extra)")
-                    out = run([FASTBOOT, "flash", part, path], timeout=1800)
-                    self.log(out[-300:])
-
-                self.log("🎉 Oppo/Realme ROM flashed!")
-                run([FASTBOOT, "reboot"])
+                with open(path, "wb") as f_:
+                    r = subprocess.run([ADB, "exec-out", "screencap", "-p"],
+                                       capture_output=True, timeout=30,
+                                       creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
+                    f_.write(r.stdout)
+                if os.path.exists(path) and os.path.getsize(path) > 1000:
+                    self.log(self.tr("tools_screenshot_saved", path))
+                else:
+                    self.log("❌ Screenshot failed")
             except Exception as e:
                 self.log(f"❌ {e}")
         threading.Thread(target=t, daemon=True).start()
 
-    # ============ Huawei ============
-    def build_huawei_tab(self):
-        f = self.tab_huawei
-        ctk.CTkLabel(f, text=self.tr("huawei_title"),
-                     font=("Arial", 16, "bold")).pack(pady=6)
-        ctk.CTkLabel(f, text=self.tr("huawei_warning"),
-                     font=("Arial", 11), text_color="orange").pack(pady=4)
-
-        row = ctk.CTkFrame(f)
-        row.pack(pady=6)
-        ctk.CTkButton(row, text=self.tr("huawei_info"), width=180,
-                      command=self.huawei_info).pack(side="left", padx=4)
-        ctk.CTkButton(row, text=self.tr("huawei_check_bl"), width=180,
-                      command=self.huawei_check_bl).pack(side="left", padx=4)
-        ctk.CTkButton(row, text=self.tr("huawei_erecovery"), width=180,
-                      fg_color="orange", hover_color="darkorange",
-                      command=self.huawei_erecovery).pack(side="left", padx=4)
-
-        ctk.CTkLabel(f, text="— Tools —",
-                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
-        tf = ctk.CTkFrame(f)
-        tf.pack(pady=4)
-        ctk.CTkButton(tf, text=self.tr("huawei_unlock_help"), width=200,
-                      fg_color="gray",
-                      command=lambda: webbrowser.open(
-                          "https://emui.huawei.com/en/unlock_index")).pack(side="left", padx=4)
-        ctk.CTkButton(tf, text=self.tr("huawei_hisuite"), width=200,
-                      fg_color="gray",
-                      command=lambda: webbrowser.open(
-                          "https://consumer.huawei.com/en/support/hisuite/")).pack(side="left", padx=4)
-        ctk.CTkButton(tf, text=self.tr("huawei_erecovery_help"), width=200,
-                      fg_color="gray",
-                      command=lambda: webbrowser.open(
-                          "https://consumer.huawei.com/en/support/")).pack(side="left", padx=4)
-
-        ctk.CTkLabel(f, text="— Flash Partitions —",
-                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
-        pf = ctk.CTkFrame(f)
-        pf.pack(pady=4)
-        ctk.CTkButton(pf, text=self.tr("huawei_flash_boot"), width=180,
-                      command=lambda: self.huawei_flash_single("boot")).pack(side="left", padx=3)
-        ctk.CTkButton(pf, text=self.tr("huawei_flash_recovery"), width=180,
-                      command=lambda: self.huawei_flash_single("recovery")).pack(side="left", padx=3)
-        ctk.CTkButton(pf, text=self.tr("huawei_flash_system"), width=180,
-                      command=lambda: self.huawei_flash_single("system")).pack(side="left", padx=3)
-        ctk.CTkButton(pf, text=self.tr("huawei_flash_ramdisk"), width=180,
-                      command=lambda: self.huawei_flash_single("ramdisk")).pack(side="left", padx=3)
-
-        cf = ctk.CTkFrame(f)
-        cf.pack(pady=6)
-        ctk.CTkLabel(cf, text=self.tr("huawei_partition")).pack(side="left", padx=4)
-        self.huawei_part_name = ctk.CTkEntry(cf, width=140)
-        self.huawei_part_name.pack(side="left", padx=4)
-        self.huawei_part_name.insert(0, "boot")
-        ctk.CTkLabel(cf, text=self.tr("huawei_image")).pack(side="left", padx=4)
-        self.huawei_img_file = ctk.CTkEntry(cf, width=220)
-        self.huawei_img_file.pack(side="left", padx=4)
-        ctk.CTkButton(cf, text=self.tr("pick"), width=60,
-                      command=self.huawei_pick_img).pack(side="left", padx=4)
-        ctk.CTkButton(cf, text=self.tr("write_btn"), width=90, fg_color="red",
-                      hover_color="darkred",
-                      command=self.huawei_flash_custom).pack(side="left", padx=4)
-
-        ctk.CTkLabel(f, text=self.tr("advanced"), font=("Arial", 12, "bold"),
-                     text_color="orange").pack(pady=(15, 3))
-        af = ctk.CTkFrame(f)
-        af.pack(pady=4)
-        ctk.CTkButton(af, text=self.tr("huawei_unlock_code"), width=200,
-                      fg_color="orange", hover_color="darkorange",
-                      command=self.huawei_unlock_code).pack(side="left", padx=3)
-        ctk.CTkButton(af, text=self.tr("huawei_erase_frp"), width=200,
-                      fg_color="red", hover_color="darkred",
-                      command=self.huawei_erase_frp).pack(side="left", padx=3)
-        ctk.CTkButton(af, text=self.tr("huawei_wipe_data"), width=200,
-                      fg_color="red", hover_color="darkred",
-                      command=self.huawei_wipe_data).pack(side="left", padx=3)
-
-        ctk.CTkLabel(f, text="— Reboot —",
-                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
-        rbf = ctk.CTkFrame(f)
-        rbf.pack(pady=4)
-        ctk.CTkButton(rbf, text=self.tr("huawei_fastboot"), width=180,
-                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "bootloader"]))).pack(side="left", padx=3)
-        ctk.CTkButton(rbf, text=self.tr("huawei_recovery"), width=180,
-                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "recovery"]))).pack(side="left", padx=3)
-        ctk.CTkButton(rbf, text=self.tr("huawei_reboot_ok"), width=180,
-                      command=lambda: self.async_run(lambda: run([ADB, "reboot"]))).pack(side="left", padx=3)
-
-    def huawei_info(self):
+    def tool_record(self):
         def t():
-            self.log("=" * 50)
-            props = ["ro.product.model", "ro.product.brand",
-                     "ro.build.version.release", "ro.build.version.emui",
-                     "ro.build.display.id", "ro.serialno",
-                     "ro.product.cpu.abi", "ro.build.version.sdk",
-                     "ro.boot.hardware", "ro.board.platform"]
-            for p in props:
-                self.log(f"{p}: {run([ADB, 'shell', 'getprop', p]).strip()}")
+            self.recording = True
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            remote = f"/sdcard/rec_{ts}.mp4"
+            self.log(self.tr("tools_recording"))
+            try:
+                # بدء التسجيل في الخلفية
+                proc = subprocess.Popen(
+                    [ADB, "shell", "screenrecord", "--time-limit", "15", remote],
+                    creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
+                proc.wait(timeout=25)
+                self.recording = False
+                # سحب الملف
+                local = os.path.join(EXPORTS_DIR, f"rec_{ts}.mp4")
+                self.log("📥 Pulling recording...")
+                run([ADB, "pull", remote, local], timeout=120)
+                run([ADB, "shell", "rm", remote])
+                if os.path.exists(local):
+                    self.log(self.tr("tools_recorded", local))
+                else:
+                    self.log("❌ Recording failed")
+            except Exception as e:
+                self.recording = False
+                self.log(f"❌ {e}")
         threading.Thread(target=t, daemon=True).start()
 
-    def huawei_check_bl(self):
-        def t():
-            self.log("=" * 50)
-            self.log(f"verifiedbootstate: {run([ADB, 'shell', 'getprop', 'ro.boot.verifiedbootstate']).strip()}")
-            self.log(f"flash.locked: {run([ADB, 'shell', 'getprop', 'ro.boot.flash.locked']).strip()}")
-            self.log(run([FASTBOOT, "oem", "device-info"]))
-        threading.Thread(target=t, daemon=True).start()
+    def tool_record_stop(self):
+        try:
+            run([ADB, "shell", "pkill", "-INT", "screenrecord"], timeout=5)
+            self.log("⏹️ Stop signal sent")
+        except Exception as e:
+            self.log(self.tr("msg_error", e))
 
-    def huawei_erecovery(self):
-        def t():
-            self.log("🔄 Rebooting to eRecovery...")
-            self.log(run([ADB, "reboot", "erecovery"], timeout=20))
-        threading.Thread(target=t, daemon=True).start()
-
-    def huawei_flash_single(self, partition):
-        p = filedialog.askopenfilename(filetypes=[("Image", "*.img"), ("All", "*.*")])
+    def tool_install_apk(self):
+        p = filedialog.askopenfilename(
+            filetypes=[("APK", "*.apk"), ("All", "*.*")])
         if not p:
             return
-        if not messagebox.askyesno(self.tr("confirm"), self.tr("confirm_flash_samsung", partition)):
-            return
         def t():
-            self.log(f"🚀 flash {partition}: {os.path.basename(p)}")
-            self.log(run([FASTBOOT, "flash", partition, p], timeout=900)[-1000:])
+            self.log(f"📦 Installing {os.path.basename(p)}...")
+            out = run([ADB, "install", "-r", p], timeout=300)
+            self.log(out)
+            if "Success" in out:
+                self.log(self.tr("tools_install_success", os.path.basename(p)))
+            else:
+                self.log(self.tr("tools_install_fail", os.path.basename(p)))
         threading.Thread(target=t, daemon=True).start()
 
-    def huawei_pick_img(self):
-        p = filedialog.askopenfilename(filetypes=[("Image", "*.img")])
-        if p:
-            self.huawei_img_file.delete(0, "end")
-            self.huawei_img_file.insert(0, p)
-
-    def huawei_flash_custom(self):
-        part = self.huawei_part_name.get().strip()
-        f = self.huawei_img_file.get().strip()
-        if not part or not os.path.exists(f):
-            messagebox.showerror(self.tr("err"), self.tr("err_check"))
+    def tool_push(self):
+        p = filedialog.askopenfilename()
+        if not p:
             return
         def t():
-            self.log(run([FASTBOOT, "flash", part, f], timeout=900)[-1000:])
+            name = os.path.basename(p)
+            self.log(f"📤 Pushing {name}...")
+            self.log(run([ADB, "push", p, "/sdcard/"], timeout=600))
         threading.Thread(target=t, daemon=True).start()
 
-    def huawei_unlock_code(self):
-        code = ctk.CTkInputDialog(text="Enter Huawei Unlock Code:", title="Unlock").get_input()
-        if not code:
+    def tool_pull(self):
+        remote = ctk.CTkInputDialog(
+            text="Remote path (e.g. /sdcard/DCIM/):",
+            title="Pull File").get_input()
+        if not remote:
             return
         def t():
-            self.log(f"🔑 Unlocking...")
-            self.log(run([FASTBOOT, "oem", "unlock", code], timeout=120))
+            self.log(f"📥 Pulling {remote}...")
+            self.log(run([ADB, "pull", remote, EXPORTS_DIR], timeout=600))
+            self.log("✅ Done")
         threading.Thread(target=t, daemon=True).start()
 
-    def huawei_erase_frp(self):
-        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_wipe")):
-            return
-        self.async_run(lambda: run([FASTBOOT, "erase", "frp"], timeout=120))
+    def tool_battery(self):
+        def t():
+            self.log("=" * 50)
+            self.log(self.tr("tools_battery_info"))
+            out = run([ADB, "shell", "dumpsys", "battery"], timeout=30)
+            self.log(out[:3000])
+        threading.Thread(target=t, daemon=True).start()
 
-    def huawei_wipe_data(self):
-        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_format")):
-            return
-        self.async_run(lambda: run([FASTBOOT, "erase", "userdata"], timeout=300))
+    def tool_list_packages(self):
+        def t():
+            self.log("=" * 50)
+            self.log(self.tr("tools_apps_list"))
+            out = run([ADB, "shell", "pm", "list", "packages", "-3"], timeout=30)
+            lines = out.strip().splitlines()
+            self.log(f"📱 {len(lines)} user apps installed")
+            for line in lines[:50]:
+                self.log("  " + line)
+        threading.Thread(target=t, daemon=True).start()
+
+    # ============ Flash ============
+    def build_flash_tab(self):
+        f = self.tab_flash
+        ctk.CTkLabel(f, text=self.tr("flash_title"),
+                     font=("Arial", 16, "bold")).pack(pady=8)
+        zf = ctk.CTkFrame(f)
+        zf.pack(pady=6, fill="x", padx=20)
+        ctk.CTkButton(zf, text=self.tr("flash_select_zip"), width=230, height=38,
+                      fg_color="green", hover_color="darkgreen",
+                      command=self.pick_flash_file).pack(side="left", padx=8)
+        self.flash_file_label = ctk.CTkLabel(zf, text=self.tr("flash_status_idle"),
+                                              font=("Arial", 11), text_color="gray")
+        self.flash_file_label.pack(side="left", padx=10)
+        tf = ctk.CTkFrame(f)
+        tf.pack(pady=4)
+        ctk.CTkButton(tf, text=self.tr("flash_scan"), width=150,
+                      command=self.scan_rom).pack(side="left", padx=5)
+        self.flash_type_label = ctk.CTkLabel(tf,
+                                              text=self.tr("flash_type", self.tr("flash_type_unknown")),
+                                              font=("Arial", 11), text_color="lightblue")
+        self.flash_type_label.pack(side="left", padx=10)
+        opts = ctk.CTkFrame(f)
+        opts.pack(pady=6)
+        ctk.CTkLabel(opts, text=self.tr("flash_mode")).grid(row=0, column=0, padx=5)
+        self.flash_mode = ctk.CTkOptionMenu(
+            opts, width=180,
+            values=[self.tr("flash_mode_normal"),
+                    self.tr("flash_mode_keep"),
+                    self.tr("flash_mode_wipe")])
+        self.flash_mode.grid(row=0, column=1, padx=5)
+        self.chk_stop = ctk.CTkCheckBox(opts, text=self.tr("flash_stop_on_error"))
+        self.chk_stop.grid(row=0, column=2, padx=10)
+        self.chk_stop.select()
+        self.chk_reboot = ctk.CTkCheckBox(opts, text=self.tr("flash_auto_reboot"))
+        self.chk_reboot.grid(row=0, column=3, padx=10)
+        self.chk_reboot.select()
+        pf = ctk.CTkFrame(f)
+        pf.pack(pady=8, fill="x", padx=20)
+        ctk.CTkLabel(pf, text=self.tr("flash_progress"),
+                     font=("Arial", 12, "bold")).pack(anchor="w")
+        self.flash_progress = ctk.CTkProgressBar(pf, height=20)
+        self.flash_progress.pack(fill="x", pady=5)
+        self.flash_progress.set(0)
+        self.flash_status = ctk.CTkLabel(pf, text=self.tr("flash_status_idle"),
+                                          font=("Arial", 11))
+        self.flash_status.pack()
+        bf = ctk.CTkFrame(f)
+        bf.pack(pady=8)
+        ctk.CTkButton(bf, text=self.tr("flash_start"), width=200, height=45,
+                      fg_color="green", hover_color="darkgreen",
+                      font=("Arial", 14, "bold"),
+                      command=self.start_flash).pack(side="left", padx=6)
+        ctk.CTkButton(bf, text=self.tr("flash_cancel"), width=200, height=45,
+                      fg_color="red", hover_color="darkred",
+                      font=("Arial", 14, "bold"),
+                      command=self.cancel_flash).pack(side="left", padx=6)
+        ctk.CTkLabel(f, text="📋 Partitions:",
+                     font=("Arial", 12, "bold")).pack(anchor="w", padx=20, pady=(10, 3))
+        self.part_list = ctk.CTkTextbox(f, height=110, font=("Consolas", 11))
+        self.part_list.pack(fill="both", expand=True, padx=20, pady=(0, 10))
 
     # ============ Xiaomi ============
     def build_xiaomi_tab(self):
@@ -1449,6 +1274,523 @@ class App(ctk.CTk):
             run([FASTBOOT, "reboot"])
         threading.Thread(target=t, daemon=True).start()
 
+    # ============ Huawei ============
+    def build_huawei_tab(self):
+        f = self.tab_huawei
+        ctk.CTkLabel(f, text=self.tr("huawei_title"),
+                     font=("Arial", 16, "bold")).pack(pady=6)
+        ctk.CTkLabel(f, text=self.tr("huawei_warning"),
+                     font=("Arial", 11), text_color="orange").pack(pady=4)
+        row = ctk.CTkFrame(f)
+        row.pack(pady=6)
+        ctk.CTkButton(row, text=self.tr("huawei_info"), width=180,
+                      command=self.huawei_info).pack(side="left", padx=4)
+        ctk.CTkButton(row, text=self.tr("huawei_check_bl"), width=180,
+                      command=self.huawei_check_bl).pack(side="left", padx=4)
+        ctk.CTkButton(row, text=self.tr("huawei_erecovery"), width=180,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.huawei_erecovery).pack(side="left", padx=4)
+        ctk.CTkLabel(f, text="— Tools —",
+                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+        tf = ctk.CTkFrame(f)
+        tf.pack(pady=4)
+        ctk.CTkButton(tf, text=self.tr("huawei_unlock_help"), width=200,
+                      fg_color="gray",
+                      command=lambda: webbrowser.open(
+                          "https://emui.huawei.com/en/unlock_index")).pack(side="left", padx=4)
+        ctk.CTkButton(tf, text=self.tr("huawei_hisuite"), width=200,
+                      fg_color="gray",
+                      command=lambda: webbrowser.open(
+                          "https://consumer.huawei.com/en/support/hisuite/")).pack(side="left", padx=4)
+        ctk.CTkButton(tf, text=self.tr("huawei_erecovery_help"), width=200,
+                      fg_color="gray",
+                      command=lambda: webbrowser.open(
+                          "https://consumer.huawei.com/en/support/")).pack(side="left", padx=4)
+        ctk.CTkLabel(f, text="— Flash Partitions —",
+                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+        pf = ctk.CTkFrame(f)
+        pf.pack(pady=4)
+        ctk.CTkButton(pf, text=self.tr("huawei_flash_boot"), width=180,
+                      command=lambda: self.huawei_flash_single("boot")).pack(side="left", padx=3)
+        ctk.CTkButton(pf, text=self.tr("huawei_flash_recovery"), width=180,
+                      command=lambda: self.huawei_flash_single("recovery")).pack(side="left", padx=3)
+        ctk.CTkButton(pf, text=self.tr("huawei_flash_system"), width=180,
+                      command=lambda: self.huawei_flash_single("system")).pack(side="left", padx=3)
+        ctk.CTkButton(pf, text=self.tr("huawei_flash_ramdisk"), width=180,
+                      command=lambda: self.huawei_flash_single("ramdisk")).pack(side="left", padx=3)
+        cf = ctk.CTkFrame(f)
+        cf.pack(pady=6)
+        ctk.CTkLabel(cf, text=self.tr("huawei_partition")).pack(side="left", padx=4)
+        self.huawei_part_name = ctk.CTkEntry(cf, width=140)
+        self.huawei_part_name.pack(side="left", padx=4)
+        self.huawei_part_name.insert(0, "boot")
+        ctk.CTkLabel(cf, text=self.tr("huawei_image")).pack(side="left", padx=4)
+        self.huawei_img_file = ctk.CTkEntry(cf, width=220)
+        self.huawei_img_file.pack(side="left", padx=4)
+        ctk.CTkButton(cf, text=self.tr("pick"), width=60,
+                      command=self.huawei_pick_img).pack(side="left", padx=4)
+        ctk.CTkButton(cf, text=self.tr("write_btn"), width=90, fg_color="red",
+                      hover_color="darkred",
+                      command=self.huawei_flash_custom).pack(side="left", padx=4)
+        ctk.CTkLabel(f, text=self.tr("advanced"), font=("Arial", 12, "bold"),
+                     text_color="orange").pack(pady=(15, 3))
+        af = ctk.CTkFrame(f)
+        af.pack(pady=4)
+        ctk.CTkButton(af, text=self.tr("huawei_unlock_code"), width=200,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.huawei_unlock_code).pack(side="left", padx=3)
+        ctk.CTkButton(af, text=self.tr("huawei_erase_frp"), width=200,
+                      fg_color="red", hover_color="darkred",
+                      command=self.huawei_erase_frp).pack(side="left", padx=3)
+        ctk.CTkButton(af, text=self.tr("huawei_wipe_data"), width=200,
+                      fg_color="red", hover_color="darkred",
+                      command=self.huawei_wipe_data).pack(side="left", padx=3)
+        ctk.CTkLabel(f, text="— Reboot —",
+                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+        rbf = ctk.CTkFrame(f)
+        rbf.pack(pady=4)
+        ctk.CTkButton(rbf, text=self.tr("huawei_fastboot"), width=180,
+                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "bootloader"]))).pack(side="left", padx=3)
+        ctk.CTkButton(rbf, text=self.tr("huawei_recovery"), width=180,
+                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "recovery"]))).pack(side="left", padx=3)
+        ctk.CTkButton(rbf, text=self.tr("huawei_reboot_ok"), width=180,
+                      command=lambda: self.async_run(lambda: run([ADB, "reboot"]))).pack(side="left", padx=3)
+
+    def huawei_info(self):
+        def t():
+            self.log("=" * 50)
+            for p in ["ro.product.model", "ro.product.brand",
+                      "ro.build.version.release", "ro.build.version.emui",
+                      "ro.build.display.id", "ro.serialno",
+                      "ro.product.cpu.abi", "ro.build.version.sdk",
+                      "ro.boot.hardware", "ro.board.platform"]:
+                self.log(f"{p}: {run([ADB, 'shell', 'getprop', p]).strip()}")
+        threading.Thread(target=t, daemon=True).start()
+
+    def huawei_check_bl(self):
+        def t():
+            self.log("=" * 50)
+            self.log(f"verifiedbootstate: {run([ADB, 'shell', 'getprop', 'ro.boot.verifiedbootstate']).strip()}")
+            self.log(f"flash.locked: {run([ADB, 'shell', 'getprop', 'ro.boot.flash.locked']).strip()}")
+            self.log(run([FASTBOOT, "oem", "device-info"]))
+        threading.Thread(target=t, daemon=True).start()
+
+    def huawei_erecovery(self):
+        def t():
+            self.log("🔄 Rebooting to eRecovery...")
+            self.log(run([ADB, "reboot", "erecovery"], timeout=20))
+        threading.Thread(target=t, daemon=True).start()
+
+    def huawei_flash_single(self, partition):
+        p = filedialog.askopenfilename(filetypes=[("Image", "*.img"), ("All", "*.*")])
+        if not p:
+            return
+        if not messagebox.askyesno(self.tr("confirm"), self.tr("confirm_flash_samsung", partition)):
+            return
+        def t():
+            self.log(f"🚀 flash {partition}: {os.path.basename(p)}")
+            self.log(run([FASTBOOT, "flash", partition, p], timeout=900)[-1000:])
+        threading.Thread(target=t, daemon=True).start()
+
+    def huawei_pick_img(self):
+        p = filedialog.askopenfilename(filetypes=[("Image", "*.img")])
+        if p:
+            self.huawei_img_file.delete(0, "end")
+            self.huawei_img_file.insert(0, p)
+
+    def huawei_flash_custom(self):
+        part = self.huawei_part_name.get().strip()
+        f = self.huawei_img_file.get().strip()
+        if not part or not os.path.exists(f):
+            messagebox.showerror(self.tr("err"), self.tr("err_check"))
+            return
+        def t():
+            self.log(run([FASTBOOT, "flash", part, f], timeout=900)[-1000:])
+        threading.Thread(target=t, daemon=True).start()
+
+    def huawei_unlock_code(self):
+        code = ctk.CTkInputDialog(text="Enter Huawei Unlock Code:", title="Unlock").get_input()
+        if not code:
+            return
+        def t():
+            self.log(f"🔑 Unlocking...")
+            self.log(run([FASTBOOT, "oem", "unlock", code], timeout=120))
+        threading.Thread(target=t, daemon=True).start()
+
+    def huawei_erase_frp(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_wipe")):
+            return
+        self.async_run(lambda: run([FASTBOOT, "erase", "frp"], timeout=120))
+
+    def huawei_wipe_data(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_format")):
+            return
+        self.async_run(lambda: run([FASTBOOT, "erase", "userdata"], timeout=300))
+
+    # ============ Samsung ============
+    def build_samsung_tab(self):
+        f = self.tab_samsung
+        ctk.CTkLabel(f, text=self.tr("samsung_title"),
+                     font=("Arial", 16, "bold")).pack(pady=6)
+        ctk.CTkLabel(f, text=self.tr("samsung_warning"),
+                     font=("Arial", 11), text_color="orange").pack(pady=4)
+        row0 = ctk.CTkFrame(f)
+        row0.pack(pady=6)
+        ctk.CTkButton(row0, text=self.tr("samsung_detect"), width=200, height=38,
+                      command=self.samsung_detect).pack(side="left", padx=5)
+        ctk.CTkButton(row0, text=self.tr("samsung_pit"), width=200, height=38,
+                      command=self.samsung_pit).pack(side="left", padx=5)
+        for name, var in [("samsung_ap", "samsung_ap"),
+                          ("samsung_bl", "samsung_bl"),
+                          ("samsung_cp", "samsung_cp"),
+                          ("samsung_csc", "samsung_csc")]:
+            row = ctk.CTkFrame(f)
+            row.pack(pady=4, fill="x", padx=20)
+            ctk.CTkLabel(row, text=self.tr(name), width=260, anchor="w").pack(side="left")
+            lbl = ctk.CTkLabel(row, text=self.tr("samsung_no_file"),
+                                font=("Arial", 10), text_color="gray")
+            lbl.pack(side="left", padx=5)
+            setattr(self, f"{var}_label", lbl)
+            ctk.CTkButton(row, text=self.tr("pick"), width=80,
+                          command=lambda v=var: self.samsung_pick(v)).pack(side="right", padx=5)
+        opt = ctk.CTkFrame(f)
+        opt.pack(pady=10)
+        self.samsung_reboot = ctk.CTkCheckBox(opt, text=self.tr("samsung_reboot"))
+        self.samsung_reboot.grid(row=0, column=0, padx=10)
+        self.samsung_reboot.select()
+        ctk.CTkButton(f, text=self.tr("samsung_flash_all"), width=350, height=50,
+                      fg_color="green", hover_color="darkgreen",
+                      font=("Arial", 15, "bold"),
+                      command=self.samsung_flash_all).pack(pady=15)
+        fl = ctk.CTkFrame(f)
+        fl.pack(pady=5)
+        for p in ["AP", "BL", "CP", "CSC"]:
+            ctk.CTkButton(fl, text=self.tr(f"samsung_flash_{p.lower()}"), width=140,
+                          command=lambda pp=p: self.samsung_flash_one(pp)).pack(side="left", padx=3)
+
+    def samsung_pick(self, var):
+        p = filedialog.askopenfilename(
+            filetypes=[("Samsung", "*.tar.md5 *.tar"), ("All", "*.*")])
+        if p:
+            setattr(self, var, p)
+            getattr(self, f"{var}_label").configure(text=os.path.basename(p),
+                                                     text_color="lightgreen")
+
+    def samsung_detect(self):
+        def t():
+            self.log("=" * 50)
+            if not os.path.exists(HEIMDALL):
+                self.log(self.tr("msg_no_heimdall"))
+                return
+            self.log(run([HEIMDALL, "detect"], timeout=30))
+        threading.Thread(target=t, daemon=True).start()
+
+    def samsung_pit(self):
+        def t():
+            self.log("=" * 50)
+            if not os.path.exists(HEIMDALL):
+                self.log(self.tr("msg_no_heimdall"))
+                return
+            self.log(run([HEIMDALL, "print-pit"], timeout=60))
+        threading.Thread(target=t, daemon=True).start()
+
+    def samsung_flash_one(self, partition):
+        key = {"AP": "samsung_ap", "BL": "samsung_bl",
+               "CP": "samsung_cp", "CSC": "samsung_csc"}[partition]
+        f = getattr(self, key, "")
+        if not f or not os.path.exists(f):
+            messagebox.showerror(self.tr("err"), self.tr("samsung_no_file"))
+            return
+        self.samsung_flash([(partition, f)])
+
+    def samsung_flash_all(self):
+        files = []
+        for p, k in [("AP", "samsung_ap"), ("BL", "samsung_bl"),
+                     ("CP", "samsung_cp"), ("CSC", "samsung_csc")]:
+            v = getattr(self, k, "")
+            if v and os.path.exists(v):
+                files.append((p, v))
+        if not files:
+            messagebox.showerror(self.tr("err"), self.tr("samsung_no_file"))
+            return
+        self.samsung_flash(files)
+
+    def samsung_flash(self, files):
+        def t():
+            self.log("=" * 50)
+            if not os.path.exists(HEIMDALL):
+                self.log(self.tr("msg_no_heimdall"))
+                return
+            det = run([HEIMDALL, "detect"], timeout=30)
+            self.log(det)
+            if "Detected" not in det and "Device" not in det:
+                self.log("❌ No device")
+                return
+            for part, f in files:
+                self.log(f"⏳ Flashing {part}: {os.path.basename(f)}")
+                args = [HEIMDALL, "flash",
+                        "--no-reboot" if not self.samsung_reboot.get() else "--reboot",
+                        "--verbose", f"--{part}", f]
+                self.log(run(args, timeout=3600, cwd=HEIMDALL_DIR)[-1500:])
+            self.log(self.tr("samsung_done"))
+        threading.Thread(target=t, daemon=True).start()
+
+    # ============ Oppo ============
+    def build_oppo_tab(self):
+        f = self.tab_oppo
+        ctk.CTkLabel(f, text=self.tr("oppo_title"),
+                     font=("Arial", 16, "bold")).pack(pady=6)
+        ctk.CTkLabel(f, text=self.tr("oppo_warning"),
+                     font=("Arial", 11), text_color="orange").pack(pady=4)
+        row = ctk.CTkFrame(f)
+        row.pack(pady=6)
+        ctk.CTkButton(row, text=self.tr("oppo_info"), width=170,
+                      command=self.oppo_info).pack(side="left", padx=4)
+        ctk.CTkButton(row, text=self.tr("oppo_check_bl"), width=170,
+                      command=self.oppo_check_bl).pack(side="left", padx=4)
+        ctk.CTkButton(row, text=self.tr("oppo_fastboot"), width=170,
+                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "bootloader"]))).pack(side="left", padx=4)
+        ctk.CTkLabel(f, text="— Unlock Tools —",
+                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+        uf = ctk.CTkFrame(f)
+        uf.pack(pady=4)
+        ctk.CTkButton(uf, text=self.tr("oppo_unlock_help"), width=220,
+                      fg_color="gray",
+                      command=lambda: webbrowser.open("https://www.oppo.com/en/support/")).pack(side="left", padx=3)
+        ctk.CTkButton(uf, text=self.tr("oppo_download_help"), width=220,
+                      fg_color="gray",
+                      command=lambda: webbrowser.open("https://www.realme.com/global/support/")).pack(side="left", padx=3)
+        ctk.CTkButton(uf, text=self.tr("oppo_flash_recovery"), width=220,
+                      command=lambda: self.oppo_flash_single("recovery")).pack(side="left", padx=3)
+        uf2 = ctk.CTkFrame(f)
+        uf2.pack(pady=4)
+        ctk.CTkButton(uf2, text=self.tr("oppo_unlock_cmd"), width=250,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.oppo_unlock).pack(side="left", padx=4)
+        ctk.CTkButton(uf2, text=self.tr("oppo_lock_cmd"), width=250,
+                      fg_color="red", hover_color="darkred",
+                      command=self.oppo_lock).pack(side="left", padx=4)
+        ctk.CTkLabel(f, text="— Fastboot ROM —",
+                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+        rf = ctk.CTkFrame(f)
+        rf.pack(pady=4)
+        ctk.CTkButton(rf, text=self.tr("oppo_select_rom"), width=250,
+                      command=self.oppo_select_rom).pack(side="left", padx=5)
+        self.oppo_rom_label = ctk.CTkLabel(rf, text=self.tr("samsung_no_file"),
+                                            font=("Arial", 10), text_color="gray")
+        self.oppo_rom_label.pack(side="left", padx=5)
+        fl = ctk.CTkFrame(f)
+        fl.pack(pady=6)
+        ctk.CTkButton(fl, text=self.tr("oppo_flash_wipe"), width=200, height=42,
+                      fg_color="green", hover_color="darkgreen",
+                      command=lambda: self.oppo_flash_rom(wipe=True)).pack(side="left", padx=4)
+        ctk.CTkButton(fl, text=self.tr("oppo_flash_keep"), width=200, height=42,
+                      fg_color="orange", hover_color="darkorange",
+                      command=lambda: self.oppo_flash_rom(wipe=False)).pack(side="left", padx=4)
+        ctk.CTkLabel(f, text="— Partitions —",
+                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+        pf = ctk.CTkFrame(f)
+        pf.pack(pady=4)
+        ctk.CTkButton(pf, text=self.tr("oppo_flash_boot"), width=170,
+                      command=lambda: self.oppo_flash_single("boot")).pack(side="left", padx=3)
+        ctk.CTkButton(pf, text=self.tr("oppo_flash_vbmeta"), width=170,
+                      command=lambda: self.oppo_flash_single("vbmeta")).pack(side="left", padx=3)
+        ctk.CTkButton(pf, text=self.tr("oppo_flash_dtbo"), width=170,
+                      command=lambda: self.oppo_flash_single("dtbo")).pack(side="left", padx=3)
+        ctk.CTkButton(pf, text=self.tr("oppo_flash_super"), width=170,
+                      command=lambda: self.oppo_flash_single("super")).pack(side="left", padx=3)
+        cf = ctk.CTkFrame(f)
+        cf.pack(pady=6)
+        ctk.CTkLabel(cf, text=self.tr("oppo_partition")).pack(side="left", padx=4)
+        self.oppo_part_name = ctk.CTkEntry(cf, width=140)
+        self.oppo_part_name.pack(side="left", padx=4)
+        self.oppo_part_name.insert(0, "boot")
+        ctk.CTkLabel(cf, text=self.tr("oppo_image")).pack(side="left", padx=4)
+        self.oppo_img_file = ctk.CTkEntry(cf, width=220)
+        self.oppo_img_file.pack(side="left", padx=4)
+        ctk.CTkButton(cf, text=self.tr("pick"), width=60,
+                      command=self.oppo_pick_img).pack(side="left", padx=4)
+        ctk.CTkButton(cf, text=self.tr("write_btn"), width=90, fg_color="red",
+                      hover_color="darkred",
+                      command=self.oppo_flash_custom).pack(side="left", padx=4)
+        ctk.CTkLabel(f, text=self.tr("advanced"), font=("Arial", 12, "bold"),
+                     text_color="orange").pack(pady=(15, 3))
+        af = ctk.CTkFrame(f)
+        af.pack(pady=4)
+        ctk.CTkButton(af, text=self.tr("oppo_erase_frp"), width=200,
+                      fg_color="red", hover_color="darkred",
+                      command=self.oppo_erase_frp).pack(side="left", padx=3)
+        ctk.CTkButton(af, text=self.tr("oppo_wipe_data"), width=200,
+                      fg_color="red", hover_color="darkred",
+                      command=self.oppo_wipe_data).pack(side="left", padx=3)
+        ctk.CTkButton(af, text=self.tr("oppo_edl"), width=200,
+                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "edl"]))).pack(side="left", padx=3)
+
+    def oppo_info(self):
+        def t():
+            self.log("=" * 50)
+            for p in ["ro.product.model", "ro.product.brand",
+                      "ro.build.version.oplusrom", "ro.build.version.opporom",
+                      "ro.build.version.realme", "ro.build.version.oxygen",
+                      "ro.build.display.id", "ro.build.version.release",
+                      "ro.build.version.sdk", "ro.product.cpu.abi",
+                      "ro.serialno", "ro.boot.verifiedbootstate",
+                      "ro.boot.flash.locked"]:
+                self.log(f"{p}: {run([ADB, 'shell', 'getprop', p]).strip()}")
+        threading.Thread(target=t, daemon=True).start()
+
+    def oppo_check_bl(self):
+        def t():
+            self.log("=" * 50)
+            self.log(run([FASTBOOT, "oem", "device-info"], timeout=30))
+            self.log(run([FASTBOOT, "getvar", "unlocked"], timeout=15))
+            self.log(f"ro.boot.flash.locked: {run([ADB, 'shell', 'getprop', 'ro.boot.flash.locked']).strip()}")
+            self.log(f"secureboot.lockstate: {run([ADB, 'shell', 'getprop', 'ro.secureboot.lockstate']).strip()}")
+        threading.Thread(target=t, daemon=True).start()
+
+    def oppo_unlock(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_unlock")):
+            return
+        def t():
+            self.log("🔓 Trying unlock...")
+            self.log(run([FASTBOOT, "flashing", "unlock"], timeout=120))
+            self.log(run([FASTBOOT, "oem", "unlock"], timeout=60))
+        threading.Thread(target=t, daemon=True).start()
+
+    def oppo_lock(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_unlock")):
+            return
+        self.async_run(lambda: run([FASTBOOT, "flashing", "lock"], timeout=120))
+
+    def oppo_flash_single(self, partition):
+        p = filedialog.askopenfilename(filetypes=[("Image", "*.img"), ("All", "*.*")])
+        if not p:
+            return
+        def t():
+            self.log(f"🚀 flash {partition}: {os.path.basename(p)}")
+            self.log(run([FASTBOOT, "flash", partition, p], timeout=900)[-1000:])
+        threading.Thread(target=t, daemon=True).start()
+
+    def oppo_pick_img(self):
+        p = filedialog.askopenfilename(filetypes=[("Image", "*.img")])
+        if p:
+            self.oppo_img_file.delete(0, "end")
+            self.oppo_img_file.insert(0, p)
+
+    def oppo_flash_custom(self):
+        part = self.oppo_part_name.get().strip()
+        f = self.oppo_img_file.get().strip()
+        if not part or not os.path.exists(f):
+            messagebox.showerror(self.tr("err"), self.tr("err_check"))
+            return
+        def t():
+            self.log(run([FASTBOOT, "flash", part, f], timeout=900)[-1000:])
+        threading.Thread(target=t, daemon=True).start()
+
+    def oppo_erase_frp(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_wipe")):
+            return
+        self.async_run(lambda: run([FASTBOOT, "erase", "frp"], timeout=120))
+
+    def oppo_wipe_data(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_format")):
+            return
+        self.async_run(lambda: run([FASTBOOT, "erase", "userdata"], timeout=300))
+
+    def oppo_select_rom(self):
+        p = filedialog.askopenfilename(
+            filetypes=[("ROM", "*.zip *.tar *.tgz *.img"), ("All", "*.*")])
+        if p:
+            self.oppo_rom = p
+            self.oppo_rom_label.configure(text=os.path.basename(p),
+                                           text_color="lightgreen")
+            self.log(f"🟢 ROM: {os.path.basename(p)}")
+
+    def oppo_flash_rom(self, wipe=False):
+        if not self.oppo_rom or not os.path.exists(self.oppo_rom):
+            messagebox.showerror(self.tr("err"), self.tr("samsung_no_file"))
+            return
+        if not messagebox.askyesno(self.tr("confirm"),
+                                    self.tr("confirm_flash_samsung",
+                                            os.path.basename(self.oppo_rom))):
+            return
+        def t():
+            try:
+                if os.path.exists(TEMP_FLASH):
+                    shutil.rmtree(TEMP_FLASH, ignore_errors=True)
+                os.makedirs(TEMP_FLASH, exist_ok=True)
+                name = os.path.basename(self.oppo_rom).lower()
+                self.log("📦 Extracting Oppo/Realme ROM...")
+                if name.endswith(".zip"):
+                    with zipfile.ZipFile(self.oppo_rom) as z:
+                        z.extractall(TEMP_FLASH)
+                elif name.endswith((".tgz", ".tar.gz", ".tar")):
+                    try:
+                        with tarfile.open(self.oppo_rom, "r:gz") as tar:
+                            tar.extractall(TEMP_FLASH)
+                    except tarfile.ReadError:
+                        with tarfile.open(self.oppo_rom, "r:") as tar:
+                            tar.extractall(TEMP_FLASH)
+                payloads = []
+                for root, dirs, files in os.walk(TEMP_FLASH):
+                    for f in files:
+                        if f == "payload.bin":
+                            payloads.append(os.path.join(root, f))
+                if payloads:
+                    self.log("⚠️ payload.bin detected")
+                    try:
+                        p_url = "https://github.com/ssut/payload-dumper-go/releases/download/1.2.2/payload-dumper-go_1.2.2_windows_amd64.tar.gz"
+                        tgz = os.path.join(BASE_DIR, "pdg.tgz")
+                        urllib.request.urlretrieve(p_url, tgz)
+                        with tarfile.open(tgz, "r:gz") as t_:
+                            t_.extractall(BASE_DIR)
+                        os.remove(tgz)
+                        exe = os.path.join(BASE_DIR, "payload-dumper-go.exe")
+                        if os.path.exists(exe):
+                            out_dir = os.path.join(TEMP_FLASH, "extracted")
+                            os.makedirs(out_dir, exist_ok=True)
+                            for pl in payloads:
+                                self.log(f"🔧 {os.path.basename(pl)}...")
+                                self.log(run([exe, "-o", out_dir, pl], timeout=1800))
+                    except Exception as e:
+                        self.log(f"⚠️ {e}")
+                images = {}
+                for root, dirs, files in os.walk(TEMP_FLASH):
+                    for f in files:
+                        if f.endswith(".img"):
+                            n = os.path.splitext(f)[0]
+                            images[n] = os.path.join(root, f)
+                if not images:
+                    self.log("❌ No images")
+                    return
+                order = ["gpt", "tz", "xbl", "abl", "aop", "bluetooth",
+                          "keymaster", "devcfg", "dsp", "featenabler",
+                          "hyp", "imagefv", "qupfw", "shrm", "uefisecapp",
+                          "vbmeta_system", "vbmeta_vendor", "vbmeta", "modem",
+                          "boot", "dtbo", "recovery", "super",
+                          "my_bigball", "my_carrier", "my_company",
+                          "my_engineering", "my_heytap", "my_manifest",
+                          "my_product", "my_region", "my_stock",
+                          "odm", "product", "system", "system_ext",
+                          "vendor", "persist", "metadata", "userdata"]
+                for part in order:
+                    if part not in images:
+                        continue
+                    if wipe and part == "userdata":
+                        continue
+                    self.log(f"🚀 flash {part}")
+                    self.log(run([FASTBOOT, "flash", part, images[part]], timeout=1800)[-300:])
+                for part, path in images.items():
+                    if part in order or (wipe and part == "userdata"):
+                        continue
+                    self.log(f"🚀 flash {part}")
+                    self.log(run([FASTBOOT, "flash", part, path], timeout=1800)[-300:])
+                self.log("🎉 Oppo/Realme ROM flashed!")
+                run([FASTBOOT, "reboot"])
+            except Exception as e:
+                self.log(f"❌ {e}")
+        threading.Thread(target=t, daemon=True).start()
+
     # ============ Root ============
     def build_root_tab(self):
         f = self.tab_root
@@ -1579,175 +1921,6 @@ class App(ctk.CTk):
             self.log(out)
             if "OKAY" in out:
                 self.log(self.tr("flash_boot_success"))
-        threading.Thread(target=t, daemon=True).start()
-
-    # ============ Flash ============
-    def build_flash_tab(self):
-        f = self.tab_flash
-        ctk.CTkLabel(f, text=self.tr("flash_title"),
-                     font=("Arial", 16, "bold")).pack(pady=8)
-        zf = ctk.CTkFrame(f)
-        zf.pack(pady=6, fill="x", padx=20)
-        ctk.CTkButton(zf, text=self.tr("flash_select_zip"), width=230, height=38,
-                      fg_color="green", hover_color="darkgreen",
-                      command=self.pick_flash_file).pack(side="left", padx=8)
-        self.flash_file_label = ctk.CTkLabel(zf, text=self.tr("flash_status_idle"),
-                                              font=("Arial", 11), text_color="gray")
-        self.flash_file_label.pack(side="left", padx=10)
-        tf = ctk.CTkFrame(f)
-        tf.pack(pady=4)
-        ctk.CTkButton(tf, text=self.tr("flash_scan"), width=150,
-                      command=self.scan_rom).pack(side="left", padx=5)
-        self.flash_type_label = ctk.CTkLabel(tf,
-                                              text=self.tr("flash_type", self.tr("flash_type_unknown")),
-                                              font=("Arial", 11), text_color="lightblue")
-        self.flash_type_label.pack(side="left", padx=10)
-        opts = ctk.CTkFrame(f)
-        opts.pack(pady=6)
-        ctk.CTkLabel(opts, text=self.tr("flash_mode")).grid(row=0, column=0, padx=5)
-        self.flash_mode = ctk.CTkOptionMenu(
-            opts, width=180,
-            values=[self.tr("flash_mode_normal"),
-                    self.tr("flash_mode_keep"),
-                    self.tr("flash_mode_wipe")])
-        self.flash_mode.grid(row=0, column=1, padx=5)
-        self.chk_stop = ctk.CTkCheckBox(opts, text=self.tr("flash_stop_on_error"))
-        self.chk_stop.grid(row=0, column=2, padx=10)
-        self.chk_stop.select()
-        self.chk_reboot = ctk.CTkCheckBox(opts, text=self.tr("flash_auto_reboot"))
-        self.chk_reboot.grid(row=0, column=3, padx=10)
-        self.chk_reboot.select()
-        pf = ctk.CTkFrame(f)
-        pf.pack(pady=8, fill="x", padx=20)
-        ctk.CTkLabel(pf, text=self.tr("flash_progress"),
-                     font=("Arial", 12, "bold")).pack(anchor="w")
-        self.flash_progress = ctk.CTkProgressBar(pf, height=20)
-        self.flash_progress.pack(fill="x", pady=5)
-        self.flash_progress.set(0)
-        self.flash_status = ctk.CTkLabel(pf, text=self.tr("flash_status_idle"),
-                                          font=("Arial", 11))
-        self.flash_status.pack()
-        bf = ctk.CTkFrame(f)
-        bf.pack(pady=8)
-        ctk.CTkButton(bf, text=self.tr("flash_start"), width=200, height=45,
-                      fg_color="green", hover_color="darkgreen",
-                      font=("Arial", 14, "bold"),
-                      command=self.start_flash).pack(side="left", padx=6)
-        ctk.CTkButton(bf, text=self.tr("flash_cancel"), width=200, height=45,
-                      fg_color="red", hover_color="darkred",
-                      font=("Arial", 14, "bold"),
-                      command=self.cancel_flash).pack(side="left", padx=6)
-        ctk.CTkLabel(f, text="📋 Partitions:",
-                     font=("Arial", 12, "bold")).pack(anchor="w", padx=20, pady=(10, 3))
-        self.part_list = ctk.CTkTextbox(f, height=110, font=("Consolas", 11))
-        self.part_list.pack(fill="both", expand=True, padx=20, pady=(0, 10))
-
-    # ============ Samsung ============
-    def build_samsung_tab(self):
-        f = self.tab_samsung
-        ctk.CTkLabel(f, text=self.tr("samsung_title"),
-                     font=("Arial", 16, "bold")).pack(pady=6)
-        ctk.CTkLabel(f, text=self.tr("samsung_warning"),
-                     font=("Arial", 11), text_color="orange").pack(pady=4)
-        row0 = ctk.CTkFrame(f)
-        row0.pack(pady=6)
-        ctk.CTkButton(row0, text=self.tr("samsung_detect"), width=200, height=38,
-                      command=self.samsung_detect).pack(side="left", padx=5)
-        ctk.CTkButton(row0, text=self.tr("samsung_pit"), width=200, height=38,
-                      command=self.samsung_pit).pack(side="left", padx=5)
-        for name, var in [("samsung_ap", "samsung_ap"),
-                          ("samsung_bl", "samsung_bl"),
-                          ("samsung_cp", "samsung_cp"),
-                          ("samsung_csc", "samsung_csc")]:
-            row = ctk.CTkFrame(f)
-            row.pack(pady=4, fill="x", padx=20)
-            ctk.CTkLabel(row, text=self.tr(name), width=260, anchor="w").pack(side="left")
-            lbl = ctk.CTkLabel(row, text=self.tr("samsung_no_file"),
-                                font=("Arial", 10), text_color="gray")
-            lbl.pack(side="left", padx=5)
-            setattr(self, f"{var}_label", lbl)
-            ctk.CTkButton(row, text=self.tr("pick"), width=80,
-                          command=lambda v=var: self.samsung_pick(v)).pack(side="right", padx=5)
-        opt = ctk.CTkFrame(f)
-        opt.pack(pady=10)
-        self.samsung_reboot = ctk.CTkCheckBox(opt, text=self.tr("samsung_reboot"))
-        self.samsung_reboot.grid(row=0, column=0, padx=10)
-        self.samsung_reboot.select()
-        ctk.CTkButton(f, text=self.tr("samsung_flash_all"), width=350, height=50,
-                      fg_color="green", hover_color="darkgreen",
-                      font=("Arial", 15, "bold"),
-                      command=self.samsung_flash_all).pack(pady=15)
-        fl = ctk.CTkFrame(f)
-        fl.pack(pady=5)
-        for p in ["AP", "BL", "CP", "CSC"]:
-            ctk.CTkButton(fl, text=self.tr(f"samsung_flash_{p.lower()}"), width=140,
-                          command=lambda pp=p: self.samsung_flash_one(pp)).pack(side="left", padx=3)
-
-    def samsung_pick(self, var):
-        p = filedialog.askopenfilename(
-            filetypes=[("Samsung", "*.tar.md5 *.tar"), ("All", "*.*")])
-        if p:
-            setattr(self, var, p)
-            getattr(self, f"{var}_label").configure(text=os.path.basename(p),
-                                                     text_color="lightgreen")
-
-    def samsung_detect(self):
-        def t():
-            self.log("=" * 50)
-            if not os.path.exists(HEIMDALL):
-                self.log(self.tr("msg_no_heimdall"))
-                return
-            self.log(run([HEIMDALL, "detect"], timeout=30))
-        threading.Thread(target=t, daemon=True).start()
-
-    def samsung_pit(self):
-        def t():
-            self.log("=" * 50)
-            if not os.path.exists(HEIMDALL):
-                self.log(self.tr("msg_no_heimdall"))
-                return
-            self.log(run([HEIMDALL, "print-pit"], timeout=60))
-        threading.Thread(target=t, daemon=True).start()
-
-    def samsung_flash_one(self, partition):
-        key = {"AP": "samsung_ap", "BL": "samsung_bl",
-               "CP": "samsung_cp", "CSC": "samsung_csc"}[partition]
-        f = getattr(self, key, "")
-        if not f or not os.path.exists(f):
-            messagebox.showerror(self.tr("err"), self.tr("samsung_no_file"))
-            return
-        self.samsung_flash([(partition, f)])
-
-    def samsung_flash_all(self):
-        files = []
-        for p, k in [("AP", "samsung_ap"), ("BL", "samsung_bl"),
-                     ("CP", "samsung_cp"), ("CSC", "samsung_csc")]:
-            v = getattr(self, k, "")
-            if v and os.path.exists(v):
-                files.append((p, v))
-        if not files:
-            messagebox.showerror(self.tr("err"), self.tr("samsung_no_file"))
-            return
-        self.samsung_flash(files)
-
-    def samsung_flash(self, files):
-        def t():
-            self.log("=" * 50)
-            if not os.path.exists(HEIMDALL):
-                self.log(self.tr("msg_no_heimdall"))
-                return
-            det = run([HEIMDALL, "detect"], timeout=30)
-            self.log(det)
-            if "Detected" not in det and "Device" not in det:
-                self.log("❌ No device")
-                return
-            for part, f in files:
-                self.log(f"⏳ Flashing {part}: {os.path.basename(f)}")
-                args = [HEIMDALL, "flash",
-                        "--no-reboot" if not self.samsung_reboot.get() else "--reboot",
-                        "--verbose", f"--{part}", f]
-                self.log(run(args, timeout=3600, cwd=HEIMDALL_DIR)[-1500:])
-            self.log(self.tr("samsung_done"))
         threading.Thread(target=t, daemon=True).start()
 
     # ============ Unlock ============
