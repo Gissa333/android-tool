@@ -1,6 +1,3 @@
-أعتذر بصدق. معك حق تماماً، وأنا أتحمل مسؤولية هذا الخطأ. إليك الكود كاملاً، مصححاً وخالياً من أي أخطاء مطبعية. انسخه كاملاً واستبدل به ملف main.py الحالي.
-
-```python
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
 import subprocess
@@ -43,7 +40,6 @@ PLATFORM_TOOLS_URL = "https://dl.google.com/android/repository/platform-tools-la
 APP_VERSION = "1.5.0"
 GITHUB_REPO = "Gissa333/android-tool"
 GITHUB_API = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
-
 
 LANG = {
     "ar": {
@@ -694,7 +690,6 @@ LANG = {
     },
 }
 
-
 def run(cmd, timeout=60, cwd=None, env=None):
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout,
@@ -703,7 +698,6 @@ def run(cmd, timeout=60, cwd=None, env=None):
         return (r.stdout or "") + (r.stderr or "")
     except Exception as e:
         return f"Error: {e}"
-
 
 def detect_rom_type(path):
     if not path or not os.path.exists(path):
@@ -726,7 +720,6 @@ def detect_rom_type(path):
     if ext in [".tgz", ".tar.gz"]:
         return "tgz"
     return "unknown"
-
 
 class App(ctk.CTk):
     def __init__(self):
@@ -965,7 +958,6 @@ class App(ctk.CTk):
         ctk.CTkButton(f, text=self.tr("about_github"), width=300, height=40,
                       command=self.open_github).pack(pady=10)
 
-    # ============ ADB ============
     def build_adb_tab(self):
         f = self.tab_adb
         btns = [
@@ -982,7 +974,6 @@ class App(ctk.CTk):
             ctk.CTkButton(f, text=t, width=210, height=36,
                           command=fn).grid(row=i // 3, column=i % 3, padx=8, pady=8)
 
-    # ============ Daily Tools ============
     def build_tools_tab(self):
         f = self.tab_tools
         ctk.CTkLabel(f, text=self.tr("tools_title"),
@@ -1141,7 +1132,6 @@ class App(ctk.CTk):
                 self.log("  " + line)
         threading.Thread(target=t, daemon=True).start()
 
-    # ============ App Manager ============
     def build_apps_tab(self):
         f = self.tab_apps
         ctk.CTkLabel(f, text=self.tr("apps_title"),
@@ -1377,7 +1367,6 @@ class App(ctk.CTk):
             self.log(self.tr("apps_stop_ok", self.selected_pkg))
         threading.Thread(target=t, daemon=True).start()
 
-    # ============ Backup & Restore ============
     def build_backup_tab(self):
         f = self.tab_backup
         ctk.CTkLabel(f, text=self.tr("backup_title"),
@@ -1500,7 +1489,6 @@ class App(ctk.CTk):
                 self.log(f"❌ {e}")
         threading.Thread(target=t, daemon=True).start()
 
-    # ============ Flash ============
     def build_flash_tab(self):
         f = self.tab_flash
         ctk.CTkLabel(f, text=self.tr("flash_title"),
@@ -1561,7 +1549,6 @@ class App(ctk.CTk):
         self.part_list = ctk.CTkTextbox(f, height=110, font=("Consolas", 11))
         self.part_list.pack(fill="both", expand=True, padx=20, pady=(0, 10))
 
-    # ============ Xiaomi ============
     def build_xiaomi_tab(self):
         f = self.tab_xiaomi
         ctk.CTkLabel(f, text=self.tr("xiaomi_title"),
@@ -1774,7 +1761,6 @@ class App(ctk.CTk):
             run([FASTBOOT, "reboot"])
         threading.Thread(target=t, daemon=True).start()
 
-    # ============ Huawei ============
     def build_huawei_tab(self):
         f = self.tab_huawei
         ctk.CTkLabel(f, text=self.tr("huawei_title"),
@@ -1927,7 +1913,6 @@ class App(ctk.CTk):
             return
         self.async_run(lambda: run([FASTBOOT, "erase", "userdata"], timeout=300))
 
-    # ============ Samsung ============
     def build_samsung_tab(self):
         f = self.tab_samsung
         ctk.CTkLabel(f, text=self.tr("samsung_title"),
@@ -2035,7 +2020,6 @@ class App(ctk.CTk):
             self.log(self.tr("samsung_done"))
         threading.Thread(target=t, daemon=True).start()
 
-    # ============ Oppo ============
     def build_oppo_tab(self):
         f = self.tab_oppo
         ctk.CTkLabel(f, text=self.tr("oppo_title"),
@@ -2291,7 +2275,6 @@ class App(ctk.CTk):
                 self.log(f"❌ {e}")
         threading.Thread(target=t, daemon=True).start()
 
-    # ============ Vivo ============
     def build_vivo_tab(self):
         f = self.tab_vivo
         ctk.CTkLabel(f, text=self.tr("vivo_title"),
@@ -2542,7 +2525,6 @@ class App(ctk.CTk):
                 self.log(f"❌ {e}")
         threading.Thread(target=t, daemon=True).start()
 
-    # ============ Root ============
     def build_root_tab(self):
         f = self.tab_root
         ctk.CTkLabel(f, text=self.tr("root_title"),
@@ -2674,7 +2656,6 @@ class App(ctk.CTk):
                 self.log(self.tr("flash_boot_success"))
         threading.Thread(target=t, daemon=True).start()
 
-    # ============ Unlock ============
     def build_unlock_tab(self):
         f = self.tab_unlock
         ctk.CTkLabel(f, text=self.tr("unlock_title"),
@@ -2718,7 +2699,6 @@ class App(ctk.CTk):
                       fg_color="red", hover_color="darkred",
                       command=self.format_data_fastboot).pack(side="left", padx=4)
 
-    # ============ MTK ============
     def build_mtk_tab(self):
         f = self.tab_mtk
         ctk.CTkLabel(f, text=self.tr("mtk_title"),
@@ -2758,7 +2738,6 @@ class App(ctk.CTk):
                       fg_color="orange", hover_color="darkorange",
                       command=self.mtk_wipe).pack(pady=3)
 
-    # ============ EDL ============
     def build_edl_tab(self):
         f = self.tab_edl
         ctk.CTkLabel(f, text=self.tr("edl_title"),
@@ -2808,7 +2787,6 @@ class App(ctk.CTk):
                       fg_color="orange", hover_color="darkorange",
                       command=self.edl_wipe).pack(side="left", padx=3)
 
-    # ============ Common ============
     def async_run(self, fn):
         def wrap():
             self.log(self.tr("msg_wait"))
@@ -2859,7 +2837,6 @@ class App(ctk.CTk):
                 self.log(f"{p}: {run([ADB, 'shell', 'getprop', p]).strip()}")
         threading.Thread(target=t, daemon=True).start()
 
-    # ============ Flash ============
     def pick_flash_file(self):
         p = filedialog.askopenfilename(
             filetypes=[("ROM Files", "*.zip *.tar *.md5 *.tgz *.tar.gz"),
@@ -2982,7 +2959,6 @@ class App(ctk.CTk):
     def cancel_flash(self):
         self.flash_cancel = True
 
-    # ============ Unlock Ops ============
     def check_lock(self):
         def t():
             out = run([ADB, "shell", "dumpsys", "device_policy"])
@@ -3046,7 +3022,6 @@ class App(ctk.CTk):
             return
         self.async_run(lambda: run([FASTBOOT, "erase", "userdata"], timeout=300))
 
-    # ============ MTK Ops ============
     def run_mtk_gui(self):
         if not os.path.exists(EMBED_PY):
             self.log(self.tr("msg_no_embed"))
@@ -3095,7 +3070,6 @@ class App(ctk.CTk):
         if messagebox.askyesno(self.tr("warn"), self.tr("confirm_wipe")):
             self.mtk_cmd(["e", "frp,userdata,metadata,md_udc"])
 
-    # ============ EDL Ops ============
     def edl_base(self):
         args = [EMBED_PY, "edl.py"]
         loader = self.edl_loader_entry.get().strip()
@@ -3157,7 +3131,5 @@ class App(ctk.CTk):
         if messagebox.askyesno(self.tr("warn"), self.tr("confirm_wipe")):
             self.edl_run(["e", "userdata"])
 
-
 if __name__ == "__main__":
     App().mainloop()
-```
