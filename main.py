@@ -37,7 +37,7 @@ EDL_SCRIPT = os.path.join(EDL_DIR, "edl.py")
 HEIMDALL = os.path.join(HEIMDALL_DIR, "heimdall.exe")
 
 PLATFORM_TOOLS_URL = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
-APP_VERSION = "1.4.0"
+APP_VERSION = "1.5.0"
 GITHUB_REPO = "Gissa333/android-tool"
 GITHUB_API = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
@@ -54,6 +54,7 @@ LANG = {
         "tab_huawei": "🟣 Huawei",
         "tab_samsung": "📱 Samsung",
         "tab_oppo": "🟢 Oppo/Realme",
+        "tab_vivo": "🔵 Vivo/iQOO",
         "tab_root": "🔓 TWRP & Root",
         "tab_unlock": "🔒 فك القفل",
         "tab_mtk": "MTK",
@@ -133,6 +134,33 @@ LANG = {
         "backup_sdcard_fail": "❌ فشل نسخ SD",
         "backup_app_placeholder": "com.example.app",
         "backup_app_prompt": "أدخل اسم الحزمة (Package Name):",
+        # Vivo
+        "vivo_title": "🔵 Vivo / iQOO",
+        "vivo_warning": "⚠️ Funtouch OS / OriginOS",
+        "vivo_info": "📱 معلومات الجهاز",
+        "vivo_check_bl": "🔍 فحص البوتلودر",
+        "vivo_fastboot": "⚡ Fastboot",
+        "vivo_recovery": "♻️ Recovery",
+        "vivo_edl": "📡 EDL",
+        "vivo_flash_boot": "📦 boot.img",
+        "vivo_flash_recovery": "📦 recovery.img",
+        "vivo_flash_vbmeta": "📦 vbmeta.img",
+        "vivo_flash_dtbo": "📦 dtbo.img",
+        "vivo_flash_super": "📦 super.img",
+        "vivo_flash_custom": "⚙️ قسم مخصص",
+        "vivo_partition": "القسم:",
+        "vivo_image": "الصورة:",
+        "vivo_unlock_help": "🔓 مساعدة الفتح",
+        "vivo_download_help": "🌐 دليل الفتح",
+        "vivo_unlock_cmd": "🔓 محاولة فتح",
+        "vivo_lock_cmd": "🔒 قفل",
+        "vivo_flash_rom": "📦 فلاش ROM",
+        "vivo_select_rom": "اختر ROM",
+        "vivo_flash_wipe": "🚀 فلاش + Wipe",
+        "vivo_flash_keep": "🚀 فلاش (Keep)",
+        "vivo_erase_frp": "🚫 FRP",
+        "vivo_wipe_data": "🧹 محو البيانات",
+        "vivo_reboot_ok": "🔄 عادي",
         # Flash
         "flash_title": "📦 فلاش الروم",
         "flash_select_zip": "📁 اختر ملف الروم",
@@ -219,8 +247,8 @@ LANG = {
         "samsung_reboot": "إعادة التشغيل",
         "samsung_done": "✅ اكتمل",
         # Oppo
-        "oppo_title": "🟢 Oppo / Realme / OnePlus / Vivo",
-        "oppo_warning": "⚠️ ColorOS / OxygenOS / Funtouch",
+        "oppo_title": "🟢 Oppo / Realme / OnePlus",
+        "oppo_warning": "⚠️ ColorOS / OxygenOS",
         "oppo_info": "📱 معلومات الجهاز",
         "oppo_check_bl": "🔍 فحص البوتلودر",
         "oppo_fastboot": "⚡ Fastboot",
@@ -311,7 +339,7 @@ LANG = {
         "about_new_version": "🎉 جديد: {}",
         "about_checking": "⏳ فحص...",
         "about_error": "❌ {}",
-        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• أدوات يومية (لقطات، تسجيل)\n• إدارة التطبيقات\n• النسخ الاحتياطي\n• فلاش الروم\n• Xiaomi / Huawei / Samsung / Oppo\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• أدوات يومية\n• إدارة التطبيقات\n• النسخ الاحتياطي\n• فلاش الروم\n• Xiaomi / Huawei / Samsung / Oppo / Vivo\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 السجل:",
         "log_save": "💾 حفظ",
         "log_copy": "📋 نسخ",
@@ -364,6 +392,7 @@ LANG = {
         "tab_huawei": "🟣 Huawei",
         "tab_samsung": "📱 Samsung",
         "tab_oppo": "🟢 Oppo/Realme",
+        "tab_vivo": "🔵 Vivo/iQOO",
         "tab_root": "🔓 TWRP & Root",
         "tab_unlock": "🔒 Unlock",
         "tab_mtk": "MTK",
@@ -439,6 +468,32 @@ LANG = {
         "backup_sdcard_fail": "❌ SD card copy failed",
         "backup_app_placeholder": "com.example.app",
         "backup_app_prompt": "Enter package name:",
+        "vivo_title": "🔵 Vivo / iQOO",
+        "vivo_warning": "⚠️ Funtouch OS / OriginOS",
+        "vivo_info": "📱 Device Info",
+        "vivo_check_bl": "🔍 Check BL",
+        "vivo_fastboot": "⚡ Fastboot",
+        "vivo_recovery": "♻️ Recovery",
+        "vivo_edl": "📡 EDL",
+        "vivo_flash_boot": "📦 boot.img",
+        "vivo_flash_recovery": "📦 recovery.img",
+        "vivo_flash_vbmeta": "📦 vbmeta.img",
+        "vivo_flash_dtbo": "📦 dtbo.img",
+        "vivo_flash_super": "📦 super.img",
+        "vivo_flash_custom": "⚙️ Custom",
+        "vivo_partition": "Partition:",
+        "vivo_image": "Image:",
+        "vivo_unlock_help": "🔓 Unlock Help",
+        "vivo_download_help": "🌐 Unlock Guide",
+        "vivo_unlock_cmd": "🔓 Try Unlock",
+        "vivo_lock_cmd": "🔒 Lock",
+        "vivo_flash_rom": "📦 Flash ROM",
+        "vivo_select_rom": "Select ROM",
+        "vivo_flash_wipe": "🚀 Flash + Wipe",
+        "vivo_flash_keep": "🚀 Flash (Keep)",
+        "vivo_erase_frp": "🚫 FRP",
+        "vivo_wipe_data": "🧹 Wipe Data",
+        "vivo_reboot_ok": "🔄 Normal",
         "flash_title": "📦 Flash ROM",
         "flash_select_zip": "📁 Select ROM",
         "flash_type": "Type: {}",
@@ -520,8 +575,8 @@ LANG = {
         "samsung_no_file": "No file",
         "samsung_reboot": "Reboot",
         "samsung_done": "✅ Done",
-        "oppo_title": "🟢 Oppo / Realme / OnePlus / Vivo",
-        "oppo_warning": "⚠️ ColorOS / OxygenOS / Funtouch",
+        "oppo_title": "🟢 Oppo / Realme / OnePlus",
+        "oppo_warning": "⚠️ ColorOS / OxygenOS",
         "oppo_info": "📱 Device Info",
         "oppo_check_bl": "🔍 Check BL",
         "oppo_fastboot": "⚡ Fastboot",
@@ -607,7 +662,7 @@ LANG = {
         "about_new_version": "🎉 New: {}",
         "about_checking": "⏳ Checking...",
         "about_error": "❌ {}",
-        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Daily Tools (Screenshots, Recording)\n• App Manager\n• Backup & Restore\n• Full ROM Flash\n• Xiaomi / Huawei / Samsung / Oppo\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Daily Tools\n• App Manager\n• Backup\n• Full ROM Flash\n• Xiaomi / Huawei / Samsung / Oppo / Vivo\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 Log:",
         "log_save": "💾 Save",
         "log_copy": "📋 Copy",
@@ -704,6 +759,7 @@ class App(ctk.CTk):
         self.boot_img = ""
         self.xiaomi_rom = ""
         self.oppo_rom = ""
+        self.vivo_rom = ""
         self.recording = False
 
         self.apps_list = []
@@ -759,6 +815,7 @@ class App(ctk.CTk):
         self.tab_huawei = self.tabs.add(self.tr("tab_huawei"))
         self.tab_samsung = self.tabs.add(self.tr("tab_samsung"))
         self.tab_oppo = self.tabs.add(self.tr("tab_oppo"))
+        self.tab_vivo = self.tabs.add(self.tr("tab_vivo"))
         self.tab_root = self.tabs.add(self.tr("tab_root"))
         self.tab_unlock = self.tabs.add(self.tr("tab_unlock"))
         self.tab_mtk = self.tabs.add(self.tr("tab_mtk"))
@@ -774,6 +831,7 @@ class App(ctk.CTk):
         self.build_huawei_tab()
         self.build_samsung_tab()
         self.build_oppo_tab()
+        self.build_vivo_tab()
         self.build_root_tab()
         self.build_unlock_tab()
         self.build_mtk_tab()
@@ -1247,8 +1305,7 @@ class App(ctk.CTk):
             return
         if not messagebox.askyesno(self.tr("confirm"),
                                     self.tr("confirm_uninstall", self.selected_pkg)):
-            return
-        def t():
+            return        def t():
             out = run([ADB, "uninstall", self.selected_pkg], timeout=120)
             self.log(out)
             if "Success" in out:
@@ -1379,7 +1436,6 @@ class App(ctk.CTk):
             ts = datetime.now().strftime("%Y%m%d_%H%M%S")
             path = os.path.join(BACKUP_DIR, f"full_backup_{ts}.ab")
             try:
-                # adb backup -apk -shared -all -system -f path
                 r = subprocess.run(
                     [ADB, "backup", "-apk", "-shared", "-all", "-f", path],
                     capture_output=True, timeout=3600,
@@ -2240,6 +2296,257 @@ class App(ctk.CTk):
                     self.log(f"🚀 flash {part}")
                     self.log(run([FASTBOOT, "flash", part, path], timeout=1800)[-300:])
                 self.log("🎉 Oppo/Realme ROM flashed!")
+                run([FASTBOOT, "reboot"])
+            except Exception as e:
+                self.log(f"❌ {e}")
+        threading.Thread(target=t, daemon=True).start()
+
+    # ============ Vivo ============
+    def build_vivo_tab(self):
+        f = self.tab_vivo
+        ctk.CTkLabel(f, text=self.tr("vivo_title"),
+                     font=("Arial", 16, "bold")).pack(pady=6)
+        ctk.CTkLabel(f, text=self.tr("vivo_warning"),
+                     font=("Arial", 11), text_color="orange").pack(pady=4)
+        row = ctk.CTkFrame(f)
+        row.pack(pady=6)
+        ctk.CTkButton(row, text=self.tr("vivo_info"), width=170,
+                      command=self.vivo_info).pack(side="left", padx=4)
+        ctk.CTkButton(row, text=self.tr("vivo_check_bl"), width=170,
+                      command=self.vivo_check_bl).pack(side="left", padx=4)
+        ctk.CTkButton(row, text=self.tr("vivo_fastboot"), width=170,
+                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "bootloader"]))).pack(side="left", padx=4)
+        ctk.CTkLabel(f, text="— Unlock Tools —",
+                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+        uf = ctk.CTkFrame(f)
+        uf.pack(pady=4)
+        ctk.CTkButton(uf, text=self.tr("vivo_unlock_help"), width=220,
+                      fg_color="gray",
+                      command=lambda: webbrowser.open("https://www.vivo.com/en/support/")).pack(side="left", padx=3)
+        ctk.CTkButton(uf, text=self.tr("vivo_download_help"), width=220,
+                      fg_color="gray",
+                      command=lambda: webbrowser.open("https://www.vivo.com/en/support/faq")).pack(side="left", padx=3)
+        ctk.CTkButton(uf, text=self.tr("vivo_flash_recovery"), width=220,
+                      command=lambda: self.vivo_flash_single("recovery")).pack(side="left", padx=3)
+        uf2 = ctk.CTkFrame(f)
+        uf2.pack(pady=4)
+        ctk.CTkButton(uf2, text=self.tr("vivo_unlock_cmd"), width=250,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.vivo_unlock).pack(side="left", padx=4)
+        ctk.CTkButton(uf2, text=self.tr("vivo_lock_cmd"), width=250,
+                      fg_color="red", hover_color="darkred",
+                      command=self.vivo_lock).pack(side="left", padx=4)
+        ctk.CTkLabel(f, text="— Fastboot ROM —",
+                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+        rf = ctk.CTkFrame(f)
+        rf.pack(pady=4)
+        ctk.CTkButton(rf, text=self.tr("vivo_select_rom"), width=250,
+                      command=self.vivo_select_rom).pack(side="left", padx=5)
+        self.vivo_rom_label = ctk.CTkLabel(rf, text=self.tr("samsung_no_file"),
+                                            font=("Arial", 10), text_color="gray")
+        self.vivo_rom_label.pack(side="left", padx=5)
+        fl = ctk.CTkFrame(f)
+        fl.pack(pady=6)
+        ctk.CTkButton(fl, text=self.tr("vivo_flash_wipe"), width=200, height=42,
+                      fg_color="green", hover_color="darkgreen",
+                      command=lambda: self.vivo_flash_rom(wipe=True)).pack(side="left", padx=4)
+        ctk.CTkButton(fl, text=self.tr("vivo_flash_keep"), width=200, height=42,
+                      fg_color="orange", hover_color="darkorange",
+                      command=lambda: self.vivo_flash_rom(wipe=False)).pack(side="left", padx=4)
+        ctk.CTkLabel(f, text="— Partitions —",
+                     font=("Arial", 12, "bold"), text_color="lightblue").pack(pady=(15, 3))
+        pf = ctk.CTkFrame(f)
+        pf.pack(pady=4)
+        ctk.CTkButton(pf, text=self.tr("vivo_flash_boot"), width=170,
+                      command=lambda: self.vivo_flash_single("boot")).pack(side="left", padx=3)
+        ctk.CTkButton(pf, text=self.tr("vivo_flash_vbmeta"), width=170,
+                      command=lambda: self.vivo_flash_single("vbmeta")).pack(side="left", padx=3)
+        ctk.CTkButton(pf, text=self.tr("vivo_flash_dtbo"), width=170,
+                      command=lambda: self.vivo_flash_single("dtbo")).pack(side="left", padx=3)
+        ctk.CTkButton(pf, text=self.tr("vivo_flash_super"), width=170,
+                      command=lambda: self.vivo_flash_single("super")).pack(side="left", padx=3)
+        cf = ctk.CTkFrame(f)
+        cf.pack(pady=6)
+        ctk.CTkLabel(cf, text=self.tr("vivo_partition")).pack(side="left", padx=4)
+        self.vivo_part_name = ctk.CTkEntry(cf, width=140)
+        self.vivo_part_name.pack(side="left", padx=4)
+        self.vivo_part_name.insert(0, "boot")
+        ctk.CTkLabel(cf, text=self.tr("vivo_image")).pack(side="left", padx=4)
+        self.vivo_img_file = ctk.CTkEntry(cf, width=220)
+        self.vivo_img_file.pack(side="left", padx=4)
+        ctk.CTkButton(cf, text=self.tr("pick"), width=60,
+                      command=self.vivo_pick_img).pack(side="left", padx=4)
+        ctk.CTkButton(cf, text=self.tr("write_btn"), width=90, fg_color="red",
+                      hover_color="darkred",
+                      command=self.vivo_flash_custom).pack(side="left", padx=4)
+        ctk.CTkLabel(f, text=self.tr("advanced"), font=("Arial", 12, "bold"),
+                     text_color="orange").pack(pady=(15, 3))
+        af = ctk.CTkFrame(f)
+        af.pack(pady=4)
+        ctk.CTkButton(af, text=self.tr("vivo_erase_frp"), width=200,
+                      fg_color="red", hover_color="darkred",
+                      command=self.vivo_erase_frp).pack(side="left", padx=3)
+        ctk.CTkButton(af, text=self.tr("vivo_wipe_data"), width=200,
+                      fg_color="red", hover_color="darkred",
+                      command=self.vivo_wipe_data).pack(side="left", padx=3)
+        ctk.CTkButton(af, text=self.tr("vivo_edl"), width=200,
+                      command=lambda: self.async_run(lambda: run([ADB, "reboot", "edl"]))).pack(side="left", padx=3)
+
+    def vivo_info(self):
+        def t():
+            self.log("=" * 50)
+            for p in ["ro.product.model", "ro.product.brand",
+                      "ro.build.version.vivo", "ro.build.version.funtouch",
+                      "ro.build.version.originos", "ro.build.display.id",
+                      "ro.build.version.release", "ro.build.version.sdk",
+                      "ro.product.cpu.abi", "ro.serialno",
+                      "ro.boot.verifiedbootstate", "ro.boot.flash.locked"]:
+                self.log(f"{p}: {run([ADB, 'shell', 'getprop', p]).strip()}")
+        threading.Thread(target=t, daemon=True).start()
+
+    def vivo_check_bl(self):
+        def t():
+            self.log("=" * 50)
+            self.log(run([FASTBOOT, "oem", "device-info"], timeout=30))
+            self.log(run([FASTBOOT, "getvar", "unlocked"], timeout=15))
+            self.log(f"ro.boot.flash.locked: {run([ADB, 'shell', 'getprop', 'ro.boot.flash.locked']).strip()}")
+        threading.Thread(target=t, daemon=True).start()
+
+    def vivo_unlock(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_unlock")):
+            return
+        def t():
+            self.log("🔓 Trying unlock...")
+            self.log(run([FASTBOOT, "flashing", "unlock"], timeout=120))
+            self.log(run([FASTBOOT, "oem", "unlock"], timeout=60))
+        threading.Thread(target=t, daemon=True).start()
+
+    def vivo_lock(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_unlock")):
+            return
+        self.async_run(lambda: run([FASTBOOT, "flashing", "lock"], timeout=120))
+
+    def vivo_flash_single(self, partition):
+        p = filedialog.askopenfilename(filetypes=[("Image", "*.img"), ("All", "*.*")])
+        if not p:
+            return
+        def t():
+            self.log(f"🚀 flash {partition}: {os.path.basename(p)}")
+            self.log(run([FASTBOOT, "flash", partition, p], timeout=900)[-1000:])
+        threading.Thread(target=t, daemon=True).start()
+
+    def vivo_pick_img(self):
+        p = filedialog.askopenfilename(filetypes=[("Image", "*.img")])
+        if p:
+            self.vivo_img_file.delete(0, "end")
+            self.vivo_img_file.insert(0, p)
+
+    def vivo_flash_custom(self):
+        part = self.vivo_part_name.get().strip()
+        f = self.vivo_img_file.get().strip()
+        if not part or not os.path.exists(f):
+            messagebox.showerror(self.tr("err"), self.tr("err_check"))
+            return
+        def t():
+            self.log(run([FASTBOOT, "flash", part, f], timeout=900)[-1000:])
+        threading.Thread(target=t, daemon=True).start()
+
+    def vivo_erase_frp(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_wipe")):
+            return
+        self.async_run(lambda: run([FASTBOOT, "erase", "frp"], timeout=120))
+
+    def vivo_wipe_data(self):
+        if not messagebox.askyesno(self.tr("warn"), self.tr("confirm_format")):
+            return
+        self.async_run(lambda: run([FASTBOOT, "erase", "userdata"], timeout=300))
+
+    def vivo_select_rom(self):
+        p = filedialog.askopenfilename(
+            filetypes=[("ROM", "*.zip *.tar *.tgz *.img"), ("All", "*.*")])
+        if p:
+            self.vivo_rom = p
+            self.vivo_rom_label.configure(text=os.path.basename(p),
+                                           text_color="lightgreen")
+            self.log(f"🔵 ROM: {os.path.basename(p)}")
+
+    def vivo_flash_rom(self, wipe=False):
+        if not self.vivo_rom or not os.path.exists(self.vivo_rom):
+            messagebox.showerror(self.tr("err"), self.tr("samsung_no_file"))
+            return
+        if not messagebox.askyesno(self.tr("confirm"),
+                                    self.tr("confirm_flash_samsung",
+                                            os.path.basename(self.vivo_rom))):
+            return
+        def t():
+            try:
+                if os.path.exists(TEMP_FLASH):
+                    shutil.rmtree(TEMP_FLASH, ignore_errors=True)
+                os.makedirs(TEMP_FLASH, exist_ok=True)
+                name = os.path.basename(self.vivo_rom).lower()
+                self.log("📦 Extracting Vivo ROM...")
+                if name.endswith(".zip"):
+                    with zipfile.ZipFile(self.vivo_rom) as z:
+                        z.extractall(TEMP_FLASH)
+                elif name.endswith((".tgz", ".tar.gz", ".tar")):
+                    try:
+                        with tarfile.open(self.vivo_rom, "r:gz") as tar:
+                            tar.extractall(TEMP_FLASH)
+                    except tarfile.ReadError:
+                        with tarfile.open(self.vivo_rom, "r:") as tar:
+                            tar.extractall(TEMP_FLASH)
+                payloads = []
+                for root, dirs, files in os.walk(TEMP_FLASH):
+                    for f in files:
+                        if f == "payload.bin":
+                            payloads.append(os.path.join(root, f))
+                if payloads:
+                    self.log("⚠️ payload.bin detected")
+                    try:
+                        p_url = "https://github.com/ssut/payload-dumper-go/releases/download/1.2.2/payload-dumper-go_1.2.2_windows_amd64.tar.gz"
+                        tgz = os.path.join(BASE_DIR, "pdg.tgz")
+                        urllib.request.urlretrieve(p_url, tgz)
+                        with tarfile.open(tgz, "r:gz") as t_:
+                            t_.extractall(BASE_DIR)
+                        os.remove(tgz)
+                        exe = os.path.join(BASE_DIR, "payload-dumper-go.exe")
+                        if os.path.exists(exe):
+                            out_dir = os.path.join(TEMP_FLASH, "extracted")
+                            os.makedirs(out_dir, exist_ok=True)
+                            for pl in payloads:
+                                self.log(f"🔧 {os.path.basename(pl)}...")
+                                self.log(run([exe, "-o", out_dir, pl], timeout=1800))
+                    except Exception as e:
+                        self.log(f"⚠️ {e}")
+                images = {}
+                for root, dirs, files in os.walk(TEMP_FLASH):
+                    for f in files:
+                        if f.endswith(".img"):
+                            n = os.path.splitext(f)[0]
+                            images[n] = os.path.join(root, f)
+                if not images:
+                    self.log("❌ No images")
+                    return
+                order = ["gpt", "tz", "xbl", "abl", "aop", "bluetooth",
+                          "keymaster", "devcfg", "dsp", "featenabler",
+                          "hyp", "imagefv", "qupfw", "shrm", "uefisecapp",
+                          "vbmeta_system", "vbmeta_vendor", "vbmeta", "modem",
+                          "boot", "dtbo", "recovery", "super",
+                          "system", "system_ext", "vendor", "product", "odm",
+                          "persist", "metadata", "userdata"]
+                for part in order:
+                    if part not in images:
+                        continue
+                    if wipe and part == "userdata":
+                        continue
+                    self.log(f"🚀 flash {part}")
+                    self.log(run([FASTBOOT, "flash", part, images[part]], timeout=1800)[-300:])
+                for part, path in images.items():
+                    if part in order or (wipe and part == "userdata"):
+                        continue
+                    self.log(f"🚀 flash {part}")
+                    self.log(run([FASTBOOT, "flash", part, path], timeout=1800)[-300:])
+                self.log("🎉 Vivo ROM flashed!")
                 run([FASTBOOT, "reboot"])
             except Exception as e:
                 self.log(f"❌ {e}")
