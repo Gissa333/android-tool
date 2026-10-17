@@ -37,7 +37,7 @@ EDL_SCRIPT = os.path.join(EDL_DIR, "edl.py")
 HEIMDALL = os.path.join(HEIMDALL_DIR, "heimdall.exe")
 
 PLATFORM_TOOLS_URL = "https://dl.google.com/android/repository/platform-tools-latest-windows.zip"
-APP_VERSION = "1.6.0"
+APP_VERSION = "1.7.0"
 GITHUB_REPO = "Gissa333/android-tool"
 GITHUB_API = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
@@ -46,6 +46,8 @@ LANG = {
         "title": "🛠️ أداة الأندرويد",
         "tab_adb": "ADB / Fastboot",
         "tab_tools": "📸 أدوات يومية",
+        "tab_system": "⚙️ أدوات النظام",
+        "tab_gaming": "🎮 الألعاب والأداء",
         "tab_apps": "📱 إدارة التطبيقات",
         "tab_backup": "💾 نسخ احتياطي",
         "tab_flash": "📦 فلاش الروم",
@@ -87,7 +89,6 @@ LANG = {
         "tools_battery_info": "🔋 معلومات البطارية",
         "tools_apps_list": "📋 التطبيقات المثبتة",
         "sys_title": "⚙️ أدوات النظام المتقدمة",
-        "sys_nav_bar": "إخفاء/إظهار شريط التنقل",
         "sys_nav_hide": "🙈 إخفاء شريط التنقل",
         "sys_nav_show": "👁️ إظهار شريط التنقل",
         "sys_dpi_title": "تغيير كثافة الشاشة (DPI):",
@@ -95,29 +96,40 @@ LANG = {
         "sys_dpi_apply": "تطبيق DPI",
         "sys_dpi_reset": "إعادة DPI الافتراضي",
         "sys_res_reset": "🔄 إعادة دقة الشاشة الافتراضية",
-        "sys_res_custom": "تخصيص الدقة:",
-        "sys_res_width": "العرض:",
-        "sys_res_height": "الطول:",
-        "sys_res_apply": "تطبيق الدقة",
         "sys_anim": "🎬 تسريع الحركة (Animation):",
         "sys_anim_fast": "🚀 تسريع (0.5x)",
         "sys_anim_normal": "🔄 إعادة للوضع الطبيعي (1x)",
-        "sys_anim_custom": "تخصيص المقياس:",
         "sys_anim_value": "مثال: 0.5",
         "sys_anim_apply": "تطبيق",
         "sys_sysui": "🔄 إعادة تشغيل واجهة النظام (SystemUI)",
-        "sys_screenshot_ui": "📸 لقطة الشاشة",
         "sys_gms": "تعطيل/تفعيل خدمات جوجل (GMS):",
         "sys_gms_disable": "🚫 تعطيل GMS",
         "sys_gms_enable": "✅ تفعيل GMS",
         "sys_restart": "♻️ إعادة تشغيل الهاتف",
-        "sys_info": "📊 معلومات النظام",
         "sys_applied": "✅ تم التطبيق",
         "sys_reset": "✅ تم إعادة القيمة الافتراضية",
-        "sys_no_device": "❌ لا يوجد جهاز متصل",
         "sys_sysui_restarting": "🔄 جاري إعادة تشغيل SystemUI...",
         "sys_gms_disabled": "✅ GMS معطل",
         "sys_gms_enabled": "✅ GMS مفعل",
+        "game_title": "🎮 تسريع الألعاب والأداء",
+        "game_boost": "🚀 تفعيل وضع الأداء العالي (بدون روت)",
+        "game_boost_desc": "يعطل خدمات الخلفية ويسرع الحركة",
+        "game_normal": "🔄 إلغاء وضع الألعاب",
+        "game_normal_desc": "إعادة الهاتف لوضعه الطبيعي",
+        "game_fps": "عرض معدل الإطارات (FPS) الحالي:",
+        "game_refresh": "🔄 إعادة تحديث المعلومات",
+        "game_ram": "🧹 تنظيف الذاكرة العشوائية (RAM)",
+        "game_ram_ok": "✅ تم تنظيف الذاكرة العشوائية",
+        "game_cache": "🗑️ مسح الكاش (Cache) لجميع التطبيقات",
+        "game_cache_ok": "✅ تم مسح الكاش",
+        "game_bg": "🚫 تعطيل التطبيقات في الخلفية",
+        "game_bg_ok": "✅ تم تعطيل التطبيقات في الخلفية",
+        "game_bg_enable": "✅ تفعيل التطبيقات في الخلفية",
+        "game_res": "تغيير دقة الشاشة للألعاب (لتسريعها):",
+        "game_res_apply": "تطبيق",
+        "game_res_reset": "🔄 إعادة الدقة الأصلية",
+        "game_status": "⏳ جاري التنفيذ...",
+        "game_info": "ملاحظة: هذه الأوامر آمنة ولا تحتاج إلى روت.",
         "apps_title": "📱 إدارة التطبيقات",
         "apps_load": "📋 تحميل قائمة التطبيقات",
         "apps_uninstall": "🗑️ حذف التطبيق",
@@ -355,7 +367,7 @@ LANG = {
         "about_new_version": "🎉 جديد: {}",
         "about_checking": "⏳ فحص...",
         "about_error": "❌ {}",
-        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• أدوات يومية\n• أدوات النظام\n• إدارة التطبيقات\n• النسخ الاحتياطي\n• فلاش الروم\n• Xiaomi / Huawei / Samsung / Oppo / Vivo\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "أداة شاملة لهواتف أندرويد\n\n• ADB / Fastboot\n• أدوات يومية\n• أدوات النظام\n• تسريع الألعاب\n• إدارة التطبيقات\n• النسخ الاحتياطي\n• فلاش الروم\n• Xiaomi / Huawei / Samsung / Oppo / Vivo\n• TWRP & Root\n• فك القفل و FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 السجل:",
         "log_save": "💾 حفظ",
         "log_copy": "📋 نسخ",
@@ -404,6 +416,8 @@ LANG = {
         "title": "🛠️ Android Tool",
         "tab_adb": "ADB / Fastboot",
         "tab_tools": "📸 Daily Tools",
+        "tab_system": "⚙️ System Tools",
+        "tab_gaming": "🎮 Gaming & Performance",
         "tab_apps": "📱 App Manager",
         "tab_backup": "💾 Backup",
         "tab_flash": "📦 Flash ROM",
@@ -445,7 +459,6 @@ LANG = {
         "tools_battery_info": "🔋 Battery Info",
         "tools_apps_list": "📋 Installed apps",
         "sys_title": "⚙️ Advanced System Tools",
-        "sys_nav_bar": "Hide/Show Navigation Bar",
         "sys_nav_hide": "🙈 Hide Navigation Bar",
         "sys_nav_show": "👁️ Show Navigation Bar",
         "sys_dpi_title": "Change Screen Density (DPI):",
@@ -453,29 +466,40 @@ LANG = {
         "sys_dpi_apply": "Apply DPI",
         "sys_dpi_reset": "Reset DPI to Default",
         "sys_res_reset": "🔄 Reset Screen Resolution",
-        "sys_res_custom": "Custom Resolution:",
-        "sys_res_width": "Width:",
-        "sys_res_height": "Height:",
-        "sys_res_apply": "Apply Resolution",
         "sys_anim": "🎬 Speed Up Animation:",
         "sys_anim_fast": "🚀 Faster (0.5x)",
         "sys_anim_normal": "🔄 Reset (1x)",
-        "sys_anim_custom": "Custom Scale:",
         "sys_anim_value": "e.g. 0.5",
         "sys_anim_apply": "Apply",
         "sys_sysui": "🔄 Restart System UI",
-        "sys_screenshot_ui": "📸 Screenshot",
         "sys_gms": "Disable/Enable Google Services (GMS):",
         "sys_gms_disable": "🚫 Disable GMS",
         "sys_gms_enable": "✅ Enable GMS",
         "sys_restart": "♻️ Restart Device",
-        "sys_info": "📊 System Info",
         "sys_applied": "✅ Applied",
         "sys_reset": "✅ Reset to default",
-        "sys_no_device": "❌ No device connected",
         "sys_sysui_restarting": "🔄 Restarting SystemUI...",
         "sys_gms_disabled": "✅ GMS disabled",
         "sys_gms_enabled": "✅ GMS enabled",
+        "game_title": "🎮 Gaming & Performance Boost",
+        "game_boost": "🚀 Enable Performance Mode (No Root)",
+        "game_boost_desc": "Disables background services and speeds up animations",
+        "game_normal": "🔄 Disable Gaming Mode",
+        "game_normal_desc": "Restore phone to normal state",
+        "game_fps": "Current FPS Rate:",
+        "game_refresh": "🔄 Refresh Info",
+        "game_ram": "🧹 Clean RAM",
+        "game_ram_ok": "✅ RAM Cleaned",
+        "game_cache": "🗑️ Clear Cache for All Apps",
+        "game_cache_ok": "✅ Cache Cleared",
+        "game_bg": "🚫 Disable Background Apps",
+        "game_bg_ok": "✅ Background Apps Disabled",
+        "game_bg_enable": "✅ Enable Background Apps",
+        "game_res": "Change Screen Resolution for Gaming:",
+        "game_res_apply": "Apply",
+        "game_res_reset": "🔄 Reset Resolution",
+        "game_status": "⏳ Running...",
+        "game_info": "Note: These commands are safe and don't require root.",
         "apps_title": "📱 App Manager",
         "apps_load": "📋 Load Apps List",
         "apps_uninstall": "🗑️ Uninstall App",
@@ -713,7 +737,7 @@ LANG = {
         "about_new_version": "🎉 New: {}",
         "about_checking": "⏳ Checking...",
         "about_error": "❌ {}",
-        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Daily Tools\n• System Tools\n• App Manager\n• Backup\n• Full ROM Flash\n• Xiaomi / Huawei / Samsung / Oppo / Vivo\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
+        "about_description": "All-in-one Android tool\n\n• ADB / Fastboot\n• Daily Tools\n• System Tools\n• Gaming Boost\n• App Manager\n• Backup\n• Full ROM Flash\n• Xiaomi / Huawei / Samsung / Oppo / Vivo\n• TWRP & Root\n• Unlock & FRP\n• MediaTek\n• Qualcomm EDL",
         "log": "📋 Log:",
         "log_save": "💾 Save",
         "log_copy": "📋 Copy",
@@ -859,7 +883,8 @@ class App(ctk.CTk):
 
         self.tab_adb = self.tabs.add(self.tr("tab_adb"))
         self.tab_tools = self.tabs.add(self.tr("tab_tools"))
-        self.tab_system = self.tabs.add(self.tr("sys_title"))
+        self.tab_system = self.tabs.add(self.tr("tab_system"))
+        self.tab_gaming = self.tabs.add(self.tr("tab_gaming"))
         self.tab_apps = self.tabs.add(self.tr("tab_apps"))
         self.tab_backup = self.tabs.add(self.tr("tab_backup"))
         self.tab_flash = self.tabs.add(self.tr("tab_flash"))
@@ -877,6 +902,7 @@ class App(ctk.CTk):
         self.build_adb_tab()
         self.build_tools_tab()
         self.build_system_tab()
+        self.build_gaming_tab()
         self.build_apps_tab()
         self.build_backup_tab()
         self.build_flash_tab()
@@ -1093,7 +1119,6 @@ class App(ctk.CTk):
         ctk.CTkLabel(f, text=self.tr("sys_title"),
                      font=("Arial", 16, "bold")).pack(pady=10)
 
-        # إخفاء شريط التنقل
         row1 = ctk.CTkFrame(f)
         row1.pack(pady=4)
         ctk.CTkButton(row1, text=self.tr("sys_nav_hide"), width=200,
@@ -1103,7 +1128,6 @@ class App(ctk.CTk):
                       fg_color="green", hover_color="darkgreen",
                       command=self.sys_show_nav).pack(side="left", padx=3)
 
-        # DPI
         ctk.CTkLabel(f, text=self.tr("sys_dpi_title"),
                      font=("Arial", 12, "bold")).pack(pady=(15, 3))
         row2 = ctk.CTkFrame(f)
@@ -1117,7 +1141,6 @@ class App(ctk.CTk):
                       fg_color="red", hover_color="darkred",
                       command=self.sys_dpi_reset).pack(side="left", padx=5)
 
-        # Animation
         ctk.CTkLabel(f, text=self.tr("sys_anim"),
                      font=("Arial", 12, "bold")).pack(pady=(15, 3))
         row3 = ctk.CTkFrame(f)
@@ -1137,7 +1160,6 @@ class App(ctk.CTk):
         ctk.CTkButton(row4, text=self.tr("sys_anim_apply"), width=120,
                       command=self.sys_anim_custom).pack(side="left", padx=5)
 
-        # SystemUI
         ctk.CTkLabel(f, text="—",
                      text_color="gray").pack(pady=10)
         row5 = ctk.CTkFrame(f)
@@ -1149,7 +1171,6 @@ class App(ctk.CTk):
                       fg_color="red", hover_color="darkred",
                       command=self.sys_restart_device).pack(side="left", padx=3)
 
-        # GMS
         ctk.CTkLabel(f, text=self.tr("sys_gms"),
                      font=("Arial", 12, "bold")).pack(pady=(15, 3))
         row6 = ctk.CTkFrame(f)
@@ -1262,120 +1283,95 @@ class App(ctk.CTk):
             self.log(self.tr("sys_gms_enabled"))
         threading.Thread(target=t, daemon=True).start()
 
-    def open_exports(self):
-        try:
-            if os.name == "nt":
-                os.startfile(EXPORTS_DIR)
-            else:
-                subprocess.Popen(["xdg-open", EXPORTS_DIR])
-        except Exception as e:
-            self.log(self.tr("msg_error", e))
+    def build_gaming_tab(self):
+        f = self.tab_gaming
+        ctk.CTkLabel(f, text=self.tr("game_title"),
+                     font=("Arial", 16, "bold")).pack(pady=10)
 
-    def tool_screenshot(self):
+        ctk.CTkButton(f, text=self.tr("game_boost"), width=400, height=50,
+                      fg_color="green", hover_color="darkgreen",
+                      font=("Arial", 14, "bold"),
+                      command=self.game_boost).pack(pady=5)
+        ctk.CTkLabel(f, text=self.tr("game_boost_desc"),
+                     font=("Arial", 11), text_color="gray").pack()
+
+        ctk.CTkButton(f, text=self.tr("game_normal"), width=400, height=45,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.game_normal).pack(pady=10)
+        ctk.CTkLabel(f, text=self.tr("game_normal_desc"),
+                     font=("Arial", 11), text_color="gray").pack()
+
+        ctk.CTkLabel(f, text="—", text_color="gray").pack(pady=10)
+
+        row1 = ctk.CTkFrame(f)
+        row1.pack(pady=5)
+        ctk.CTkButton(row1, text=self.tr("game_ram"), width=200,
+                      command=self.game_ram).pack(side="left", padx=5)
+        ctk.CTkButton(row1, text=self.tr("game_cache"), width=200,
+                      command=self.game_cache).pack(side="left", padx=5)
+
+        row2 = ctk.CTkFrame(f)
+        row2.pack(pady=5)
+        ctk.CTkButton(row2, text=self.tr("game_bg"), width=200,
+                      fg_color="orange", hover_color="darkorange",
+                      command=self.game_bg_disable).pack(side="left", padx=5)
+        ctk.CTkButton(row2, text=self.tr("game_bg_enable"), width=200,
+                      fg_color="green", hover_color="darkgreen",
+                      command=self.game_bg_enable).pack(side="left", padx=5)
+
+        ctk.CTkLabel(f, text=self.tr("game_info"),
+                     font=("Arial", 11), text_color="lightblue").pack(pady=15)
+
+    def game_boost(self):
         def t():
-            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-            path = os.path.join(EXPORTS_DIR, f"screenshot_{ts}.png")
-            self.log("📸 Taking screenshot...")
-            try:
-                with open(path, "wb") as f_:
-                    r = subprocess.run([ADB, "exec-out", "screencap", "-p"],
-                                       capture_output=True, timeout=30,
-                                       creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
-                    f_.write(r.stdout)
-                if os.path.exists(path) and os.path.getsize(path) > 1000:
-                    self.log(self.tr("tools_screenshot_saved", path))
-                else:
-                    self.log("❌ Screenshot failed")
-            except Exception as e:
-                self.log(f"❌ {e}")
+            self.log("🚀 Activating Gaming Mode...")
+            for key in ["window_animation_scale",
+                        "transition_animation_scale",
+                        "animator_duration_scale"]:
+                run([ADB, "shell", "settings", "put", "global", key, "0.5"])
+            run([ADB, "shell", "settings", "put", "global", "zen_mode", "1"])
+            self.log("✅ Gaming Mode Active!")
         threading.Thread(target=t, daemon=True).start()
 
-    def tool_record(self):
+    def game_normal(self):
         def t():
-            self.recording = True
-            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-            remote = f"/sdcard/rec_{ts}.mp4"
-            self.log(self.tr("tools_recording"))
-            try:
-                proc = subprocess.Popen(
-                    [ADB, "shell", "screenrecord", "--time-limit", "15", remote],
-                    creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
-                proc.wait(timeout=25)
-                self.recording = False
-                local = os.path.join(EXPORTS_DIR, f"rec_{ts}.mp4")
-                self.log("📥 Pulling recording...")
-                run([ADB, "pull", remote, local], timeout=120)
-                run([ADB, "shell", "rm", remote])
-                if os.path.exists(local):
-                    self.log(self.tr("tools_recorded", local))
-                else:
-                    self.log("❌ Recording failed")
-            except Exception as e:
-                self.recording = False
-                self.log(f"❌ {e}")
+            self.log("🔄 Deactivating Gaming Mode...")
+            for key in ["window_animation_scale",
+                        "transition_animation_scale",
+                        "animator_duration_scale"]:
+                run([ADB, "shell", "settings", "put", "global", key, "1.0"])
+            run([ADB, "shell", "settings", "put", "global", "zen_mode", "0"])
+            self.log("✅ Normal Mode Restored!")
         threading.Thread(target=t, daemon=True).start()
 
-    def tool_record_stop(self):
-        try:
-            run([ADB, "shell", "pkill", "-INT", "screenrecord"], timeout=5)
-            self.log("⏹️ Stop signal sent")
-        except Exception as e:
-            self.log(self.tr("msg_error", e))
-
-    def tool_install_apk(self):
-        p = filedialog.askopenfilename(
-            filetypes=[("APK", "*.apk"), ("All", "*.*")])
-        if not p:
-            return
+    def game_ram(self):
         def t():
-            self.log(f"📦 Installing {os.path.basename(p)}...")
-            out = run([ADB, "install", "-r", p], timeout=300)
-            self.log(out)
-            if "Success" in out:
-                self.log(self.tr("tools_install_success", os.path.basename(p)))
-            else:
-                self.log(self.tr("tools_install_fail", os.path.basename(p)))
+            self.log("🧹 Cleaning RAM...")
+            run([ADB, "shell", "am", "kill-all"])
+            self.log(self.tr("game_ram_ok"))
         threading.Thread(target=t, daemon=True).start()
 
-    def tool_push(self):
-        p = filedialog.askopenfilename()
-        if not p:
-            return
+    def game_cache(self):
         def t():
-            name = os.path.basename(p)
-            self.log(f"📤 Pushing {name}...")
-            self.log(run([ADB, "push", p, "/sdcard/"], timeout=600))
+            self.log("🗑️ Clearing Cache...")
+            run([ADB, "shell", "pm", "trim-caches", "999G"])
+            self.log(self.tr("game_cache_ok"))
         threading.Thread(target=t, daemon=True).start()
 
-    def tool_pull(self):
-        remote = ctk.CTkInputDialog(
-            text="Remote path (e.g. /sdcard/DCIM/):",
-            title="Pull File").get_input()
-        if not remote:
-            return
+    def game_bg_disable(self):
         def t():
-            self.log(f"📥 Pulling {remote}...")
-            self.log(run([ADB, "pull", remote, EXPORTS_DIR], timeout=600))
-            self.log("✅ Done")
+            self.log("🚫 Disabling background apps...")
+            run([ADB, "shell", "settings", "put", "global", "app_standby_enabled", "0"])
+            run([ADB, "shell", "settings", "put", "global", "adaptive_battery_management_enabled", "0"])
+            self.log(self.tr("game_bg_ok"))
         threading.Thread(target=t, daemon=True).start()
 
-    def tool_battery(self):
+    def game_bg_enable(self):
         def t():
-            self.log("=" * 50)
-            self.log(self.tr("tools_battery_info"))
-            out = run([ADB, "shell", "dumpsys", "battery"], timeout=30)
-            self.log(out[:3000])
-        threading.Thread(target=t, daemon=True).start()
-
-    def tool_list_packages(self):
-        def t():
-            self.log("=" * 50)
-            self.log(self.tr("tools_apps_list"))
-            out = run([ADB, "shell", "pm", "list", "packages", "-3"], timeout=30)
-            lines = out.strip().splitlines()
-            self.log(f"📱 {len(lines)} user apps installed")
-            for line in lines[:50]:
-                self.log("  " + line)
+            self.log("✅ Enabling background apps...")
+            run([ADB, "shell", "settings", "put", "global", "app_standby_enabled", "1"])
+            run([ADB, "shell", "settings", "put", "global", "adaptive_battery_management_enabled", "1"])
+            self.log(self.tr("sys_applied"))
         threading.Thread(target=t, daemon=True).start()
 
     def build_apps_tab(self):
