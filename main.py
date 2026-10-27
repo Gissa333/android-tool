@@ -13,7 +13,7 @@ import webbrowser
 import time
 from datetime import datetime
 
-# --- الترجمة ---
+# --- قاموس اللغات ---
 LANG = {
     "ar": {
         "title": "أداة الأندرويد", "tab_adb": "ADB / Fastboot", "tab_tools": "أدوات يومية",
@@ -325,7 +325,6 @@ if getattr(sys, 'frozen', False):
 else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# هنا سيتم تحميل الأدوات
 TOOLS_DIR = os.path.join(BASE_DIR, "platform-tools")
 MTK_DIR = os.path.join(BASE_DIR, "mtkclient")
 EDL_DIR = os.path.join(BASE_DIR, "edl")
@@ -455,17 +454,15 @@ class LicenseWindow(ctk.CTk):
         if activate_license(key):
             self.status.configure(text=self.tr("lic_success"), text_color="lightgreen")
             self.success = True
-            self.after(700, self._close)
+            self.after(1000, self._close_and_launch)
 
-    def _close(self):
-        try:
-            self.quit()
-        except Exception:
-            pass
+    def _close_and_launch(self):
         try:
             self.destroy()
         except Exception:
             pass
+        if self.success and self.on_success:
+            self.on_success()
 
 class App(ctk.CTk):
     def __init__(self):
@@ -504,7 +501,6 @@ class App(ctk.CTk):
         self.check_tools()
         threading.Thread(target=self._bg_check_update, daemon=True).start()
         
-        # هنا يتم التحميل التلقائي
         self.after(500, self.check_and_download_tools)
 
     def _on_close(self):
@@ -1244,15 +1240,12 @@ def show_splash():
 def main():
     show_splash()
     if not is_activated():
-        holder = {"app": None}
+        def launch_app():
+            app = App()
+            app.mainloop()
 
-        def launch():
-            holder["app"] = App()
-
-        lic = LicenseWindow(on_success=launch)
+        lic = LicenseWindow(on_success=launch_app)
         lic.mainloop()
-        if holder["app"] is not None:
-            holder["app"].mainloop()
     else:
         app = App()
         app.mainloop()
