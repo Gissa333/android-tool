@@ -1,131 +1,33 @@
-name: Build Windows EXE + Installer
+name: Build Windows EXE
 
 on:
-  workflow_dispatch:
   push:
-    tags:
-      - 'v*'
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
 
-      - name: Install Basic Dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install pyinstaller
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install customtkinter pyinstaller
 
-      - name: Download mtkclient
-        shell: pwsh
-        run: |
-          Invoke-WebRequest -Uri "https://github.com/bkerler/mtkclient/archive/refs/heads/main.zip" -OutFile mtk.zip
-          Expand-Archive mtk.zip -DestinationPath .
-          Move-Item mtkclient-main mtkclient
+    - name: Build with PyInstaller
+      run: |
+        pyinstaller --noconfirm --onedir --windowed --collect-all customtkinter --name "AndroidTool" main.py
 
-      - name: Download edl
-        shell: pwsh
-        run: |
-          Invoke-WebRequest -Uri "https://github.com/bkerler/edl/archive/refs/heads/master.zip" -OutFile edl.zip
-          Expand-Archive edl.zip -DestinationPath .
-          Move-Item edl-master edl
-
-      - name: Download Heimdall
-        shell: pwsh
-        run: |
-          $url = "https://github.com/Dees-Tech/heihei/releases/download/v2.1.0/Heimdall_Windows_2.1.0.zip"
-          try {
-            Invoke-WebRequest -Uri $url -OutFile heimdall.zip
-            New-Item -ItemType Directory -Path heimdall -Force | Out-Null
-            Expand-Archive heimdall.zip -DestinationPath heimdall -Force
-          } catch {
-            Write-Host "Heimdall download failed - will try alternative"
-            $alt = "https://bitbucket.org/benjamin_dobell/heimdall/downloads/Heimdall-v2.0.2-win.zip"
-            try {
-              Invoke-WebRequest -Uri $alt -OutFile heimdall.zip
-              New-Item -ItemType Directory -Path heimdall -Force | Out-Null
-              Expand-Archive heimdall.zip -DestinationPath heimdall -Force
-            } catch {
-              Write-Host "Alternative also failed"
-              New-Item -ItemType Directory -Path heimdall -Force | Out-Null
-            }
-          }
-
-      - name: Download Python Embeddable
-        shell: pwsh
-        run: |
-          $url = "https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-amd64.zip"
-          Invoke-WebRequest -Uri $url -OutFile python-embed.zip
-          New-Item -ItemType Directory -Path python-embed -Force | Out-Null
-          Expand-Archive python-embed.zip -DestinationPath python-embed -Force
-
-      - name: Enable site-packages
-        shell: pwsh
-        run: |
-          $pth = Get-ChildItem python-embed\python*._pth | Select-Object -First 1
-          $content = Get-Content $pth.FullName
-          $content = $content -replace '#import site', 'import site'
-          Add-Content $pth.FullName "Lib\site-packages"
-          Add-Content $pth.FullName "..\mtkclient"
-          Add-Content $pth.FullName "..\edl"
-          Set-Content $pth.FullName $content
-
-      - name: Install pip
-        shell: pwsh
-        run: |
-          Invoke-WebRequest -Uri "https://bootstrap.pypa.io/get-pip.py" -OutFile get-pip.py
-          .\python-embed\python.exe get-pip.py --no-warn-script-location
-
-      - name: Install mtkclient requirements
-        shell: pwsh
-        run: |
-          .\python-embed\python.exe -m pip install --no-warn-script-location -r mtkclient\requirements.txt
-          .\python-embed\python.exe -m pip install --no-warn-script-location pyusb pyserial pycryptodome capstone colorama
-
-      - name: Install edl requirements
-        shell: pwsh
-        run: |
-          if (Test-Path edl\requirements.txt) {
-            .\python-embed\python.exe -m pip install --no-warn-script-location -r edl\requirements.txt
-          }
-          .\python-embed\python.exe -m pip install --no-warn-script-location pyserial pyusb docopt
-
-      - name: Build with Spec
-        run: pyinstaller --noconfirm AndroidTool.spec
-
-      - name: Copy resources into dist
-        shell: pwsh
-        run: |
-          Copy-Item -Recurse -Force python-embed dist\AndroidTool\python-embed
-          Copy-Item -Recurse -Force mtkclient dist\AndroidTool\mtkclient
-          Copy-Item -Recurse -Force edl dist\AndroidTool\edl
-          if (Test-Path heimdall) { Copy-Item -Recurse -Force heimdall dist\AndroidTool\heimdall }
-          Remove-Item -Recurse -Force dist\AndroidTool\mtkclient\.git -ErrorAction SilentlyContinue
-          Remove-Item -Recurse -Force dist\AndroidTool\edl\.git -ErrorAction SilentlyContinue
-
-      - name: Install Inno Setup
-        run: choco install innosetup -y
-
-      - name: Build Installer
-        run: |
-          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\setup.iss
-
-      - name: Upload Portable
-        uses: actions/upload-artifact@v4
-        with:
-          name: AndroidTool-Portable
-          path: dist/AndroidTool/
-
-      - name: Upload Installer
-        uses: actions/upload-artifact@v4
-        with:
-          name: AndroidTool-Setup
-          path: installer/Output/AndroidTool-Setup.exe
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: AndroidTool-Windows
+        path: dist/AndroidTool/
