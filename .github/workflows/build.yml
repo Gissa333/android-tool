@@ -24,10 +24,10 @@ jobs:
 
     - name: Build with PyInstaller
       run: |
-        pyinstaller --noconfirm --onefile --windowed --collect-all customtkinter --add-data "platform-tools;platform-tools" --add-data "mtkclient;mtkclient" --add-data "edl;edl" --name "AndroidTool" main.py
+        pyinstaller --noconfirm --onefile --windowed --collect-all customtkinter --name "AndroidTool" main.py
 
-    - name: Upload artifact
+    - name: Upload Portable EXE
       uses: actions/upload-artifact@v4
       with:
-        name: AndroidTool-Windows
+        name: AndroidTool-Portable
         path: dist/AndroidTool.exe
