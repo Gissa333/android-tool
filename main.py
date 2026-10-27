@@ -13,7 +13,7 @@ import webbrowser
 import time
 from datetime import datetime
 
-# --- تعريف اللغات (أول شيء لتفادي خطأ LANG) ---
+# --- الترجمة ---
 LANG = {
     "ar": {
         "title": "أداة الأندرويد", "tab_adb": "ADB / Fastboot", "tab_tools": "أدوات يومية",
@@ -309,7 +309,7 @@ LANG = {
     }
 }
 
-# دالة ذكية لإيجاد مسار الأدوات سواء كان البرنامج يعمل كملف بايثون أو EXE
+# --- إعداد المسارات ---
 def resource_path(relative_path):
     try:
         base_path = sys._MEIPASS
@@ -325,17 +325,15 @@ if getattr(sys, 'frozen', False):
 else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# استخدام resource_path لجلب المسار الصحيح للأدوات داخل الـ EXE
-TOOLS_DIR = resource_path("platform-tools")
-MTK_DIR = resource_path("mtkclient")
-EDL_DIR = resource_path("edl")
-HEIMDALL_DIR = resource_path("heimdall")
-TEMP_FLASH = os.path.join(BASE_DIR, "flash_temp")
+# هنا سيتم تحميل الأدوات
+TOOLS_DIR = os.path.join(BASE_DIR, "platform-tools")
+MTK_DIR = os.path.join(BASE_DIR, "mtkclient")
+EDL_DIR = os.path.join(BASE_DIR, "edl")
+HEIMDALL_DIR = os.path.join(BASE_DIR, "heimdall")
 LOGS_DIR = os.path.join(BASE_DIR, "logs")
 EXPORTS_DIR = os.path.join(BASE_DIR, "exports")
 BACKUP_DIR = os.path.join(BASE_DIR, "backups")
 CONFIG_FILE = os.path.join(BASE_DIR, "config.json")
-EMBED_PY = os.path.join(BASE_DIR, "python-embed", "python.exe")
 
 ADB = os.path.join(TOOLS_DIR, "adb.exe")
 FASTBOOT = os.path.join(TOOLS_DIR, "fastboot.exe")
@@ -505,6 +503,9 @@ class App(ctk.CTk):
         self.build_ui()
         self.check_tools()
         threading.Thread(target=self._bg_check_update, daemon=True).start()
+        
+        # هنا يتم التحميل التلقائي
+        self.after(500, self.check_and_download_tools)
 
     def _on_close(self):
         try:
@@ -526,6 +527,21 @@ class App(ctk.CTk):
             self.after(0, lambda: fn(*args, **kwargs))
         except Exception:
             pass
+
+    def check_and_download_tools(self):
+        if not os.path.exists(ADB):
+            self.log("لم يتم العثور على ADB. جاري التحميل التلقائي...")
+            def download():
+                try:
+                    zip_path = os.path.join(BASE_DIR, "platform-tools.zip")
+                    urllib.request.urlretrieve(PLATFORM_TOOLS_URL, zip_path)
+                    with zipfile.ZipFile(zip_path) as z:
+                        z.extractall(BASE_DIR)
+                    os.remove(zip_path)
+                    self.log("تم تحميل وتثبيت Platform-Tools بنجاح!")
+                except Exception as e:
+                    self.log(f"فشل التحميل التلقائي: {e}")
+            threading.Thread(target=download, daemon=True).start()
 
     def build_ui(self):
         for w in self.winfo_children():
@@ -744,7 +760,7 @@ class App(ctk.CTk):
     def build_adb_tab(self):
         f = self.tab_adb
         btns = [
-            (self.tr("download_tools"), self.download_tools),
+            (self.tr("download_tools"), self.check_and_download_tools),
             (self.tr("detect"), self.detect),
             (self.tr("device_info"), self.info),
             (self.tr("reboot"), lambda: self.async_run(lambda: run([ADB, "reboot"]))),
@@ -1181,20 +1197,6 @@ class App(ctk.CTk):
             except Exception as e:
                 self.log(f"Error: {e}")
         threading.Thread(target=wrapper, daemon=True).start()
-
-    def download_tools(self):
-        self.log(self.tr("msg_downloading_pt"))
-        def t():
-            try:
-                zip_path = os.path.join(BASE_DIR, "platform-tools.zip")
-                urllib.request.urlretrieve(PLATFORM_TOOLS_URL, zip_path)
-                with zipfile.ZipFile(zip_path) as z:
-                    z.extractall(BASE_DIR)
-                os.remove(zip_path)
-                self.log(self.tr("msg_installed"))
-            except Exception as e:
-                self.log(self.tr("msg_error", e))
-        threading.Thread(target=t, daemon=True).start()
 
     def detect(self):
         self.async_run(lambda: run([ADB, "devices"]))
